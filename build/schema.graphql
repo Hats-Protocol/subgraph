@@ -1,6 +1,60 @@
-type ExampleEntity @entity {
+type TX @entity {
   id: ID!
-  count: BigInt!
-  owner: Bytes! # address
-  operator: Bytes! # address
+  createdAt: String!
+}
+# Entity that recursively maps an TopHat's entire tree
+type TopHatTree @entity {
+  id: ID!
+  createdAt: String!
+  owner: Bytes!
+  subHats: [HatTree!]
+}
+# Finite TopHat data
+type TopHat @entity {
+  id: ID!
+  createdAt: String!
+  owner: Bytes!
+  subHats: [HatTree!]
+}
+# Entity that recursively maps an Hat's tree
+type HatTree @entity {
+  id: ID!
+  createdAt: String!
+  name: String
+  description: String
+  imageUrl: String
+  wearer: [WearerTransferReceipt!]
+  subHats: [HatTree!]
+}
+# Finite Hat data
+type Hat @entity {
+  id: ID!
+  createdAt: String!
+  name: String
+  description: String
+  imageUrl: String
+  wearer: [WearerTransferReceipt!]
+}
+
+type Wearer @entity {
+  id: ID!
+  name: String!
+  age: Int!
+  tx: TX!
+}
+
+type WearerProfile @entity {
+  id: ID!
+  name: String!
+  age: Int!
+  tx: TX!
+  allHats: [Hat!]
+}
+
+type WearerTransferReceipt @entity {
+  id: ID!
+  transferedAt: String!
+  txReceipt: Bytes!
+  hatOwner: TopHat! 
+  wearer: Bytes!
 }
