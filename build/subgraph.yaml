@@ -1,4 +1,6 @@
 specVersion: 0.0.4
+description: Hats Protocol Subgraph
+repository: https://github.com/jordanlesich/temporary-hats-graph
 schema:
   file: schema.graphql
 dataSources:
@@ -6,6 +8,7 @@ dataSources:
     name: HatsFactory
     network: goerli
     source:
+      startBlock: 7228645
       address: "0xB7019C3670F5d4dD99166727a7D29F8A16F4F20A"
       abi: HatsFactory
     mapping:
@@ -13,14 +16,9 @@ dataSources:
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - ApprovalForAll
-        - HatCreated
-        - HatRenounced
-        - HatStatusChanged
-        - TransferBatch
-        - TransferSingle
-        - URI
-        - WearerStatus
+        - Hat
+        - Wearer
+        - TopHat
       abis:
         - name: HatsFactory
           file: HatsFactory/abis/HatsFactory.json
