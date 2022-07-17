@@ -16,17 +16,12 @@ dataSources:
       apiVersion: 0.0.5
       language: wasm/assemblyscript
       entities:
-        - Hat
-        - Wearer
+        - TX
+        - TopHatTree
         - TopHat
-        # - ApprovalForAll
-        # - HatCreated
-        # - HatRenounced
-        # - HatStatusChanged
-        # - TransferBatch
-        # - TransferSingle
-        # - URI
-        # - WearerStatus
+        - Hat
+        - HatTree
+        - Wearer
       abis:
         - name: HatsFactory
           file: ./abis/HatsFactory.json

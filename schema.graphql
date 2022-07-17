@@ -2,6 +2,7 @@ type TX @entity {
   id: ID!
   createdAt: String!
 }
+# TOP HATS MAY BE UNNECESSARY
 # Entity that recursively maps an TopHat's entire tree
 type TopHatTree @entity {
   id: ID!
@@ -30,10 +31,12 @@ type HatTree @entity {
 type Hat @entity {
   id: ID!
   createdAt: String!
+  wearerStatus: String!
   name: String
   description: String
   imageUrl: String
-  wearer: [WearerTransferReceipt!]
+  wearer: Wearer
+  OtherWearers: [WearerTransferReceipt!]
 }
 
 type Wearer @entity {
