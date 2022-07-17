@@ -1,6 +1,6 @@
 specVersion: 0.0.4
 schema:
-  file: ./schema.graphql
+  file: schema.graphql
 dataSources:
   - kind: ethereum
     name: HatsFactory
@@ -23,7 +23,7 @@ dataSources:
         - WearerStatus
       abis:
         - name: HatsFactory
-          file: ./abis/HatsFactory.json
+          file: HatsFactory/abis/HatsFactory.json
       eventHandlers:
         - event: ApprovalForAll(indexed address,indexed address,bool)
           handler: handleApprovalForAll
@@ -41,4 +41,4 @@ dataSources:
           handler: handleURI
         - event: WearerStatus(uint256,address,bool,bool)
           handler: handleWearerStatus
-      file: ./src/hats-factory.ts
+      file: HatsFactory/HatsFactory.wasm
