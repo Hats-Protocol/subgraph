@@ -1,0 +1,16 @@
+{
+  "name": "hats-protocol",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ jordanlesich/hats-protocol",
+    "create-local": "graph create --node http://localhost:8020/ jordanlesich/hats-protocol",
+    "remove-local": "graph remove --node http://localhost:8020/ jordanlesich/hats-protocol",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 jordanlesich/hats-protocol"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.32.0",
+    "@graphprotocol/graph-ts": "0.27.0"
+  }
+}

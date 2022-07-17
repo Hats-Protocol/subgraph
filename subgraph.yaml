@@ -1,0 +1,44 @@
+specVersion: 0.0.1
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: HatsFactory
+    network: goerli
+    source:
+      address: "0xB7019C3670F5d4dD99166727a7D29F8A16F4F20A"
+      abi: HatsFactory
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.5
+      language: wasm/assemblyscript
+      entities:
+        - ApprovalForAll
+        - HatCreated
+        - HatRenounced
+        - HatStatusChanged
+        - TransferBatch
+        - TransferSingle
+        - URI
+        - WearerStatus
+      abis:
+        - name: HatsFactory
+          file: ./abis/HatsFactory.json
+      eventHandlers:
+        - event: ApprovalForAll(indexed address,indexed address,bool)
+          handler: handleApprovalForAll
+        - event: HatCreated(uint256,string,uint32,address,address)
+          handler: handleHatCreated
+        - event: HatRenounced(uint256,address)
+          handler: handleHatRenounced
+        - event: HatStatusChanged(uint256,bool)
+          handler: handleHatStatusChanged
+        - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
+          handler: handleTransferBatch
+        - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleTransferSingle
+        - event: URI(string,indexed uint256)
+          handler: handleURI
+        - event: WearerStatus(uint256,address,bool,bool)
+          handler: handleWearerStatus
+      file: ./src/hats-factory.ts
