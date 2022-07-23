@@ -24,19 +24,23 @@ type HatTree @entity {
   name: String
   description: String
   imageUrl: String
-  wearer: [WearerTransferReceipt!]
+  # wearer: [WearerTransferReceipt!]
   subHats: [HatTree!]
 }
 # Finite Hat data
 type Hat @entity {
   id: ID!
   createdAt: String!
-  wearerStatus: String!
+  # wearerStatus: String!
   name: String
   description: String
   imageUrl: String
-  wearer: Wearer
-  OtherWearers: [WearerTransferReceipt!]
+  # wearer: Wearer
+  wearers: [Wearer!]
+}(
+# HatToken vs Hat (Type)
+type HatToken @entity {
+
 }
 
 type Wearer @entity {
