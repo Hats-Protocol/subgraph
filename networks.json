@@ -1,0 +1,20 @@
+{
+  "goerli": {
+    "Hats": {
+      "address": "0xcf912a0193593f5cD55D81FF611c26c3ED63f924",
+      "startBlock": 8105204
+    }
+  },
+  "polygon": {
+    "Hats": {
+      "address": "0x95647F88dcbC12986046fc4f49064Edd11a25d38",
+      "startBlock": 36556828
+    }
+  },
+  "gnosis": {
+    "Hats": {
+      "address": "0x6B49b86D21aBc1D60611bD85c843a9766B5493DB",
+      "startBlock": 25339814
+    }
+  }
+}

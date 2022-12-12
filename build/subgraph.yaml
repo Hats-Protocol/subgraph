@@ -1,0 +1,42 @@
+specVersion: 0.0.5
+schema:
+  file: schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Hats
+    network: gnosis
+    source:
+      abi: Hats
+      address: "0x6B49b86D21aBc1D60611bD85c843a9766B5493DB"
+      startBlock: 25339814
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Hat
+        - Wearer
+        - Tree
+      abis:
+        - name: Hats
+          file: Hats/abis/Hats.json
+      eventHandlers:
+        - event: HatCreated(uint256,string,uint32,address,address,bool,string)
+          handler: handleHatCreated
+        - event: HatDetailsChanged(uint256,string)
+          handler: handleHatDetailsChanged
+        - event: HatEligibilityChanged(uint256,address)
+          handler: handleHatEligibilityChanged
+        - event: HatImageURIChanged(uint256,string)
+          handler: handleHatImageURIChanged
+        - event: HatMaxSupplyChanged(uint256,uint32)
+          handler: handleHatMaxSupplyChanged
+        - event: HatMutabilityChanged(uint256)
+          handler: handleHatMutabilityChanged
+        - event: HatStatusChanged(uint256,bool)
+          handler: handleHatStatusChanged
+        - event: HatToggleChanged(uint256,address)
+          handler: handleHatToggleChanged
+        - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
+          handler: handleTransferSingle
+      file: Hats/Hats.wasm

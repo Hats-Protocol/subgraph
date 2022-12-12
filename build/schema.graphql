@@ -1,0 +1,25 @@
+type Hat @entity {
+  id: ID!
+  status: Boolean!
+  createdAt: BigInt!
+  wearers: [Wearer!]!
+  details: String!
+  maxSupply: BigInt!
+  eligibility: String!
+  toggle: String!
+  mutable: Boolean!
+  imageUri: String!
+  level: Int!
+  tree: Tree!
+} 
+
+type Wearer @entity {
+  id: ID!
+  hats: [Hat!]! @derivedFrom(field: "wearers")
+}
+
+type Tree @entity {
+  "Tree ID is its top hat domain - first 4 bytes of the top hat ID"
+  id: ID!
+  hats: [Hat!]! @derivedFrom(field: "tree")
+}
