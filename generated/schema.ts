@@ -11,307 +11,6 @@ import {
   BigDecimal
 } from "@graphprotocol/graph-ts";
 
-export class TX extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id != null, "Cannot save TX entity without an ID");
-    if (id) {
-      assert(
-        id.kind == ValueKind.STRING,
-        `Entities of type TX must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
-      );
-      store.set("TX", id.toString(), this);
-    }
-  }
-
-  static load(id: string): TX | null {
-    return changetype<TX | null>(store.get("TX", id));
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value!.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get createdAt(): string {
-    let value = this.get("createdAt");
-    return value!.toString();
-  }
-
-  set createdAt(value: string) {
-    this.set("createdAt", Value.fromString(value));
-  }
-}
-
-export class TopHatTree extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id != null, "Cannot save TopHatTree entity without an ID");
-    if (id) {
-      assert(
-        id.kind == ValueKind.STRING,
-        `Entities of type TopHatTree must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
-      );
-      store.set("TopHatTree", id.toString(), this);
-    }
-  }
-
-  static load(id: string): TopHatTree | null {
-    return changetype<TopHatTree | null>(store.get("TopHatTree", id));
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value!.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get createdAt(): string {
-    let value = this.get("createdAt");
-    return value!.toString();
-  }
-
-  set createdAt(value: string) {
-    this.set("createdAt", Value.fromString(value));
-  }
-
-  get owner(): Bytes {
-    let value = this.get("owner");
-    return value!.toBytes();
-  }
-
-  set owner(value: Bytes) {
-    this.set("owner", Value.fromBytes(value));
-  }
-
-  get subHats(): Array<string> | null {
-    let value = this.get("subHats");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toStringArray();
-    }
-  }
-
-  set subHats(value: Array<string> | null) {
-    if (!value) {
-      this.unset("subHats");
-    } else {
-      this.set("subHats", Value.fromStringArray(<Array<string>>value));
-    }
-  }
-}
-
-export class TopHat extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id != null, "Cannot save TopHat entity without an ID");
-    if (id) {
-      assert(
-        id.kind == ValueKind.STRING,
-        `Entities of type TopHat must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
-      );
-      store.set("TopHat", id.toString(), this);
-    }
-  }
-
-  static load(id: string): TopHat | null {
-    return changetype<TopHat | null>(store.get("TopHat", id));
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value!.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get createdAt(): string {
-    let value = this.get("createdAt");
-    return value!.toString();
-  }
-
-  set createdAt(value: string) {
-    this.set("createdAt", Value.fromString(value));
-  }
-
-  get owner(): Bytes {
-    let value = this.get("owner");
-    return value!.toBytes();
-  }
-
-  set owner(value: Bytes) {
-    this.set("owner", Value.fromBytes(value));
-  }
-
-  get subHats(): Array<string> | null {
-    let value = this.get("subHats");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toStringArray();
-    }
-  }
-
-  set subHats(value: Array<string> | null) {
-    if (!value) {
-      this.unset("subHats");
-    } else {
-      this.set("subHats", Value.fromStringArray(<Array<string>>value));
-    }
-  }
-}
-
-export class HatTree extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id != null, "Cannot save HatTree entity without an ID");
-    if (id) {
-      assert(
-        id.kind == ValueKind.STRING,
-        `Entities of type HatTree must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
-      );
-      store.set("HatTree", id.toString(), this);
-    }
-  }
-
-  static load(id: string): HatTree | null {
-    return changetype<HatTree | null>(store.get("HatTree", id));
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value!.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get createdAt(): string {
-    let value = this.get("createdAt");
-    return value!.toString();
-  }
-
-  set createdAt(value: string) {
-    this.set("createdAt", Value.fromString(value));
-  }
-
-  get name(): string | null {
-    let value = this.get("name");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set name(value: string | null) {
-    if (!value) {
-      this.unset("name");
-    } else {
-      this.set("name", Value.fromString(<string>value));
-    }
-  }
-
-  get description(): string | null {
-    let value = this.get("description");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set description(value: string | null) {
-    if (!value) {
-      this.unset("description");
-    } else {
-      this.set("description", Value.fromString(<string>value));
-    }
-  }
-
-  get imageUrl(): string | null {
-    let value = this.get("imageUrl");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set imageUrl(value: string | null) {
-    if (!value) {
-      this.unset("imageUrl");
-    } else {
-      this.set("imageUrl", Value.fromString(<string>value));
-    }
-  }
-
-  get wearer(): Array<string> | null {
-    let value = this.get("wearer");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toStringArray();
-    }
-  }
-
-  set wearer(value: Array<string> | null) {
-    if (!value) {
-      this.unset("wearer");
-    } else {
-      this.set("wearer", Value.fromStringArray(<Array<string>>value));
-    }
-  }
-
-  get subHats(): Array<string> | null {
-    let value = this.get("subHats");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toStringArray();
-    }
-  }
-
-  set subHats(value: Array<string> | null) {
-    if (!value) {
-      this.unset("subHats");
-    } else {
-      this.set("subHats", Value.fromStringArray(<Array<string>>value));
-    }
-  }
-}
-
 export class Hat extends Entity {
   constructor(id: string) {
     super();
@@ -343,81 +42,103 @@ export class Hat extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get createdAt(): string {
+  get status(): boolean {
+    let value = this.get("status");
+    return value!.toBoolean();
+  }
+
+  set status(value: boolean) {
+    this.set("status", Value.fromBoolean(value));
+  }
+
+  get createdAt(): BigInt {
     let value = this.get("createdAt");
+    return value!.toBigInt();
+  }
+
+  set createdAt(value: BigInt) {
+    this.set("createdAt", Value.fromBigInt(value));
+  }
+
+  get wearers(): Array<string> {
+    let value = this.get("wearers");
+    return value!.toStringArray();
+  }
+
+  set wearers(value: Array<string>) {
+    this.set("wearers", Value.fromStringArray(value));
+  }
+
+  get details(): string {
+    let value = this.get("details");
     return value!.toString();
   }
 
-  set createdAt(value: string) {
-    this.set("createdAt", Value.fromString(value));
+  set details(value: string) {
+    this.set("details", Value.fromString(value));
   }
 
-  get name(): string | null {
-    let value = this.get("name");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
+  get maxSupply(): BigInt {
+    let value = this.get("maxSupply");
+    return value!.toBigInt();
   }
 
-  set name(value: string | null) {
-    if (!value) {
-      this.unset("name");
-    } else {
-      this.set("name", Value.fromString(<string>value));
-    }
+  set maxSupply(value: BigInt) {
+    this.set("maxSupply", Value.fromBigInt(value));
   }
 
-  get description(): string | null {
-    let value = this.get("description");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
+  get eligibility(): string {
+    let value = this.get("eligibility");
+    return value!.toString();
   }
 
-  set description(value: string | null) {
-    if (!value) {
-      this.unset("description");
-    } else {
-      this.set("description", Value.fromString(<string>value));
-    }
+  set eligibility(value: string) {
+    this.set("eligibility", Value.fromString(value));
   }
 
-  get imageUrl(): string | null {
-    let value = this.get("imageUrl");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
+  get toggle(): string {
+    let value = this.get("toggle");
+    return value!.toString();
   }
 
-  set imageUrl(value: string | null) {
-    if (!value) {
-      this.unset("imageUrl");
-    } else {
-      this.set("imageUrl", Value.fromString(<string>value));
-    }
+  set toggle(value: string) {
+    this.set("toggle", Value.fromString(value));
   }
 
-  get wearer(): Array<string> | null {
-    let value = this.get("wearer");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toStringArray();
-    }
+  get mutable(): boolean {
+    let value = this.get("mutable");
+    return value!.toBoolean();
   }
 
-  set wearer(value: Array<string> | null) {
-    if (!value) {
-      this.unset("wearer");
-    } else {
-      this.set("wearer", Value.fromStringArray(<Array<string>>value));
-    }
+  set mutable(value: boolean) {
+    this.set("mutable", Value.fromBoolean(value));
+  }
+
+  get imageUri(): string {
+    let value = this.get("imageUri");
+    return value!.toString();
+  }
+
+  set imageUri(value: string) {
+    this.set("imageUri", Value.fromString(value));
+  }
+
+  get level(): i32 {
+    let value = this.get("level");
+    return value!.toI32();
+  }
+
+  set level(value: i32) {
+    this.set("level", Value.fromI32(value));
+  }
+
+  get tree(): string {
+    let value = this.get("tree");
+    return value!.toString();
+  }
+
+  set tree(value: string) {
+    this.set("tree", Value.fromString(value));
   }
 }
 
@@ -452,35 +173,17 @@ export class Wearer extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get name(): string {
-    let value = this.get("name");
-    return value!.toString();
+  get hats(): Array<string> {
+    let value = this.get("hats");
+    return value!.toStringArray();
   }
 
-  set name(value: string) {
-    this.set("name", Value.fromString(value));
-  }
-
-  get age(): i32 {
-    let value = this.get("age");
-    return value!.toI32();
-  }
-
-  set age(value: i32) {
-    this.set("age", Value.fromI32(value));
-  }
-
-  get tx(): string {
-    let value = this.get("tx");
-    return value!.toString();
-  }
-
-  set tx(value: string) {
-    this.set("tx", Value.fromString(value));
+  set hats(value: Array<string>) {
+    this.set("hats", Value.fromStringArray(value));
   }
 }
 
-export class WearerProfile extends Entity {
+export class Tree extends Entity {
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -488,18 +191,18 @@ export class WearerProfile extends Entity {
 
   save(): void {
     let id = this.get("id");
-    assert(id != null, "Cannot save WearerProfile entity without an ID");
+    assert(id != null, "Cannot save Tree entity without an ID");
     if (id) {
       assert(
         id.kind == ValueKind.STRING,
-        `Entities of type WearerProfile must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+        `Entities of type Tree must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
       );
-      store.set("WearerProfile", id.toString(), this);
+      store.set("Tree", id.toString(), this);
     }
   }
 
-  static load(id: string): WearerProfile | null {
-    return changetype<WearerProfile | null>(store.get("WearerProfile", id));
+  static load(id: string): Tree | null {
+    return changetype<Tree | null>(store.get("Tree", id));
   }
 
   get id(): string {
@@ -511,120 +214,12 @@ export class WearerProfile extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get name(): string {
-    let value = this.get("name");
-    return value!.toString();
+  get hats(): Array<string> {
+    let value = this.get("hats");
+    return value!.toStringArray();
   }
 
-  set name(value: string) {
-    this.set("name", Value.fromString(value));
-  }
-
-  get age(): i32 {
-    let value = this.get("age");
-    return value!.toI32();
-  }
-
-  set age(value: i32) {
-    this.set("age", Value.fromI32(value));
-  }
-
-  get tx(): string {
-    let value = this.get("tx");
-    return value!.toString();
-  }
-
-  set tx(value: string) {
-    this.set("tx", Value.fromString(value));
-  }
-
-  get allHats(): Array<string> | null {
-    let value = this.get("allHats");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toStringArray();
-    }
-  }
-
-  set allHats(value: Array<string> | null) {
-    if (!value) {
-      this.unset("allHats");
-    } else {
-      this.set("allHats", Value.fromStringArray(<Array<string>>value));
-    }
-  }
-}
-
-export class WearerTransferReceipt extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(
-      id != null,
-      "Cannot save WearerTransferReceipt entity without an ID"
-    );
-    if (id) {
-      assert(
-        id.kind == ValueKind.STRING,
-        `Entities of type WearerTransferReceipt must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
-      );
-      store.set("WearerTransferReceipt", id.toString(), this);
-    }
-  }
-
-  static load(id: string): WearerTransferReceipt | null {
-    return changetype<WearerTransferReceipt | null>(
-      store.get("WearerTransferReceipt", id)
-    );
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    return value!.toString();
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get transferedAt(): string {
-    let value = this.get("transferedAt");
-    return value!.toString();
-  }
-
-  set transferedAt(value: string) {
-    this.set("transferedAt", Value.fromString(value));
-  }
-
-  get txReceipt(): Bytes {
-    let value = this.get("txReceipt");
-    return value!.toBytes();
-  }
-
-  set txReceipt(value: Bytes) {
-    this.set("txReceipt", Value.fromBytes(value));
-  }
-
-  get hatOwner(): string {
-    let value = this.get("hatOwner");
-    return value!.toString();
-  }
-
-  set hatOwner(value: string) {
-    this.set("hatOwner", Value.fromString(value));
-  }
-
-  get wearer(): Bytes {
-    let value = this.get("wearer");
-    return value!.toBytes();
-  }
-
-  set wearer(value: Bytes) {
-    this.set("wearer", Value.fromBytes(value));
+  set hats(value: Array<string>) {
+    this.set("hats", Value.fromStringArray(value));
   }
 }
