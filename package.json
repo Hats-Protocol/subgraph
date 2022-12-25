@@ -4,7 +4,7 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ gershido/hats-protocol",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ gershido/hats-protocol-goerli",
     "create-local": "graph create --node http://localhost:8020/ gershido/hats-protocol",
     "remove-local": "graph remove --node http://localhost:8020/ gershido/hats-protocol",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 gershido/hats-protocol",
@@ -14,5 +14,7 @@
     "@graphprotocol/graph-cli": "0.37.1",
     "@graphprotocol/graph-ts": "0.28.1"
   },
-  "devDependencies": { "matchstick-as": "0.5.0" }
+  "devDependencies": {
+    "matchstick-as": "0.5.0"
+  }
 }

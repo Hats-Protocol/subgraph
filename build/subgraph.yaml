@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: Hats
-    network: gnosis
+    network: goerli
     source:
       abi: Hats
-      address: "0x6B49b86D21aBc1D60611bD85c843a9766B5493DB"
-      startBlock: 25339814
+      address: "0x432A5d7C41D68DA0bfd8aB966b4fcef338049dd1"
+      startBlock: 8105204
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7

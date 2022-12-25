@@ -2,7 +2,6 @@ type Hat @entity {
   id: ID!
   status: Boolean!
   createdAt: BigInt!
-  wearers: [Wearer!]!
   details: String!
   maxSupply: BigInt!
   eligibility: String!
@@ -10,16 +9,151 @@ type Hat @entity {
   mutable: Boolean!
   imageUri: String!
   level: Int!
+  currentSupply: BigInt!
   tree: Tree!
+  wearers: [Wearer!]!
+  admin: Hat!
+  subHats: [Hat!]! @derivedFrom(field: "admin")
+  events: [HatsEvent!]! @derivedFrom(field: "hat")
 } 
 
 type Wearer @entity {
   id: ID!
-  hats: [Hat!]! @derivedFrom(field: "wearers")
+  currentHats: [Hat!]! @derivedFrom(field: "wearers")
+  mintEvent: [HatMintedEvent!]! @derivedFrom(field: "wearer")
+  burnEvent: [HatBurnedEvent!]! @derivedFrom(field: "wearer")
 }
 
 type Tree @entity {
   "Tree ID is its top hat domain - first 4 bytes of the top hat ID"
   id: ID!
   hats: [Hat!]! @derivedFrom(field: "tree")
+  events: [HatsEvent!]! @derivedFrom(field: "tree")
 }
+
+interface HatsEvent {
+	id: ID!
+	tree: Tree!
+  hat: Hat!
+  blockNumber: Int!
+	timestamp: BigInt!
+  transactionID: Bytes!
+}
+
+type HatCreatedEvent implements HatsEvent @entity {
+  id: ID!
+  tree: Tree!
+  hat: Hat!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  hatId: String!
+  hatDetails: String!
+  hatMaxSupply: BigInt!
+  hatEligibility: String!
+  hatToggle: String!
+  hatMutable: Boolean!
+  hatImageUri: String!
+}
+
+type HatMintedEvent implements HatsEvent @entity {
+  id: ID!
+  tree: Tree!
+  hat: Hat!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  hatId: String!
+  wearer: Wearer!
+  operator: String!
+}
+
+type HatBurnedEvent implements HatsEvent @entity {
+  id: ID!
+  tree: Tree!
+  hat: Hat!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  hatId: String!
+  wearer: Wearer!
+  operator: String!
+}
+
+type HatStatusChangedEvent implements HatsEvent @entity {
+  id: ID!
+  tree: Tree!
+  hat: Hat!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  hatId: String!
+  hatNewStatus: Boolean!
+}
+
+type HatDetailsChangedEvent implements HatsEvent @entity {
+  id: ID!
+  tree: Tree!
+  hat: Hat!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  hatId: String!
+  hatNewDetails: String!
+}
+
+type HatEligibilityChangedEvent implements HatsEvent @entity {
+  id: ID!
+  tree: Tree!
+  hat: Hat!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  hatId: String!
+  hatNewEligibility: String!
+}
+
+type HatToggleChangedEvent implements HatsEvent @entity {
+  id: ID!
+  tree: Tree!
+  hat: Hat!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  hatId: String!
+  hatNewToggle: String!
+}
+
+type HatMutabilityChangedEvent implements HatsEvent @entity {
+  id: ID!
+  tree: Tree!
+  hat: Hat!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  hatId: String!
+}
+
+type HatMaxSupplyChangedEvent implements HatsEvent @entity {
+  id: ID!
+  tree: Tree!
+  hat: Hat!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  hatId: String!
+  hatNewMaxSupply: BigInt!
+}
+
+type HatImageURIChangedEvent implements HatsEvent @entity {
+  id: ID!
+  tree: Tree!
+  hat: Hat!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  hatId: String!
+  hatNewImageURI: String!
+}
+
+
