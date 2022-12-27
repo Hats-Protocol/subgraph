@@ -39,7 +39,8 @@ import {
 
 export function handleHatCreated(event: HatCreated): void {
   // create new hat
-  let hat = new Hat(hatIdToPrettyId(event.params.id));
+  let hat = new Hat(hatIdToHex(event.params.id));
+  hat.prettyId = hatIdToPrettyId(event.params.id);
   hat.createdAt = event.block.timestamp;
   hat.wearers = [];
   hat.details = event.params.details;
@@ -73,7 +74,7 @@ export function handleHatCreated(event: HatCreated): void {
   hatCreatedEvent.blockNumber = event.block.number.toI32();
   hatCreatedEvent.timestamp = event.block.timestamp;
   hatCreatedEvent.transactionID = event.transaction.hash;
-  hatCreatedEvent.hatId = hatIdToPrettyId(event.params.id);
+  hatCreatedEvent.hatId = hatIdToHex(event.params.id);
   hatCreatedEvent.hatDetails = event.params.details;
   hatCreatedEvent.hatMaxSupply = event.params.maxSupply;
   hatCreatedEvent.hatEligibility = event.params.eligibility.toHexString();
@@ -81,13 +82,13 @@ export function handleHatCreated(event: HatCreated): void {
   hatCreatedEvent.hatMutable = event.params.mutable_;
   hatCreatedEvent.hatImageUri = event.params.imageURI;
   hatCreatedEvent.tree = topHatDomain(event.params.id);
-  hatCreatedEvent.hat = hatIdToPrettyId(event.params.id);
+  hatCreatedEvent.hat = hatIdToHex(event.params.id);
   hatCreatedEvent.save();
 }
 
 export function handleHatDetailsChanged(event: HatDetailsChanged): void {
   // load hat and update the details field
-  let hat = Hat.load(hatIdToPrettyId(event.params.hatId)) as Hat;
+  let hat = Hat.load(hatIdToHex(event.params.hatId)) as Hat;
   hat.details = event.params.newDetails;
   hat.save();
 
@@ -96,10 +97,10 @@ export function handleHatDetailsChanged(event: HatDetailsChanged): void {
   hatDetailsChangedEvent.blockNumber = event.block.number.toI32();
   hatDetailsChangedEvent.timestamp = event.block.timestamp;
   hatDetailsChangedEvent.transactionID = event.transaction.hash;
-  hatDetailsChangedEvent.hatId = hatIdToPrettyId(event.params.hatId);
+  hatDetailsChangedEvent.hatId = hatIdToHex(event.params.hatId);
   hatDetailsChangedEvent.hatNewDetails = event.params.newDetails;
   hatDetailsChangedEvent.tree = topHatDomain(event.params.hatId);
-  hatDetailsChangedEvent.hat = hatIdToPrettyId(event.params.hatId);
+  hatDetailsChangedEvent.hat = hatIdToHex(event.params.hatId);
   hatDetailsChangedEvent.save();
 }
 
@@ -107,7 +108,7 @@ export function handleHatEligibilityChanged(
   event: HatEligibilityChanged
 ): void {
   // load hat and update the eligibility field
-  let hat = Hat.load(hatIdToPrettyId(event.params.hatId)) as Hat;
+  let hat = Hat.load(hatIdToHex(event.params.hatId)) as Hat;
   hat.eligibility = event.params.newEligibility.toHexString();
   hat.save();
 
@@ -116,16 +117,16 @@ export function handleHatEligibilityChanged(
   hatEligibilityChangedEvent.blockNumber = event.block.number.toI32();
   hatEligibilityChangedEvent.timestamp = event.block.timestamp;
   hatEligibilityChangedEvent.transactionID = event.transaction.hash;
-  hatEligibilityChangedEvent.hatId = hatIdToPrettyId(event.params.hatId);
+  hatEligibilityChangedEvent.hatId = hatIdToHex(event.params.hatId);
   hatEligibilityChangedEvent.hatNewEligibility = event.params.newEligibility.toHexString();
   hatEligibilityChangedEvent.tree = topHatDomain(event.params.hatId);
-  hatEligibilityChangedEvent.hat = hatIdToPrettyId(event.params.hatId);
+  hatEligibilityChangedEvent.hat = hatIdToHex(event.params.hatId);
   hatEligibilityChangedEvent.save();
 }
 
 export function handleHatImageURIChanged(event: HatImageURIChanged): void {
   // load hat and update the imageUri field
-  let hat = Hat.load(hatIdToPrettyId(event.params.hatId)) as Hat;
+  let hat = Hat.load(hatIdToHex(event.params.hatId)) as Hat;
   hat.imageUri = event.params.newImageURI;
   hat.save();
 
@@ -134,16 +135,16 @@ export function handleHatImageURIChanged(event: HatImageURIChanged): void {
   hatImageURIChangedEvent.blockNumber = event.block.number.toI32();
   hatImageURIChangedEvent.timestamp = event.block.timestamp;
   hatImageURIChangedEvent.transactionID = event.transaction.hash;
-  hatImageURIChangedEvent.hatId = hatIdToPrettyId(event.params.hatId);
+  hatImageURIChangedEvent.hatId = hatIdToHex(event.params.hatId);
   hatImageURIChangedEvent.hatNewImageURI = event.params.newImageURI;
   hatImageURIChangedEvent.tree = topHatDomain(event.params.hatId);
-  hatImageURIChangedEvent.hat = hatIdToPrettyId(event.params.hatId);
+  hatImageURIChangedEvent.hat = hatIdToHex(event.params.hatId);
   hatImageURIChangedEvent.save();
 }
 
 export function handleHatMaxSupplyChanged(event: HatMaxSupplyChanged): void {
   // load hat and update the maxSupply field
-  let hat = Hat.load(hatIdToPrettyId(event.params.hatId)) as Hat;
+  let hat = Hat.load(hatIdToHex(event.params.hatId)) as Hat;
   hat.maxSupply = event.params.newMaxSupply;
   hat.save();
 
@@ -152,16 +153,16 @@ export function handleHatMaxSupplyChanged(event: HatMaxSupplyChanged): void {
   hatMaxSupplyChangedEvent.blockNumber = event.block.number.toI32();
   hatMaxSupplyChangedEvent.timestamp = event.block.timestamp;
   hatMaxSupplyChangedEvent.transactionID = event.transaction.hash;
-  hatMaxSupplyChangedEvent.hatId = hatIdToPrettyId(event.params.hatId);
+  hatMaxSupplyChangedEvent.hatId = hatIdToHex(event.params.hatId);
   hatMaxSupplyChangedEvent.hatNewMaxSupply = event.params.newMaxSupply;
   hatMaxSupplyChangedEvent.tree = topHatDomain(event.params.hatId);
-  hatMaxSupplyChangedEvent.hat = hatIdToPrettyId(event.params.hatId);
+  hatMaxSupplyChangedEvent.hat = hatIdToHex(event.params.hatId);
   hatMaxSupplyChangedEvent.save();
 }
 
 export function handleHatMutabilityChanged(event: HatMutabilityChanged): void {
   // load hat and update the mutability field
-  let hat = Hat.load(hatIdToPrettyId(event.params.hatId)) as Hat;
+  let hat = Hat.load(hatIdToHex(event.params.hatId)) as Hat;
   hat.mutable = false;
   hat.save();
 
@@ -170,15 +171,15 @@ export function handleHatMutabilityChanged(event: HatMutabilityChanged): void {
   hatMutabilityChangedEvent.blockNumber = event.block.number.toI32();
   hatMutabilityChangedEvent.timestamp = event.block.timestamp;
   hatMutabilityChangedEvent.transactionID = event.transaction.hash;
-  hatMutabilityChangedEvent.hatId = hatIdToPrettyId(event.params.hatId);
+  hatMutabilityChangedEvent.hatId = hatIdToHex(event.params.hatId);
   hatMutabilityChangedEvent.tree = topHatDomain(event.params.hatId);
-  hatMutabilityChangedEvent.hat = hatIdToPrettyId(event.params.hatId);
+  hatMutabilityChangedEvent.hat = hatIdToHex(event.params.hatId);
   hatMutabilityChangedEvent.save();
 }
 
 export function handleHatStatusChanged(event: HatStatusChanged): void {
   // load hat and update the status field
-  let hat = Hat.load(hatIdToPrettyId(event.params.hatId)) as Hat;
+  let hat = Hat.load(hatIdToHex(event.params.hatId)) as Hat;
   hat.status = event.params.newStatus;
   hat.save();
 
@@ -187,16 +188,16 @@ export function handleHatStatusChanged(event: HatStatusChanged): void {
   hatStatusChangedEvent.blockNumber = event.block.number.toI32();
   hatStatusChangedEvent.timestamp = event.block.timestamp;
   hatStatusChangedEvent.transactionID = event.transaction.hash;
-  hatStatusChangedEvent.hatId = hatIdToPrettyId(event.params.hatId);
+  hatStatusChangedEvent.hatId = hatIdToHex(event.params.hatId);
   hatStatusChangedEvent.hatNewStatus = event.params.newStatus;
   hatStatusChangedEvent.tree = topHatDomain(event.params.hatId);
-  hatStatusChangedEvent.hat = hatIdToPrettyId(event.params.hatId);
+  hatStatusChangedEvent.hat = hatIdToHex(event.params.hatId);
   hatStatusChangedEvent.save();
 }
 
 export function handleHatToggleChanged(event: HatToggleChanged): void {
   // load hat and update the toggle field
-  let hat = Hat.load(hatIdToPrettyId(event.params.hatId)) as Hat;
+  let hat = Hat.load(hatIdToHex(event.params.hatId)) as Hat;
   hat.toggle = event.params.newToggle.toHexString();
   hat.save();
 
@@ -205,15 +206,15 @@ export function handleHatToggleChanged(event: HatToggleChanged): void {
   hatToggleChangedEvent.blockNumber = event.block.number.toI32();
   hatToggleChangedEvent.timestamp = event.block.timestamp;
   hatToggleChangedEvent.transactionID = event.transaction.hash;
-  hatToggleChangedEvent.hatId = hatIdToPrettyId(event.params.hatId);
+  hatToggleChangedEvent.hatId = hatIdToHex(event.params.hatId);
   hatToggleChangedEvent.hatNewToggle = event.params.newToggle.toHexString();
   hatToggleChangedEvent.tree = topHatDomain(event.params.hatId);
-  hatToggleChangedEvent.hat = hatIdToPrettyId(event.params.hatId);
+  hatToggleChangedEvent.hat = hatIdToHex(event.params.hatId);
   hatToggleChangedEvent.save();
 }
 
 export function handleTransferSingle(event: TransferSingle): void {
-  let hat = Hat.load(hatIdToPrettyId(event.params.id)) as Hat;
+  let hat = Hat.load(hatIdToHex(event.params.id)) as Hat;
   if (event.params.from != Address.zero() && event.params.to != Address.zero()) { //transfer event
     giveHat(hat, event);
     removeHat(hat, event);
@@ -246,11 +247,11 @@ function giveHat(hat: Hat, event: TransferSingle): void {
   hatMintedEvent.blockNumber = event.block.number.toI32();
   hatMintedEvent.timestamp = event.block.timestamp;
   hatMintedEvent.transactionID = event.transaction.hash;
-  hatMintedEvent.hatId = hatIdToPrettyId(event.params.id);
+  hatMintedEvent.hatId = hatIdToHex(event.params.id);
   hatMintedEvent.wearer = to.id;
   hatMintedEvent.operator = event.params.operator.toHexString();
   hatMintedEvent.tree = topHatDomain(event.params.id);
-  hatMintedEvent.hat = hatIdToPrettyId(event.params.id);
+  hatMintedEvent.hat = hatIdToHex(event.params.id);
   hatMintedEvent.save();
 }
 
@@ -269,11 +270,11 @@ function removeHat(hat: Hat, event: TransferSingle): void {
   hatBurnedEvent.blockNumber = event.block.number.toI32();
   hatBurnedEvent.timestamp = event.block.timestamp;
   hatBurnedEvent.transactionID = event.transaction.hash;
-  hatBurnedEvent.hatId = hatIdToPrettyId(event.params.id);
+  hatBurnedEvent.hatId = hatIdToHex(event.params.id);
   hatBurnedEvent.wearer = from.id;
   hatBurnedEvent.operator = event.params.operator.toHexString();
   hatBurnedEvent.tree = topHatDomain(event.params.id);
-  hatBurnedEvent.hat = hatIdToPrettyId(event.params.id);
+  hatBurnedEvent.hat = hatIdToHex(event.params.id);
   hatBurnedEvent.save();
 }
 

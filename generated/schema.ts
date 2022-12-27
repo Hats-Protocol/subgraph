@@ -42,6 +42,15 @@ export class Hat extends Entity {
     this.set("id", Value.fromString(value));
   }
 
+  get prettyId(): string {
+    let value = this.get("prettyId");
+    return value!.toString();
+  }
+
+  set prettyId(value: string) {
+    this.set("prettyId", Value.fromString(value));
+  }
+
   get status(): boolean {
     let value = this.get("status");
     return value!.toBoolean();

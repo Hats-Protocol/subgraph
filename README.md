@@ -34,19 +34,21 @@ Get a specific tree:
 ```
 
 ## Hat
+The ID of a the hat entity is the ID of the hat in hex format.
 
-the ID of a hat is its hat ID, formatted in an IP address style:
+Addotionally, the hat entity includes a "prettyId" field, which is formatted in an IP address style:
 - In hex, with the `0x` prefix
 - Periods between the hat levels
 - Only levels with non-zero values are shown
-For example, the ID of a level 3 hat might look like this: `0x00000001.01.01`
+For example, the "prettyId" of a level 3 hat might look like this: `0x00000001.01.01`
 
 The following query will get all the basic information of a hat:
 
 ```graphql
 {
-  hat(id: "0x00000001.01") {
+  hat(id: "0x0000000101000000000000000000000000000000000000000000000000000000") {
     id
+    prettyId
     status
     details
     eligibility
@@ -65,7 +67,7 @@ The following query will get the tree that the hat belongs to:
 
 ```graphql
 {
-  hat(id: "0x00000001.01") {
+  hat(id: "0x0000000101000000000000000000000000000000000000000000000000000000") {
     id
     tree {
       id
@@ -78,9 +80,9 @@ The following query will get the admin of the hat:
 
 ```graphql
 {
-  hat(id: "0x00000001.01") {
+  hat(id: "0x0000000101000000000000000000000000000000000000000000000000000000") {
     id
-    tree {
+    admin {
       id
     }
   }
@@ -91,7 +93,7 @@ The following query will get the sub-hats that are one level deeper:
 
 ```graphql
 {
-  hat(id: "0x00000001.01") {
+  hat(id: "0x0000000101000000000000000000000000000000000000000000000000000000") {
     id
     subHats {
       id
@@ -104,7 +106,7 @@ The following query will get the wearers of the hat:
 
 ```graphql
 {
-  hat(id: "0x00000001.01") {
+  hat(id: "0x0000000101000000000000000000000000000000000000000000000000000000") {
     id
     wearers {
       id
@@ -198,7 +200,7 @@ The following query will get the entire history of events in a specific hat:
 
 ```graphql
 {
-  tree(id: "0x00000001.01") {
+  hat(id: "0x0000000101000000000000000000000000000000000000000000000000000000") {
     id
     events {
       id
@@ -286,7 +288,7 @@ The following query will get the siblings of a hat:
 
 ```graphql
 {
-  hat(id: "0x00000001.01") {
+  hat(id: "0x0000000101000000000000000000000000000000000000000000000000000000") {
     admin {
       subHats {
         id
@@ -300,7 +302,7 @@ The following query will get a sub tree, in which a specific hat is a root of:
 
 ```graphql
 {
-  hats(where: {id_gte: "0x00000001.01", id_lt: "0x00000001.02"}) {
+  hats(where: {id_gte: "0x0000000101000000000000000000000000000000000000000000000000000000", id_lt: "0x0000000102000000000000000000000000000000000000000000000000000000"}) {
     id
   }
 }
