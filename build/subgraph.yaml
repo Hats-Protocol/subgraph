@@ -1,42 +1,42 @@
-specVersion: 0.0.4
-description: Hats Protocol Subgraph
-repository: https://github.com/jordanlesich/temporary-hats-graph
+specVersion: 0.0.5
 schema:
   file: schema.graphql
 dataSources:
   - kind: ethereum
-    name: HatsFactory
+    name: Hats
     network: goerli
     source:
-      startBlock: 7228645
-      address: "0xB7019C3670F5d4dD99166727a7D29F8A16F4F20A"
-      abi: HatsFactory
+      abi: Hats
+      address: "0x432A5d7C41D68DA0bfd8aB966b4fcef338049dd1"
+      startBlock: 8105204
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.5
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
         - Hat
         - Wearer
-        - TopHat
+        - Tree
       abis:
-        - name: HatsFactory
-          file: HatsFactory/abis/HatsFactory.json
+        - name: Hats
+          file: Hats/abis/Hats.json
       eventHandlers:
-        - event: ApprovalForAll(indexed address,indexed address,bool)
-          handler: handleApprovalForAll
-        - event: HatCreated(uint256,string,uint32,address,address)
+        - event: HatCreated(uint256,string,uint32,address,address,bool,string)
           handler: handleHatCreated
-        - event: HatRenounced(uint256,address)
-          handler: handleHatRenounced
+        - event: HatDetailsChanged(uint256,string)
+          handler: handleHatDetailsChanged
+        - event: HatEligibilityChanged(uint256,address)
+          handler: handleHatEligibilityChanged
+        - event: HatImageURIChanged(uint256,string)
+          handler: handleHatImageURIChanged
+        - event: HatMaxSupplyChanged(uint256,uint32)
+          handler: handleHatMaxSupplyChanged
+        - event: HatMutabilityChanged(uint256)
+          handler: handleHatMutabilityChanged
         - event: HatStatusChanged(uint256,bool)
           handler: handleHatStatusChanged
-        - event: TransferBatch(indexed address,indexed address,indexed address,uint256[],uint256[])
-          handler: handleTransferBatch
+        - event: HatToggleChanged(uint256,address)
+          handler: handleHatToggleChanged
         - event: TransferSingle(indexed address,indexed address,indexed address,uint256,uint256)
           handler: handleTransferSingle
-        - event: URI(string,indexed uint256)
-          handler: handleURI
-        - event: WearerStatus(uint256,address,bool,bool)
-          handler: handleWearerStatus
-      file: HatsFactory/HatsFactory.wasm
+      file: Hats/Hats.wasm
