@@ -7,11 +7,6 @@ export function hatLevel(contractAddress: Address, hatId: BigInt): i32 {
     return hatsContract.getHatLevel(hatId);
 }
 
-export function isTopHat(contractAddress: Address, hatId: BigInt): boolean {
-    let hatsContract = Hats.bind(contractAddress);
-    return hatsContract.isTopHat(hatId);
-}
-
 export function hatIdToHex(hatId: BigInt): string {
     return '0x' + hatId.toHexString().slice(2).padStart(64, '0');
 }
@@ -41,6 +36,6 @@ export function createEventID(event: ethereum.Event): string {
 export function getHatAdmin(contractAddress: Address, hatId: BigInt, level: i32): string {
     let hatsContract = Hats.bind(contractAddress);
     let admin = hatsContract.getAdminAtLevel(hatId, level);
-    return hatIdToPrettyId(admin);
+    return hatIdToHex(admin);
 }
 

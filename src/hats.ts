@@ -30,7 +30,6 @@ import {
   hatLevel,
   hatIdToHex,
   topHatDomain,
-  isTopHat,
   createEventID,
   getHatAdmin,
   hatIdToPrettyId
@@ -53,20 +52,17 @@ export function handleHatCreated(event: HatCreated): void {
   hat.level = hatLevel(event.address, event.params.id);
   hat.currentSupply = BigInt.fromU32(0);
   if (hat.level == 0) {
+    // top hat is its own admin
     hat.admin = hat.id;
-  } else {
-    hat.admin = getHatAdmin(event.address, event.params.id, hat.level - 1);
-  }
-
-  // if the hat is a top hat, create a new tree
-  if (isTopHat(event.address, event.params.id)) {
+    // create a new tree
     let tree = new Tree(topHatDomain(event.params.id))
     hat.tree = tree.id;
     tree.save();
-  }
-  else {
+  } else {
+    hat.admin = getHatAdmin(event.address, event.params.id, hat.level - 1);
     hat.tree = topHatDomain(event.params.id);
   }
+
   hat.save();
 
   // create new HatCreatedEvent
