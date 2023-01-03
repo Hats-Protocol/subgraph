@@ -29,8 +29,8 @@ export function topHatDomain(hatId: BigInt): string {
     return hatIdHex.substring(0, 10);
 }
 
-export function createEventID(event: ethereum.Event): string {
-    return event.block.number.toString().concat('-').concat(event.logIndex.toString())
+export function createEventID(event: ethereum.Event, name: string): string {
+    return name.concat('-').concat(event.block.number.toString()).concat('-').concat(event.logIndex.toString());
 }
 
 export function getHatAdmin(contractAddress: Address, hatId: BigInt, level: i32): string {

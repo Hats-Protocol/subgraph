@@ -135,6 +135,7 @@ The following query will get all hats of a wearer:
 ## Events
 
 The events are used to track the history of hats and wearers.
+The event ID format is `<event name>-<block number>-<log index>`.
 
 The following query will get the entire history of events in a specific tree:
 
