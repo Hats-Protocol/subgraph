@@ -30,7 +30,6 @@ import {
   hatLevel,
   hatIdToHex,
   topHatDomain,
-  isTopHat,
   createEventID,
   getHatAdmin,
   hatIdToPrettyId
@@ -53,24 +52,21 @@ export function handleHatCreated(event: HatCreated): void {
   hat.level = hatLevel(event.address, event.params.id);
   hat.currentSupply = BigInt.fromU32(0);
   if (hat.level == 0) {
+    // top hat is its own admin
     hat.admin = hat.id;
-  } else {
-    hat.admin = getHatAdmin(event.address, event.params.id, hat.level - 1);
-  }
-
-  // if the hat is a top hat, create a new tree
-  if (isTopHat(event.address, event.params.id)) {
+    // create a new tree
     let tree = new Tree(topHatDomain(event.params.id))
     hat.tree = tree.id;
     tree.save();
-  }
-  else {
+  } else {
+    hat.admin = getHatAdmin(event.address, event.params.id, hat.level - 1);
     hat.tree = topHatDomain(event.params.id);
   }
+
   hat.save();
 
   // create new HatCreatedEvent
-  let hatCreatedEvent = new HatCreatedEvent(createEventID(event));
+  let hatCreatedEvent = new HatCreatedEvent(createEventID(event, 'HatCreated'));
   hatCreatedEvent.blockNumber = event.block.number.toI32();
   hatCreatedEvent.timestamp = event.block.timestamp;
   hatCreatedEvent.transactionID = event.transaction.hash;
@@ -93,7 +89,7 @@ export function handleHatDetailsChanged(event: HatDetailsChanged): void {
   hat.save();
 
   // create new HatDetailsChangedEvent 
-  let hatDetailsChangedEvent = new HatDetailsChangedEvent(createEventID(event));
+  let hatDetailsChangedEvent = new HatDetailsChangedEvent(createEventID(event, 'HatDetailsChanged'));
   hatDetailsChangedEvent.blockNumber = event.block.number.toI32();
   hatDetailsChangedEvent.timestamp = event.block.timestamp;
   hatDetailsChangedEvent.transactionID = event.transaction.hash;
@@ -113,7 +109,7 @@ export function handleHatEligibilityChanged(
   hat.save();
 
   // create new HatEligibilityChangedEvent 
-  let hatEligibilityChangedEvent = new HatEligibilityChangedEvent(createEventID(event));
+  let hatEligibilityChangedEvent = new HatEligibilityChangedEvent(createEventID(event, 'HatEligibilityChanged'));
   hatEligibilityChangedEvent.blockNumber = event.block.number.toI32();
   hatEligibilityChangedEvent.timestamp = event.block.timestamp;
   hatEligibilityChangedEvent.transactionID = event.transaction.hash;
@@ -131,7 +127,7 @@ export function handleHatImageURIChanged(event: HatImageURIChanged): void {
   hat.save();
 
   // create new HatImageURIChangedEvent 
-  let hatImageURIChangedEvent = new HatImageURIChangedEvent(createEventID(event));
+  let hatImageURIChangedEvent = new HatImageURIChangedEvent(createEventID(event, 'HatImageURIChanged'));
   hatImageURIChangedEvent.blockNumber = event.block.number.toI32();
   hatImageURIChangedEvent.timestamp = event.block.timestamp;
   hatImageURIChangedEvent.transactionID = event.transaction.hash;
@@ -149,7 +145,7 @@ export function handleHatMaxSupplyChanged(event: HatMaxSupplyChanged): void {
   hat.save();
 
   // create new HatMaxSupplyChangedEvent 
-  let hatMaxSupplyChangedEvent = new HatMaxSupplyChangedEvent(createEventID(event));
+  let hatMaxSupplyChangedEvent = new HatMaxSupplyChangedEvent(createEventID(event, 'HatMaxSupplyChanged'));
   hatMaxSupplyChangedEvent.blockNumber = event.block.number.toI32();
   hatMaxSupplyChangedEvent.timestamp = event.block.timestamp;
   hatMaxSupplyChangedEvent.transactionID = event.transaction.hash;
@@ -167,7 +163,7 @@ export function handleHatMutabilityChanged(event: HatMutabilityChanged): void {
   hat.save();
 
   // create new HatMaxSupplyChangedEvent 
-  let hatMutabilityChangedEvent = new HatMutabilityChangedEvent(createEventID(event));
+  let hatMutabilityChangedEvent = new HatMutabilityChangedEvent(createEventID(event, 'HatMutabilityChanged'));
   hatMutabilityChangedEvent.blockNumber = event.block.number.toI32();
   hatMutabilityChangedEvent.timestamp = event.block.timestamp;
   hatMutabilityChangedEvent.transactionID = event.transaction.hash;
@@ -184,7 +180,7 @@ export function handleHatStatusChanged(event: HatStatusChanged): void {
   hat.save();
 
   // create new HatStatusChangedEvent 
-  let hatStatusChangedEvent = new HatStatusChangedEvent(createEventID(event));
+  let hatStatusChangedEvent = new HatStatusChangedEvent(createEventID(event, 'HatStatusChanged'));
   hatStatusChangedEvent.blockNumber = event.block.number.toI32();
   hatStatusChangedEvent.timestamp = event.block.timestamp;
   hatStatusChangedEvent.transactionID = event.transaction.hash;
@@ -202,7 +198,7 @@ export function handleHatToggleChanged(event: HatToggleChanged): void {
   hat.save();
 
   // create new HatToggleChangedEvent 
-  let hatToggleChangedEvent = new HatToggleChangedEvent(createEventID(event));
+  let hatToggleChangedEvent = new HatToggleChangedEvent(createEventID(event, 'HatToggleChanged'));
   hatToggleChangedEvent.blockNumber = event.block.number.toI32();
   hatToggleChangedEvent.timestamp = event.block.timestamp;
   hatToggleChangedEvent.transactionID = event.transaction.hash;
@@ -243,7 +239,7 @@ function giveHat(hat: Hat, event: TransferSingle): void {
   hat.save();
 
   // create new HatMintedEvent 
-  let hatMintedEvent = new HatMintedEvent(createEventID(event));
+  let hatMintedEvent = new HatMintedEvent(createEventID(event, 'HatMinted'));
   hatMintedEvent.blockNumber = event.block.number.toI32();
   hatMintedEvent.timestamp = event.block.timestamp;
   hatMintedEvent.transactionID = event.transaction.hash;
@@ -266,7 +262,7 @@ function removeHat(hat: Hat, event: TransferSingle): void {
   hat.save();
 
   // create new HatBurnedEvent 
-  let hatBurnedEvent = new HatBurnedEvent(createEventID(event));
+  let hatBurnedEvent = new HatBurnedEvent(createEventID(event, 'HatBurned'));
   hatBurnedEvent.blockNumber = event.block.number.toI32();
   hatBurnedEvent.timestamp = event.block.timestamp;
   hatBurnedEvent.transactionID = event.transaction.hash;
