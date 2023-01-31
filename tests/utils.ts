@@ -15,12 +15,102 @@ import {
     HatImageURIChanged,
     HatMaxSupplyChanged,
     HatMutabilityChanged,
-    HatStatusChanged
+    HatStatusChanged,
+    TopHatLinkRequested,
+    TopHatLinked,
+    WearerStandingChanged
 } from "../generated/Hats/Hats";
 import {
     newMockEvent,
     createMockedFunction
 } from "matchstick-as";
+
+export function mockTopHatLinkRequestedEvent(
+    domain: string,
+    newAdmin: string
+): TopHatLinkRequested {
+    // prepare event parameters array
+    let domainParam = new ethereum.EventParam('domain', ethereum.Value.fromUnsignedBigInt(BigInt.fromUnsignedBytes(Bytes.fromHexString(changeEndianness(domain)))));
+    let newAdminParam = new ethereum.EventParam('newAdmin', ethereum.Value.fromUnsignedBigInt(BigInt.fromUnsignedBytes(Bytes.fromHexString(changeEndianness(newAdmin)))));
+
+    // create mocked event
+    let mockEvent = newMockEvent();
+    let topHatLinkRequestedEvent = new TopHatLinkRequested(
+        mockEvent.address,
+        mockEvent.logIndex,
+        mockEvent.transactionLogIndex,
+        mockEvent.logType,
+        mockEvent.block,
+        mockEvent.transaction,
+        mockEvent.parameters,
+        mockEvent.receipt
+    );
+
+    topHatLinkRequestedEvent.parameters = new Array<ethereum.EventParam>();
+    topHatLinkRequestedEvent.parameters.push(domainParam);
+    topHatLinkRequestedEvent.parameters.push(newAdminParam);
+
+    return topHatLinkRequestedEvent;
+}
+
+export function mockTopHatLinkedEvent(
+    domain: string,
+    newAdmin: string
+): TopHatLinked {
+    // prepare event parameters array
+    let domainParam = new ethereum.EventParam('domain', ethereum.Value.fromUnsignedBigInt(BigInt.fromUnsignedBytes(Bytes.fromHexString(changeEndianness(domain)))));
+    let newAdminParam = new ethereum.EventParam('newAdmin', ethereum.Value.fromUnsignedBigInt(BigInt.fromUnsignedBytes(Bytes.fromHexString(changeEndianness(newAdmin)))));
+
+    // create mocked event
+    let mockEvent = newMockEvent();
+    let topHatLinkedEvent = new TopHatLinked(
+        mockEvent.address,
+        mockEvent.logIndex,
+        mockEvent.transactionLogIndex,
+        mockEvent.logType,
+        mockEvent.block,
+        mockEvent.transaction,
+        mockEvent.parameters,
+        mockEvent.receipt
+    );
+
+    topHatLinkedEvent.parameters = new Array<ethereum.EventParam>();
+    topHatLinkedEvent.parameters.push(domainParam);
+    topHatLinkedEvent.parameters.push(newAdminParam);
+
+    return topHatLinkedEvent;
+}
+
+export function mockWearerStandingChangedEvent(
+    id: string,
+    wearer: Address,
+    wearerStanding: boolean
+): WearerStandingChanged {
+    // prepare event parameters array
+    let idParam = new ethereum.EventParam('id', ethereum.Value.fromUnsignedBigInt(BigInt.fromUnsignedBytes(Bytes.fromHexString(changeEndianness(id)))));
+    let wearerParam = new ethereum.EventParam('wearer', ethereum.Value.fromAddress(wearer));
+    let wearerStandingParam = new ethereum.EventParam('wearerStanding', ethereum.Value.fromBoolean(wearerStanding));
+
+    // create mocked event
+    let mockEvent = newMockEvent();
+    let wearerStandingChangedEvent = new WearerStandingChanged(
+        mockEvent.address,
+        mockEvent.logIndex,
+        mockEvent.transactionLogIndex,
+        mockEvent.logType,
+        mockEvent.block,
+        mockEvent.transaction,
+        mockEvent.parameters,
+        mockEvent.receipt
+    );
+
+    wearerStandingChangedEvent.parameters = new Array<ethereum.EventParam>();
+    wearerStandingChangedEvent.parameters.push(idParam);
+    wearerStandingChangedEvent.parameters.push(wearerParam);
+    wearerStandingChangedEvent.parameters.push(wearerStandingParam);
+
+    return wearerStandingChangedEvent;
+}
 
 export function mockHatStatusChangedEvent(
     id: string,
@@ -28,7 +118,7 @@ export function mockHatStatusChangedEvent(
 ): HatStatusChanged {
     // prepare event parameters array
     let idParam = new ethereum.EventParam('id', ethereum.Value.fromUnsignedBigInt(BigInt.fromUnsignedBytes(Bytes.fromHexString(changeEndianness(id)))));
-    let maxSupplyParam = new ethereum.EventParam('details', ethereum.Value.fromBoolean(status));
+    let newStatusParam = new ethereum.EventParam('newStatus', ethereum.Value.fromBoolean(status));
 
     // create mocked event
     let mockEvent = newMockEvent();
@@ -45,7 +135,7 @@ export function mockHatStatusChangedEvent(
 
     hatStatusChangedEvent.parameters = new Array<ethereum.EventParam>();
     hatStatusChangedEvent.parameters.push(idParam);
-    hatStatusChangedEvent.parameters.push(maxSupplyParam);
+    hatStatusChangedEvent.parameters.push(newStatusParam);
 
     return hatStatusChangedEvent;
 }
@@ -81,7 +171,7 @@ export function mockHatMaxSupplyChangedEvent(
 ): HatMaxSupplyChanged {
     // prepare event parameters array
     let idParam = new ethereum.EventParam('id', ethereum.Value.fromUnsignedBigInt(BigInt.fromUnsignedBytes(Bytes.fromHexString(changeEndianness(id)))));
-    let maxSupplyParam = new ethereum.EventParam('details', ethereum.Value.fromUnsignedBigInt(maxSupply));
+    let maxSupplyParam = new ethereum.EventParam('maxSupply', ethereum.Value.fromUnsignedBigInt(maxSupply));
 
     // create mocked event
     let mockEvent = newMockEvent();
@@ -109,7 +199,7 @@ export function mockHatImageUriChangedEvent(
 ): HatImageURIChanged {
     // prepare event parameters array
     let idParam = new ethereum.EventParam('id', ethereum.Value.fromUnsignedBigInt(BigInt.fromUnsignedBytes(Bytes.fromHexString(changeEndianness(id)))));
-    let imageUriParam = new ethereum.EventParam('details', ethereum.Value.fromString(imageUri));
+    let imageUriParam = new ethereum.EventParam('imageUri', ethereum.Value.fromString(imageUri));
 
     // create mocked event
     let mockEvent = newMockEvent();
@@ -137,7 +227,7 @@ export function mockHatToggleChangedEvent(
 ): HatToggleChanged {
     // prepare event parameters array
     let idParam = new ethereum.EventParam('id', ethereum.Value.fromUnsignedBigInt(BigInt.fromUnsignedBytes(Bytes.fromHexString(changeEndianness(id)))));
-    let toggleParam = new ethereum.EventParam('details', ethereum.Value.fromAddress(toggle));
+    let toggleParam = new ethereum.EventParam('toggle', ethereum.Value.fromAddress(toggle));
 
     // create mocked event
     let mockEvent = newMockEvent();
@@ -165,7 +255,7 @@ export function mockHatEligibilityChangedEvent(
 ): HatEligibilityChanged {
     // prepare event parameters array
     let idParam = new ethereum.EventParam('id', ethereum.Value.fromUnsignedBigInt(BigInt.fromUnsignedBytes(Bytes.fromHexString(changeEndianness(id)))));
-    let eligibilityParam = new ethereum.EventParam('details', ethereum.Value.fromAddress(eligibility));
+    let eligibilityParam = new ethereum.EventParam('eligibility', ethereum.Value.fromAddress(eligibility));
 
     // create mocked event
     let mockEvent = newMockEvent();

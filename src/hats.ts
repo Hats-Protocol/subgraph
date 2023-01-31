@@ -1,4 +1,4 @@
-import { BigInt, Address } from "@graphprotocol/graph-ts"
+import { BigInt, Address, log } from "@graphprotocol/graph-ts"
 import {
   Hats,
   HatCreated,
@@ -9,7 +9,10 @@ import {
   HatMutabilityChanged,
   HatStatusChanged,
   HatToggleChanged,
-  TransferSingle
+  TransferSingle,
+  TopHatLinkRequested,
+  TopHatLinked,
+  WearerStandingChanged
 } from "../generated/Hats/Hats"
 import {
   Hat,
@@ -24,7 +27,10 @@ import {
   HatToggleChangedEvent,
   HatMutabilityChangedEvent,
   HatMaxSupplyChangedEvent,
-  HatImageURIChangedEvent
+  HatImageURIChangedEvent,
+  TopHatLinkRequestedEvent,
+  TopHatLinkedEvent,
+  WearerStandingChangedEvent
 } from "../generated/schema"
 import {
   hatLevel,
@@ -32,7 +38,9 @@ import {
   topHatDomain,
   createEventID,
   getHatAdmin,
-  hatIdToPrettyId
+  hatIdToPrettyId,
+  topHatDomainToHex,
+  topHatDomainToHatId
 } from "./utils"
 
 
@@ -51,11 +59,14 @@ export function handleHatCreated(event: HatCreated): void {
   hat.status = true;
   hat.level = hatLevel(event.address, event.params.id);
   hat.currentSupply = BigInt.fromU32(0);
+  hat.badStandings = [];
   if (hat.level == 0) {
     // top hat is its own admin
     hat.admin = hat.id;
     // create a new tree
     let tree = new Tree(topHatDomain(event.params.id))
+    tree.linkedToHat = null;
+    tree.linkedToTree = null;
     hat.tree = tree.id;
     tree.save();
   } else {
@@ -70,7 +81,6 @@ export function handleHatCreated(event: HatCreated): void {
   hatCreatedEvent.blockNumber = event.block.number.toI32();
   hatCreatedEvent.timestamp = event.block.timestamp;
   hatCreatedEvent.transactionID = event.transaction.hash;
-  hatCreatedEvent.hatId = hatIdToHex(event.params.id);
   hatCreatedEvent.hatDetails = event.params.details;
   hatCreatedEvent.hatMaxSupply = event.params.maxSupply;
   hatCreatedEvent.hatEligibility = event.params.eligibility.toHexString();
@@ -93,7 +103,6 @@ export function handleHatDetailsChanged(event: HatDetailsChanged): void {
   hatDetailsChangedEvent.blockNumber = event.block.number.toI32();
   hatDetailsChangedEvent.timestamp = event.block.timestamp;
   hatDetailsChangedEvent.transactionID = event.transaction.hash;
-  hatDetailsChangedEvent.hatId = hatIdToHex(event.params.hatId);
   hatDetailsChangedEvent.hatNewDetails = event.params.newDetails;
   hatDetailsChangedEvent.tree = topHatDomain(event.params.hatId);
   hatDetailsChangedEvent.hat = hatIdToHex(event.params.hatId);
@@ -113,7 +122,6 @@ export function handleHatEligibilityChanged(
   hatEligibilityChangedEvent.blockNumber = event.block.number.toI32();
   hatEligibilityChangedEvent.timestamp = event.block.timestamp;
   hatEligibilityChangedEvent.transactionID = event.transaction.hash;
-  hatEligibilityChangedEvent.hatId = hatIdToHex(event.params.hatId);
   hatEligibilityChangedEvent.hatNewEligibility = event.params.newEligibility.toHexString();
   hatEligibilityChangedEvent.tree = topHatDomain(event.params.hatId);
   hatEligibilityChangedEvent.hat = hatIdToHex(event.params.hatId);
@@ -131,7 +139,6 @@ export function handleHatImageURIChanged(event: HatImageURIChanged): void {
   hatImageURIChangedEvent.blockNumber = event.block.number.toI32();
   hatImageURIChangedEvent.timestamp = event.block.timestamp;
   hatImageURIChangedEvent.transactionID = event.transaction.hash;
-  hatImageURIChangedEvent.hatId = hatIdToHex(event.params.hatId);
   hatImageURIChangedEvent.hatNewImageURI = event.params.newImageURI;
   hatImageURIChangedEvent.tree = topHatDomain(event.params.hatId);
   hatImageURIChangedEvent.hat = hatIdToHex(event.params.hatId);
@@ -149,7 +156,6 @@ export function handleHatMaxSupplyChanged(event: HatMaxSupplyChanged): void {
   hatMaxSupplyChangedEvent.blockNumber = event.block.number.toI32();
   hatMaxSupplyChangedEvent.timestamp = event.block.timestamp;
   hatMaxSupplyChangedEvent.transactionID = event.transaction.hash;
-  hatMaxSupplyChangedEvent.hatId = hatIdToHex(event.params.hatId);
   hatMaxSupplyChangedEvent.hatNewMaxSupply = event.params.newMaxSupply;
   hatMaxSupplyChangedEvent.tree = topHatDomain(event.params.hatId);
   hatMaxSupplyChangedEvent.hat = hatIdToHex(event.params.hatId);
@@ -167,7 +173,6 @@ export function handleHatMutabilityChanged(event: HatMutabilityChanged): void {
   hatMutabilityChangedEvent.blockNumber = event.block.number.toI32();
   hatMutabilityChangedEvent.timestamp = event.block.timestamp;
   hatMutabilityChangedEvent.transactionID = event.transaction.hash;
-  hatMutabilityChangedEvent.hatId = hatIdToHex(event.params.hatId);
   hatMutabilityChangedEvent.tree = topHatDomain(event.params.hatId);
   hatMutabilityChangedEvent.hat = hatIdToHex(event.params.hatId);
   hatMutabilityChangedEvent.save();
@@ -184,7 +189,6 @@ export function handleHatStatusChanged(event: HatStatusChanged): void {
   hatStatusChangedEvent.blockNumber = event.block.number.toI32();
   hatStatusChangedEvent.timestamp = event.block.timestamp;
   hatStatusChangedEvent.transactionID = event.transaction.hash;
-  hatStatusChangedEvent.hatId = hatIdToHex(event.params.hatId);
   hatStatusChangedEvent.hatNewStatus = event.params.newStatus;
   hatStatusChangedEvent.tree = topHatDomain(event.params.hatId);
   hatStatusChangedEvent.hat = hatIdToHex(event.params.hatId);
@@ -202,7 +206,6 @@ export function handleHatToggleChanged(event: HatToggleChanged): void {
   hatToggleChangedEvent.blockNumber = event.block.number.toI32();
   hatToggleChangedEvent.timestamp = event.block.timestamp;
   hatToggleChangedEvent.transactionID = event.transaction.hash;
-  hatToggleChangedEvent.hatId = hatIdToHex(event.params.hatId);
   hatToggleChangedEvent.hatNewToggle = event.params.newToggle.toHexString();
   hatToggleChangedEvent.tree = topHatDomain(event.params.hatId);
   hatToggleChangedEvent.hat = hatIdToHex(event.params.hatId);
@@ -221,6 +224,69 @@ export function handleTransferSingle(event: TransferSingle): void {
   else if (event.params.from != Address.zero() && event.params.to == Address.zero()) { // burn event
     removeHat(hat, event);
   }
+}
+
+export function handleWearerStandingChanged(event: WearerStandingChanged): void {
+  // load hat and update the badStandings array
+  let hat = Hat.load(hatIdToHex(event.params.hatId)) as Hat;
+  let wearer = Wearer.load(event.params.wearer.toHexString()) as Wearer;
+  let badStandings = hat.badStandings;
+  if (event.params.wearerStanding) {
+    let index = badStandings.indexOf(wearer.id);
+    badStandings.splice(index, 1);
+    hat.badStandings = badStandings;
+  }
+  else {
+    badStandings.push(wearer.id);
+    hat.badStandings = badStandings;
+  }
+  hat.save();
+
+  // create new WearerStandingChangedEvent 
+  let wearerStandingChangedEvent = new WearerStandingChangedEvent(createEventID(event, 'WearerStandingChanged'));
+  wearerStandingChangedEvent.tree = topHatDomain(event.params.hatId);
+  wearerStandingChangedEvent.hat = hatIdToHex(event.params.hatId);
+  wearerStandingChangedEvent.blockNumber = event.block.number.toI32();
+  wearerStandingChangedEvent.timestamp = event.block.timestamp;
+  wearerStandingChangedEvent.transactionID = event.transaction.hash;
+  wearerStandingChangedEvent.wearer = wearer.id;
+  wearerStandingChangedEvent.wearerStanding = event.params.wearerStanding;
+  wearerStandingChangedEvent.save();
+}
+
+export function handleTopHatLinkRequested(event: TopHatLinkRequested): void {
+  // create new TopHatLinkRequestedEvent 
+  let topHatLinkRequestedEvent = new TopHatLinkRequestedEvent(createEventID(event, 'TopHatLinkRequested'));
+  topHatLinkRequestedEvent.tree = topHatDomainToHex(event.params.domain);
+  topHatLinkRequestedEvent.hat = topHatDomainToHatId(event.params.domain);
+  topHatLinkRequestedEvent.blockNumber = event.block.number.toI32();
+  topHatLinkRequestedEvent.timestamp = event.block.timestamp;
+  topHatLinkRequestedEvent.transactionID = event.transaction.hash;
+  topHatLinkRequestedEvent.newAdmin = hatIdToHex(event.params.newAdmin);
+  topHatLinkRequestedEvent.save();
+}
+
+export function handleTopHatLinked(event: TopHatLinked): void {
+  let tree = Tree.load(topHatDomainToHex(event.params.domain)) as Tree;
+  if (event.params.newAdmin == BigInt.zero()) {
+    tree.linkedToHat = null;
+    tree.linkedToTree = null;
+  }
+  else {
+    tree.linkedToHat = hatIdToHex(event.params.newAdmin);
+    tree.linkedToTree = topHatDomain(event.params.newAdmin);
+  }
+  tree.save();
+
+  // create new TopHatLinkedEvent 
+  let topHatLinkedEvent = new TopHatLinkedEvent(createEventID(event, 'TopHatLinked'));
+  topHatLinkedEvent.tree = topHatDomainToHex(event.params.domain);
+  topHatLinkedEvent.hat = topHatDomainToHatId(event.params.domain);
+  topHatLinkedEvent.blockNumber = event.block.number.toI32();
+  topHatLinkedEvent.timestamp = event.block.timestamp;
+  topHatLinkedEvent.transactionID = event.transaction.hash;
+  topHatLinkedEvent.newAdmin = hatIdToHex(event.params.newAdmin);
+  topHatLinkedEvent.save();
 }
 
 function giveHat(hat: Hat, event: TransferSingle): void {
@@ -243,7 +309,6 @@ function giveHat(hat: Hat, event: TransferSingle): void {
   hatMintedEvent.blockNumber = event.block.number.toI32();
   hatMintedEvent.timestamp = event.block.timestamp;
   hatMintedEvent.transactionID = event.transaction.hash;
-  hatMintedEvent.hatId = hatIdToHex(event.params.id);
   hatMintedEvent.wearer = to.id;
   hatMintedEvent.operator = event.params.operator.toHexString();
   hatMintedEvent.tree = topHatDomain(event.params.id);
@@ -266,7 +331,6 @@ function removeHat(hat: Hat, event: TransferSingle): void {
   hatBurnedEvent.blockNumber = event.block.number.toI32();
   hatBurnedEvent.timestamp = event.block.timestamp;
   hatBurnedEvent.transactionID = event.transaction.hash;
-  hatBurnedEvent.hatId = hatIdToHex(event.params.id);
   hatBurnedEvent.wearer = from.id;
   hatBurnedEvent.operator = event.params.operator.toHexString();
   hatBurnedEvent.tree = topHatDomain(event.params.id);

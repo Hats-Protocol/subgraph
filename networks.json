@@ -1,8 +1,8 @@
 {
   "goerli": {
     "Hats": {
-      "address": "0xcf912a0193593f5cD55D81FF611c26c3ED63f924",
-      "startBlock": 8095424
+      "address": "0x96bD657Fcc04c71B47f896a829E5728415cbcAa1",
+      "startBlock": 8376439
     }
   },
   "polygon": {

@@ -14,7 +14,9 @@ type Hat @entity {
   tree: Tree!
   wearers: [Wearer!]!
   admin: Hat!
+  badStandings: [Wearer!]!
   subHats: [Hat!]! @derivedFrom(field: "admin")
+  linkedTrees: [Tree!]! @derivedFrom(field: "linkedToHat")
   events: [HatsEvent!]! @derivedFrom(field: "hat")
 } 
 
@@ -28,7 +30,10 @@ type Wearer @entity {
 type Tree @entity {
   "Tree ID is its top hat domain - first 4 bytes of the top hat ID"
   id: ID!
+  linkedToTree: Tree
+  linkedToHat: Hat
   hats: [Hat!]! @derivedFrom(field: "tree")
+  linkedFromTrees: [Tree!]! @derivedFrom(field: "linkedToTree")
   events: [HatsEvent!]! @derivedFrom(field: "tree")
 }
 
@@ -48,7 +53,6 @@ type HatCreatedEvent implements HatsEvent @entity {
   blockNumber: Int!
   timestamp: BigInt!
   transactionID: Bytes!
-  hatId: String!
   hatDetails: String!
   hatMaxSupply: BigInt!
   hatEligibility: String!
@@ -64,7 +68,6 @@ type HatMintedEvent implements HatsEvent @entity {
   blockNumber: Int!
   timestamp: BigInt!
   transactionID: Bytes!
-  hatId: String!
   wearer: Wearer!
   operator: String!
 }
@@ -76,7 +79,6 @@ type HatBurnedEvent implements HatsEvent @entity {
   blockNumber: Int!
   timestamp: BigInt!
   transactionID: Bytes!
-  hatId: String!
   wearer: Wearer!
   operator: String!
 }
@@ -88,7 +90,6 @@ type HatStatusChangedEvent implements HatsEvent @entity {
   blockNumber: Int!
   timestamp: BigInt!
   transactionID: Bytes!
-  hatId: String!
   hatNewStatus: Boolean!
 }
 
@@ -99,7 +100,6 @@ type HatDetailsChangedEvent implements HatsEvent @entity {
   blockNumber: Int!
   timestamp: BigInt!
   transactionID: Bytes!
-  hatId: String!
   hatNewDetails: String!
 }
 
@@ -110,7 +110,6 @@ type HatEligibilityChangedEvent implements HatsEvent @entity {
   blockNumber: Int!
   timestamp: BigInt!
   transactionID: Bytes!
-  hatId: String!
   hatNewEligibility: String!
 }
 
@@ -121,7 +120,6 @@ type HatToggleChangedEvent implements HatsEvent @entity {
   blockNumber: Int!
   timestamp: BigInt!
   transactionID: Bytes!
-  hatId: String!
   hatNewToggle: String!
 }
 
@@ -132,7 +130,6 @@ type HatMutabilityChangedEvent implements HatsEvent @entity {
   blockNumber: Int!
   timestamp: BigInt!
   transactionID: Bytes!
-  hatId: String!
 }
 
 type HatMaxSupplyChangedEvent implements HatsEvent @entity {
@@ -142,7 +139,6 @@ type HatMaxSupplyChangedEvent implements HatsEvent @entity {
   blockNumber: Int!
   timestamp: BigInt!
   transactionID: Bytes!
-  hatId: String!
   hatNewMaxSupply: BigInt!
 }
 
@@ -153,8 +149,38 @@ type HatImageURIChangedEvent implements HatsEvent @entity {
   blockNumber: Int!
   timestamp: BigInt!
   transactionID: Bytes!
-  hatId: String!
   hatNewImageURI: String!
+}
+
+type TopHatLinkRequestedEvent implements HatsEvent @entity {
+  id: ID!
+  tree: Tree!
+  hat: Hat!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  newAdmin: Hat!
+}
+
+type TopHatLinkedEvent implements HatsEvent @entity {
+  id: ID!
+  tree: Tree!
+  hat: Hat!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  newAdmin: Hat!
+}
+
+type WearerStandingChangedEvent implements HatsEvent @entity {
+  id: ID!
+  tree: Tree!
+  hat: Hat!
+  blockNumber: Int!
+  timestamp: BigInt!
+  transactionID: Bytes!
+  wearer: Wearer!
+  wearerStanding: Boolean!
 }
 
 

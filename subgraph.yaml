@@ -7,8 +7,8 @@ dataSources:
     network: goerli
     source:
       abi: Hats
-      address: "0xcf912a0193593f5cD55D81FF611c26c3ED63f924"
-      startBlock: 8095424
+      address: "0x96bD657Fcc04c71B47f896a829E5728415cbcAa1"
+      startBlock: 8376439
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -40,4 +40,10 @@ dataSources:
         - event: TransferSingle(indexed address,indexed address,indexed
             address,uint256,uint256)
           handler: handleTransferSingle
+        - event: WearerStandingChanged(uint256,address,bool)
+          handler: handleWearerStandingChanged
+        - event: TopHatLinkRequested(uint32,uint256)
+          handler: handleTopHatLinkRequested
+        - event: TopHatLinked(uint32,uint256)
+          handler: handleTopHatLinked
       file: ./src/hats.ts
