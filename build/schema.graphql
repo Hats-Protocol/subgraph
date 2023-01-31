@@ -18,7 +18,7 @@ type Hat @entity {
   subHats: [Hat!]! @derivedFrom(field: "admin")
   linkedTrees: [Tree!]! @derivedFrom(field: "linkedToHat")
   events: [HatsEvent!]! @derivedFrom(field: "hat")
-} 
+}
 
 type Wearer @entity {
   id: ID!
@@ -38,11 +38,11 @@ type Tree @entity {
 }
 
 interface HatsEvent {
-	id: ID!
-	tree: Tree!
+  id: ID!
+  tree: Tree!
   hat: Hat!
   blockNumber: Int!
-	timestamp: BigInt!
+  timestamp: BigInt!
   transactionID: Bytes!
 }
 
@@ -182,5 +182,3 @@ type WearerStandingChangedEvent implements HatsEvent @entity {
   wearer: Wearer!
   wearerStanding: Boolean!
 }
-
-
