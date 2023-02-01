@@ -2,6 +2,10 @@
 
 This is a subgraph for the [Hats-Protocol](https://www.hatsprotocol.xyz/) project.
 
+# Important Note:
+
+The `status` and `badStandings` fields of a `Hat` entity, track the status and standing as currently recorded in the Hats contract. It is NOT tracking the eligibility and toggle modules in case they exist and thus only represent the last recorded state in the Hats contract. In case they depend on the state of external contracts, these fields in the subgraph may be out of sync with the onchain state.
+
 # Example Queries
 
 ## Tree
@@ -33,23 +37,62 @@ Get a specific tree:
 }
 ```
 
+In case the tree was linked to another tree, get the parent tree:
+
+```graphql
+{
+  tree(id: "0x00000001") {
+    id
+    childOfTree {
+      id
+    }
+  }
+}
+```
+
+In case the tree was linked to another tree, get the hat that the tree is linked to:
+
+```graphql
+{
+  tree(id: "0x00000001") {
+    id
+    linkedToHat {
+      id
+    }
+  }
+}
+```
+
+In case the tree was linked to by other trees, get the trees that are linked directly to the tree:
+
+```graphql
+{
+  tree(id: "0x00000001") {
+    id
+    parentOfTrees {
+      id
+    }
+  }
+}
+```
+
 ## Hat
 
-The ID of a the hat entity is the ID of the hat in hex format.
+The ID of the hat entity is the ID of the hat in hex format.
 
-Addotionally, the hat entity includes a "prettyId" field, which is formatted in an IP address style:
+Additionally, the hat entity includes a "prettyId" field, which is formatted in an IP address style:
 
 - In hex, with the `0x` prefix
 - Periods between the hat levels
 - Only levels with non-zero values are shown
-  For example, the "prettyId" of a level 3 hat might look like this: `0x00000001.01.01`
+  For example, the "prettyId" of a level 3 hat might look like this: `0x00000001.0001.0001`
 
 The following query will get all the basic information of a hat:
 
 ```graphql
 {
   hat(
-    id: "0x0000000101000000000000000000000000000000000000000000000000000000"
+    id: "0x0000000100010000000000000000000000000000000000000000000000000000"
   ) {
     id
     prettyId
@@ -62,7 +105,7 @@ The following query will get all the basic information of a hat:
     createdAt
     maxSupply
     currentSupply
-    level
+    levelAtLocalTree
   }
 }
 ```
@@ -72,7 +115,7 @@ The following query will get the tree that the hat belongs to:
 ```graphql
 {
   hat(
-    id: "0x0000000101000000000000000000000000000000000000000000000000000000"
+    id: "0x0000000100010000000000000000000000000000000000000000000000000000"
   ) {
     id
     tree {
@@ -87,7 +130,7 @@ The following query will get the admin of the hat:
 ```graphql
 {
   hat(
-    id: "0x0000000101000000000000000000000000000000000000000000000000000000"
+    id: "0x0000000100010000000000000000000000000000000000000000000000000000"
   ) {
     id
     admin {
@@ -102,7 +145,7 @@ The following query will get the sub-hats that are one level deeper:
 ```graphql
 {
   hat(
-    id: "0x0000000101000000000000000000000000000000000000000000000000000000"
+    id: "0x0000000100010000000000000000000000000000000000000000000000000000"
   ) {
     id
     subHats {
@@ -117,10 +160,40 @@ The following query will get the wearers of the hat:
 ```graphql
 {
   hat(
-    id: "0x0000000101000000000000000000000000000000000000000000000000000000"
+    id: "0x0000000100010000000000000000000000000000000000000000000000000000"
   ) {
     id
     wearers {
+      id
+    }
+  }
+}
+```
+
+The following query will get the all the wearers with a bad standing:
+
+```graphql
+{
+  hat(
+    id: "0x0000000100010000000000000000000000000000000000000000000000000000"
+  ) {
+    id
+    badStandings {
+      id
+    }
+  }
+}
+```
+
+The following query will get the all the trees that are linked to a hat:
+
+```graphql
+{
+  hat(
+    id: "0x0000000100010000000000000000000000000000000000000000000000000000"
+  ) {
+    id
+    linkedTrees {
       id
     }
   }
@@ -160,49 +233,63 @@ The following query will get the entire history of events in a specific tree:
       blockNumber
       timestamp
       transactionID
+      tree {
+        id
+      }
+      hat {
+        id
+      }
       ... on HatCreatedEvent {
-        hatId
+        hatDetails
+        hatMaxSupply
+        hatEligibility
+        hatToggle
+        hatMutable
+        hatImageUri
       }
       ... on HatMintedEvent {
-        hatId
         wearer {
           id
         }
         operator
       }
       ... on HatBurnedEvent {
-        hatId
         wearer {
           id
         }
         operator
       }
       ... on HatStatusChangedEvent {
-        hatId
         hatNewStatus
       }
       ... on HatDetailsChangedEvent {
-        hatId
         hatNewDetails
       }
       ... on HatEligibilityChangedEvent {
-        hatId
         hatNewEligibility
       }
       ... on HatToggleChangedEvent {
-        hatId
         hatNewToggle
       }
       ... on HatMutabilityChangedEvent {
-        hatId
       }
       ... on HatMaxSupplyChangedEvent {
-        hatId
         hatNewMaxSupply
       }
       ... on HatImageURIChangedEvent {
-        hatId
         hatNewImageURI
+      }
+      ... on TopHatLinkRequestedEvent {
+        newAdmin
+      }
+      ... on TopHatLinkedEvent {
+        newAdmin
+      }
+      ... on WearerStandingChangedEvent {
+        wearer {
+          id
+        }
+        wearerStanding
       }
     }
   }
@@ -214,7 +301,7 @@ The following query will get the entire history of events in a specific hat:
 ```graphql
 {
   hat(
-    id: "0x0000000101000000000000000000000000000000000000000000000000000000"
+    id: "0x0000000100010000000000000000000000000000000000000000000000000000"
   ) {
     id
     events {
@@ -266,6 +353,18 @@ The following query will get the entire history of events in a specific hat:
         hatId
         hatNewImageURI
       }
+      ... on TopHatLinkRequestedEvent {
+        newAdmin
+      }
+      ... on TopHatLinkedEvent {
+        newAdmin
+      }
+      ... on WearerStandingChangedEvent {
+        wearer {
+          id
+        }
+        wearerStanding
+      }
     }
   }
 }
@@ -304,7 +403,7 @@ The following query will get the siblings of a hat:
 ```graphql
 {
   hat(
-    id: "0x0000000101000000000000000000000000000000000000000000000000000000"
+    id: "0x0000000100010000000000000000000000000000000000000000000000000000"
   ) {
     admin {
       subHats {
@@ -321,8 +420,8 @@ The following query will get a sub tree, in which a specific hat is a root of:
 {
   hats(
     where: {
-      id_gte: "0x0000000101000000000000000000000000000000000000000000000000000000"
-      id_lt: "0x0000000102000000000000000000000000000000000000000000000000000000"
+      id_gte: "0x0000000100010000000000000000000000000000000000000000000000000000"
+      id_lt: "0x0000000100020000000000000000000000000000000000000000000000000000"
     }
   ) {
     id

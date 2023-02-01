@@ -534,19 +534,6 @@ export function createHatCreatedEvent(
     imageURI
   );
 
-  // mock function calls
-  createMockedFunction(
-    hatCreatedEvent.address,
-    "getHatLevel",
-    "getHatLevel(uint256):(uint8)"
-  )
-    .withArgs([
-      ethereum.Value.fromUnsignedBigInt(
-        BigInt.fromByteArray(ByteArray.fromHexString(changeEndianness(id)))
-      ),
-    ])
-    .returns([ethereum.Value.fromUnsignedBigInt(BigInt.fromU32(level))]);
-
   if (level == 0) {
     createMockedFunction(
       hatCreatedEvent.address,
@@ -567,8 +554,8 @@ export function createHatCreatedEvent(
   } else {
     createMockedFunction(
       hatCreatedEvent.address,
-      "getAdminAtLevel",
-      "getAdminAtLevel(uint256,uint8):(uint256)"
+      "getTreeAdminAtLevel",
+      "getTreeAdminAtLevel(uint256,uint8):(uint256)"
     )
       .withArgs([
         ethereum.Value.fromUnsignedBigInt(

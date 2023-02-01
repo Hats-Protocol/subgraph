@@ -41,6 +41,7 @@ import {
   hatIdToPrettyId,
   topHatDomainToHex,
   topHatDomainToHatId,
+  hatLevelLocal,
 } from "./utils";
 
 export function handleHatCreated(event: HatCreated): void {
@@ -56,20 +57,20 @@ export function handleHatCreated(event: HatCreated): void {
   hat.mutable = event.params.mutable_;
   hat.imageUri = event.params.imageURI;
   hat.status = true;
-  hat.level = hatLevel(event.address, event.params.id);
+  hat.levelAtLocalTree = hatLevelLocal(event.params.id);
   hat.currentSupply = BigInt.fromU32(0);
   hat.badStandings = [];
-  if (hat.level == 0) {
+  if (hat.levelAtLocalTree == 0) {
     // top hat is its own admin
     hat.admin = hat.id;
     // create a new tree
     let tree = new Tree(topHatDomain(event.params.id));
     tree.linkedToHat = null;
-    tree.linkedToTree = null;
+    tree.childOfTree = null;
     hat.tree = tree.id;
     tree.save();
   } else {
-    hat.admin = getHatAdmin(event.address, event.params.id, hat.level - 1);
+    hat.admin = getHatAdmin(event.address, event.params.id, hat.levelAtLocalTree - 1);
     hat.tree = topHatDomain(event.params.id);
   }
 
@@ -297,14 +298,18 @@ export function handleTopHatLinkRequested(event: TopHatLinkRequested): void {
 
 export function handleTopHatLinked(event: TopHatLinked): void {
   let tree = Tree.load(topHatDomainToHex(event.params.domain)) as Tree;
-  if (event.params.newAdmin == BigInt.zero()) {
+  let topHat = Hat.load(topHatDomainToHatId(event.params.domain)) as Hat;
+  if (event.params.newAdmin == BigInt.zero()) { // delink tree 
     tree.linkedToHat = null;
-    tree.linkedToTree = null;
-  } else {
+    tree.childOfTree = null;
+    topHat.admin = topHat.id; // tophat returns to be its own admin
+  } else { // link tree
     tree.linkedToHat = hatIdToHex(event.params.newAdmin);
-    tree.linkedToTree = topHatDomain(event.params.newAdmin);
+    tree.childOfTree = topHatDomain(event.params.newAdmin);
+    topHat.admin = hatIdToHex(event.params.newAdmin); // tophat is no longer its own admin after linkage
   }
   tree.save();
+  topHat.save();
 
   // create new TopHatLinkedEvent
   let topHatLinkedEvent = new TopHatLinkedEvent(

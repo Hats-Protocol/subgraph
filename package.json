@@ -4,7 +4,7 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ hats-protocol/hats-protocol-goerli",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ gershido/hats-protocol-goerli",
     "create-local": "graph create --node http://localhost:8020/ Hats-Protocol/hats-protocol-goerli",
     "remove-local": "graph remove --node http://localhost:8020/ Hats-Protocol/hats-protocol-goerli",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 Hats-Protocol/hats-protocol-goerli",

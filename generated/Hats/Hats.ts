@@ -7,7 +7,7 @@ import {
   Entity,
   Bytes,
   Address,
-  BigInt,
+  BigInt
 } from "@graphprotocol/graph-ts";
 
 export class ApprovalForAll extends ethereum.Event {
@@ -486,7 +486,7 @@ export class Hats extends ethereum.SmartContract {
       "badStandings(uint256,address):(bool)",
       [
         ethereum.Value.fromUnsignedBigInt(param0),
-        ethereum.Value.fromAddress(param1),
+        ethereum.Value.fromAddress(param1)
       ]
     );
 
@@ -502,7 +502,7 @@ export class Hats extends ethereum.SmartContract {
       "badStandings(uint256,address):(bool)",
       [
         ethereum.Value.fromUnsignedBigInt(param0),
-        ethereum.Value.fromAddress(param1),
+        ethereum.Value.fromAddress(param1)
       ]
     );
     if (result.reverted) {
@@ -518,7 +518,7 @@ export class Hats extends ethereum.SmartContract {
       "balanceOf(address,uint256):(uint256)",
       [
         ethereum.Value.fromAddress(_wearer),
-        ethereum.Value.fromUnsignedBigInt(_hatId),
+        ethereum.Value.fromUnsignedBigInt(_hatId)
       ]
     );
 
@@ -531,7 +531,7 @@ export class Hats extends ethereum.SmartContract {
       "balanceOf(address,uint256):(uint256)",
       [
         ethereum.Value.fromAddress(_wearer),
-        ethereum.Value.fromUnsignedBigInt(_hatId),
+        ethereum.Value.fromUnsignedBigInt(_hatId)
       ]
     );
     if (result.reverted) {
@@ -547,7 +547,7 @@ export class Hats extends ethereum.SmartContract {
       "balanceOfBatch(address[],uint256[]):(uint256[])",
       [
         ethereum.Value.fromAddressArray(owners),
-        ethereum.Value.fromUnsignedBigIntArray(ids),
+        ethereum.Value.fromUnsignedBigIntArray(ids)
       ]
     );
 
@@ -563,7 +563,7 @@ export class Hats extends ethereum.SmartContract {
       "balanceOfBatch(address[],uint256[]):(uint256[])",
       [
         ethereum.Value.fromAddressArray(owners),
-        ethereum.Value.fromUnsignedBigIntArray(ids),
+        ethereum.Value.fromUnsignedBigIntArray(ids)
       ]
     );
     if (result.reverted) {
@@ -607,7 +607,7 @@ export class Hats extends ethereum.SmartContract {
         ethereum.Value.fromAddressArray(_eligibilityModules),
         ethereum.Value.fromAddressArray(_toggleModules),
         ethereum.Value.fromBooleanArray(_mutables),
-        ethereum.Value.fromStringArray(_imageURIs),
+        ethereum.Value.fromStringArray(_imageURIs)
       ]
     );
 
@@ -633,7 +633,7 @@ export class Hats extends ethereum.SmartContract {
         ethereum.Value.fromAddressArray(_eligibilityModules),
         ethereum.Value.fromAddressArray(_toggleModules),
         ethereum.Value.fromBooleanArray(_mutables),
-        ethereum.Value.fromStringArray(_imageURIs),
+        ethereum.Value.fromStringArray(_imageURIs)
       ]
     );
     if (result.reverted) {
@@ -649,7 +649,7 @@ export class Hats extends ethereum.SmartContract {
       "batchMintHats(uint256[],address[]):(bool)",
       [
         ethereum.Value.fromUnsignedBigIntArray(_hatIds),
-        ethereum.Value.fromAddressArray(_wearers),
+        ethereum.Value.fromAddressArray(_wearers)
       ]
     );
 
@@ -665,7 +665,7 @@ export class Hats extends ethereum.SmartContract {
       "batchMintHats(uint256[],address[]):(bool)",
       [
         ethereum.Value.fromUnsignedBigIntArray(_hatIds),
-        ethereum.Value.fromAddressArray(_wearers),
+        ethereum.Value.fromAddressArray(_wearers)
       ]
     );
     if (result.reverted) {
@@ -681,7 +681,7 @@ export class Hats extends ethereum.SmartContract {
       "buildHatId(uint256,uint16):(uint256)",
       [
         ethereum.Value.fromUnsignedBigInt(_admin),
-        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(_newHat)),
+        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(_newHat))
       ]
     );
 
@@ -694,7 +694,7 @@ export class Hats extends ethereum.SmartContract {
       "buildHatId(uint256,uint16):(uint256)",
       [
         ethereum.Value.fromUnsignedBigInt(_admin),
-        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(_newHat)),
+        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(_newHat))
       ]
     );
     if (result.reverted) {
@@ -733,7 +733,7 @@ export class Hats extends ethereum.SmartContract {
       "checkHatWearerStatus(uint256,address):(bool)",
       [
         ethereum.Value.fromUnsignedBigInt(_hatId),
-        ethereum.Value.fromAddress(_wearer),
+        ethereum.Value.fromAddress(_wearer)
       ]
     );
 
@@ -749,7 +749,7 @@ export class Hats extends ethereum.SmartContract {
       "checkHatWearerStatus(uint256,address):(bool)",
       [
         ethereum.Value.fromUnsignedBigInt(_hatId),
-        ethereum.Value.fromAddress(_wearer),
+        ethereum.Value.fromAddress(_wearer)
       ]
     );
     if (result.reverted) {
@@ -778,7 +778,7 @@ export class Hats extends ethereum.SmartContract {
         ethereum.Value.fromAddress(_eligibility),
         ethereum.Value.fromAddress(_toggle),
         ethereum.Value.fromBoolean(_mutable),
-        ethereum.Value.fromString(_imageURI),
+        ethereum.Value.fromString(_imageURI)
       ]
     );
 
@@ -804,7 +804,7 @@ export class Hats extends ethereum.SmartContract {
         ethereum.Value.fromAddress(_eligibility),
         ethereum.Value.fromAddress(_toggle),
         ethereum.Value.fromBoolean(_mutable),
-        ethereum.Value.fromString(_imageURI),
+        ethereum.Value.fromString(_imageURI)
       ]
     );
     if (result.reverted) {
@@ -820,7 +820,7 @@ export class Hats extends ethereum.SmartContract {
       "getAdminAtLevel(uint256,uint8):(uint256)",
       [
         ethereum.Value.fromUnsignedBigInt(_hatId),
-        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(_level)),
+        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(_level))
       ]
     );
 
@@ -836,7 +836,7 @@ export class Hats extends ethereum.SmartContract {
       "getAdminAtLevel(uint256,uint8):(uint256)",
       [
         ethereum.Value.fromUnsignedBigInt(_hatId),
-        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(_level)),
+        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(_level))
       ]
     );
     if (result.reverted) {
@@ -848,7 +848,7 @@ export class Hats extends ethereum.SmartContract {
 
   getHatLevel(_hatId: BigInt): i32 {
     let result = super.call("getHatLevel", "getHatLevel(uint256):(uint8)", [
-      ethereum.Value.fromUnsignedBigInt(_hatId),
+      ethereum.Value.fromUnsignedBigInt(_hatId)
     ]);
 
     return result[0].toI32();
@@ -856,7 +856,7 @@ export class Hats extends ethereum.SmartContract {
 
   try_getHatLevel(_hatId: BigInt): ethereum.CallResult<i32> {
     let result = super.tryCall("getHatLevel", "getHatLevel(uint256):(uint8)", [
-      ethereum.Value.fromUnsignedBigInt(_hatId),
+      ethereum.Value.fromUnsignedBigInt(_hatId)
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -890,7 +890,7 @@ export class Hats extends ethereum.SmartContract {
 
   getNextId(_admin: BigInt): BigInt {
     let result = super.call("getNextId", "getNextId(uint256):(uint256)", [
-      ethereum.Value.fromUnsignedBigInt(_admin),
+      ethereum.Value.fromUnsignedBigInt(_admin)
     ]);
 
     return result[0].toBigInt();
@@ -898,7 +898,7 @@ export class Hats extends ethereum.SmartContract {
 
   try_getNextId(_admin: BigInt): ethereum.CallResult<BigInt> {
     let result = super.tryCall("getNextId", "getNextId(uint256):(uint256)", [
-      ethereum.Value.fromUnsignedBigInt(_admin),
+      ethereum.Value.fromUnsignedBigInt(_admin)
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -959,7 +959,7 @@ export class Hats extends ethereum.SmartContract {
       "getTreeAdminAtLevel(uint256,uint8):(uint256)",
       [
         ethereum.Value.fromUnsignedBigInt(_hatId),
-        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(_level)),
+        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(_level))
       ]
     );
 
@@ -975,7 +975,7 @@ export class Hats extends ethereum.SmartContract {
       "getTreeAdminAtLevel(uint256,uint8):(uint256)",
       [
         ethereum.Value.fromUnsignedBigInt(_hatId),
-        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(_level)),
+        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(_level))
       ]
     );
     if (result.reverted) {
@@ -987,7 +987,7 @@ export class Hats extends ethereum.SmartContract {
 
   hatSupply(_hatId: BigInt): BigInt {
     let result = super.call("hatSupply", "hatSupply(uint256):(uint32)", [
-      ethereum.Value.fromUnsignedBigInt(_hatId),
+      ethereum.Value.fromUnsignedBigInt(_hatId)
     ]);
 
     return result[0].toBigInt();
@@ -995,7 +995,7 @@ export class Hats extends ethereum.SmartContract {
 
   try_hatSupply(_hatId: BigInt): ethereum.CallResult<BigInt> {
     let result = super.tryCall("hatSupply", "hatSupply(uint256):(uint32)", [
-      ethereum.Value.fromUnsignedBigInt(_hatId),
+      ethereum.Value.fromUnsignedBigInt(_hatId)
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -1010,7 +1010,7 @@ export class Hats extends ethereum.SmartContract {
       "isAdminOfHat(address,uint256):(bool)",
       [
         ethereum.Value.fromAddress(_user),
-        ethereum.Value.fromUnsignedBigInt(_hatId),
+        ethereum.Value.fromUnsignedBigInt(_hatId)
       ]
     );
 
@@ -1026,7 +1026,7 @@ export class Hats extends ethereum.SmartContract {
       "isAdminOfHat(address,uint256):(bool)",
       [
         ethereum.Value.fromAddress(_user),
-        ethereum.Value.fromUnsignedBigInt(_hatId),
+        ethereum.Value.fromUnsignedBigInt(_hatId)
       ]
     );
     if (result.reverted) {
@@ -1068,7 +1068,7 @@ export class Hats extends ethereum.SmartContract {
       "isEligible(address,uint256):(bool)",
       [
         ethereum.Value.fromAddress(_wearer),
-        ethereum.Value.fromUnsignedBigInt(_hatId),
+        ethereum.Value.fromUnsignedBigInt(_hatId)
       ]
     );
 
@@ -1084,7 +1084,7 @@ export class Hats extends ethereum.SmartContract {
       "isEligible(address,uint256):(bool)",
       [
         ethereum.Value.fromAddress(_wearer),
-        ethereum.Value.fromUnsignedBigInt(_hatId),
+        ethereum.Value.fromUnsignedBigInt(_hatId)
       ]
     );
     if (result.reverted) {
@@ -1100,7 +1100,7 @@ export class Hats extends ethereum.SmartContract {
       "isInGoodStanding(address,uint256):(bool)",
       [
         ethereum.Value.fromAddress(_wearer),
-        ethereum.Value.fromUnsignedBigInt(_hatId),
+        ethereum.Value.fromUnsignedBigInt(_hatId)
       ]
     );
 
@@ -1116,7 +1116,7 @@ export class Hats extends ethereum.SmartContract {
       "isInGoodStanding(address,uint256):(bool)",
       [
         ethereum.Value.fromAddress(_wearer),
-        ethereum.Value.fromUnsignedBigInt(_hatId),
+        ethereum.Value.fromUnsignedBigInt(_hatId)
       ]
     );
     if (result.reverted) {
@@ -1128,7 +1128,7 @@ export class Hats extends ethereum.SmartContract {
 
   isTopHat(_hatId: BigInt): boolean {
     let result = super.call("isTopHat", "isTopHat(uint256):(bool)", [
-      ethereum.Value.fromUnsignedBigInt(_hatId),
+      ethereum.Value.fromUnsignedBigInt(_hatId)
     ]);
 
     return result[0].toBoolean();
@@ -1136,7 +1136,7 @@ export class Hats extends ethereum.SmartContract {
 
   try_isTopHat(_hatId: BigInt): ethereum.CallResult<boolean> {
     let result = super.tryCall("isTopHat", "isTopHat(uint256):(bool)", [
-      ethereum.Value.fromUnsignedBigInt(_hatId),
+      ethereum.Value.fromUnsignedBigInt(_hatId)
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -1151,7 +1151,7 @@ export class Hats extends ethereum.SmartContract {
       "isWearerOfHat(address,uint256):(bool)",
       [
         ethereum.Value.fromAddress(_user),
-        ethereum.Value.fromUnsignedBigInt(_hatId),
+        ethereum.Value.fromUnsignedBigInt(_hatId)
       ]
     );
 
@@ -1167,7 +1167,7 @@ export class Hats extends ethereum.SmartContract {
       "isWearerOfHat(address,uint256):(bool)",
       [
         ethereum.Value.fromAddress(_user),
-        ethereum.Value.fromUnsignedBigInt(_hatId),
+        ethereum.Value.fromUnsignedBigInt(_hatId)
       ]
     );
     if (result.reverted) {
@@ -1241,7 +1241,7 @@ export class Hats extends ethereum.SmartContract {
   mintHat(_hatId: BigInt, _wearer: Address): boolean {
     let result = super.call("mintHat", "mintHat(uint256,address):(bool)", [
       ethereum.Value.fromUnsignedBigInt(_hatId),
-      ethereum.Value.fromAddress(_wearer),
+      ethereum.Value.fromAddress(_wearer)
     ]);
 
     return result[0].toBoolean();
@@ -1250,7 +1250,7 @@ export class Hats extends ethereum.SmartContract {
   try_mintHat(_hatId: BigInt, _wearer: Address): ethereum.CallResult<boolean> {
     let result = super.tryCall("mintHat", "mintHat(uint256,address):(bool)", [
       ethereum.Value.fromUnsignedBigInt(_hatId),
-      ethereum.Value.fromAddress(_wearer),
+      ethereum.Value.fromAddress(_wearer)
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -1266,7 +1266,7 @@ export class Hats extends ethereum.SmartContract {
       [
         ethereum.Value.fromAddress(_target),
         ethereum.Value.fromString(_details),
-        ethereum.Value.fromString(_imageURI),
+        ethereum.Value.fromString(_imageURI)
       ]
     );
 
@@ -1284,7 +1284,7 @@ export class Hats extends ethereum.SmartContract {
       [
         ethereum.Value.fromAddress(_target),
         ethereum.Value.fromString(_details),
-        ethereum.Value.fromString(_imageURI),
+        ethereum.Value.fromString(_imageURI)
       ]
     );
     if (result.reverted) {
@@ -1315,7 +1315,7 @@ export class Hats extends ethereum.SmartContract {
       "noCircularLinkage(uint32,uint256):(bool)",
       [
         ethereum.Value.fromUnsignedBigInt(_topHatDomain),
-        ethereum.Value.fromUnsignedBigInt(_linkedAdmin),
+        ethereum.Value.fromUnsignedBigInt(_linkedAdmin)
       ]
     );
 
@@ -1331,7 +1331,7 @@ export class Hats extends ethereum.SmartContract {
       "noCircularLinkage(uint32,uint256):(bool)",
       [
         ethereum.Value.fromUnsignedBigInt(_topHatDomain),
-        ethereum.Value.fromUnsignedBigInt(_linkedAdmin),
+        ethereum.Value.fromUnsignedBigInt(_linkedAdmin)
       ]
     );
     if (result.reverted) {
@@ -1347,7 +1347,7 @@ export class Hats extends ethereum.SmartContract {
       "sameTippyTophatDomain(uint32,uint256):(bool)",
       [
         ethereum.Value.fromUnsignedBigInt(_topHatDomain),
-        ethereum.Value.fromUnsignedBigInt(_newAdminHat),
+        ethereum.Value.fromUnsignedBigInt(_newAdminHat)
       ]
     );
 
@@ -1363,7 +1363,7 @@ export class Hats extends ethereum.SmartContract {
       "sameTippyTophatDomain(uint32,uint256):(bool)",
       [
         ethereum.Value.fromUnsignedBigInt(_topHatDomain),
-        ethereum.Value.fromUnsignedBigInt(_newAdminHat),
+        ethereum.Value.fromUnsignedBigInt(_newAdminHat)
       ]
     );
     if (result.reverted) {
@@ -1379,7 +1379,7 @@ export class Hats extends ethereum.SmartContract {
       "setHatStatus(uint256,bool):(bool)",
       [
         ethereum.Value.fromUnsignedBigInt(_hatId),
-        ethereum.Value.fromBoolean(_newStatus),
+        ethereum.Value.fromBoolean(_newStatus)
       ]
     );
 
@@ -1395,7 +1395,7 @@ export class Hats extends ethereum.SmartContract {
       "setHatStatus(uint256,bool):(bool)",
       [
         ethereum.Value.fromUnsignedBigInt(_hatId),
-        ethereum.Value.fromBoolean(_newStatus),
+        ethereum.Value.fromBoolean(_newStatus)
       ]
     );
     if (result.reverted) {
@@ -1418,7 +1418,7 @@ export class Hats extends ethereum.SmartContract {
         ethereum.Value.fromUnsignedBigInt(_hatId),
         ethereum.Value.fromAddress(_wearer),
         ethereum.Value.fromBoolean(_eligible),
-        ethereum.Value.fromBoolean(_standing),
+        ethereum.Value.fromBoolean(_standing)
       ]
     );
 
@@ -1438,7 +1438,7 @@ export class Hats extends ethereum.SmartContract {
         ethereum.Value.fromUnsignedBigInt(_hatId),
         ethereum.Value.fromAddress(_wearer),
         ethereum.Value.fromBoolean(_eligible),
-        ethereum.Value.fromBoolean(_standing),
+        ethereum.Value.fromBoolean(_standing)
       ]
     );
     if (result.reverted) {
@@ -1473,7 +1473,7 @@ export class Hats extends ethereum.SmartContract {
 
   uri(id: BigInt): string {
     let result = super.call("uri", "uri(uint256):(string)", [
-      ethereum.Value.fromUnsignedBigInt(id),
+      ethereum.Value.fromUnsignedBigInt(id)
     ]);
 
     return result[0].toString();
@@ -1481,7 +1481,7 @@ export class Hats extends ethereum.SmartContract {
 
   try_uri(id: BigInt): ethereum.CallResult<string> {
     let result = super.tryCall("uri", "uri(uint256):(string)", [
-      ethereum.Value.fromUnsignedBigInt(id),
+      ethereum.Value.fromUnsignedBigInt(id)
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();

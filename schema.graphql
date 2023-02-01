@@ -9,7 +9,7 @@ type Hat @entity {
   toggle: String!
   mutable: Boolean!
   imageUri: String!
-  level: Int!
+  levelAtLocalTree: Int!
   currentSupply: BigInt!
   tree: Tree!
   wearers: [Wearer!]!
@@ -30,10 +30,10 @@ type Wearer @entity {
 type Tree @entity {
   "Tree ID is its top hat domain - first 4 bytes of the top hat ID"
   id: ID!
-  linkedToTree: Tree
+  childOfTree: Tree
   linkedToHat: Hat
   hats: [Hat!]! @derivedFrom(field: "tree")
-  linkedFromTrees: [Tree!]! @derivedFrom(field: "linkedToTree")
+  parentOfTrees: [Tree!]! @derivedFrom(field: "childOfTree")
   events: [HatsEvent!]! @derivedFrom(field: "tree")
 }
 
@@ -153,6 +153,7 @@ type HatImageURIChangedEvent implements HatsEvent @entity {
 }
 
 type TopHatLinkRequestedEvent implements HatsEvent @entity {
+  "tree field is the tree that is being linked, hat field is the tree top hat"
   id: ID!
   tree: Tree!
   hat: Hat!
@@ -163,6 +164,7 @@ type TopHatLinkRequestedEvent implements HatsEvent @entity {
 }
 
 type TopHatLinkedEvent implements HatsEvent @entity {
+  "tree field is the tree that is being linked, hat field is the tree top hat"
   id: ID!
   tree: Tree!
   hat: Hat!

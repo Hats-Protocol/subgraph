@@ -8,7 +8,7 @@ import {
   store,
   Bytes,
   BigInt,
-  BigDecimal,
+  BigDecimal
 } from "@graphprotocol/graph-ts";
 
 export class Hat extends Entity {
@@ -123,13 +123,13 @@ export class Hat extends Entity {
     this.set("imageUri", Value.fromString(value));
   }
 
-  get level(): i32 {
-    let value = this.get("level");
+  get levelAtLocalTree(): i32 {
+    let value = this.get("levelAtLocalTree");
     return value!.toI32();
   }
 
-  set level(value: i32) {
-    this.set("level", Value.fromI32(value));
+  set levelAtLocalTree(value: i32) {
+    this.set("levelAtLocalTree", Value.fromI32(value));
   }
 
   get currentSupply(): BigInt {
@@ -295,8 +295,8 @@ export class Tree extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get linkedToTree(): string | null {
-    let value = this.get("linkedToTree");
+  get childOfTree(): string | null {
+    let value = this.get("childOfTree");
     if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -304,11 +304,11 @@ export class Tree extends Entity {
     }
   }
 
-  set linkedToTree(value: string | null) {
+  set childOfTree(value: string | null) {
     if (!value) {
-      this.unset("linkedToTree");
+      this.unset("childOfTree");
     } else {
-      this.set("linkedToTree", Value.fromString(<string>value));
+      this.set("childOfTree", Value.fromString(<string>value));
     }
   }
 
@@ -338,13 +338,13 @@ export class Tree extends Entity {
     this.set("hats", Value.fromStringArray(value));
   }
 
-  get linkedFromTrees(): Array<string> {
-    let value = this.get("linkedFromTrees");
+  get parentOfTrees(): Array<string> {
+    let value = this.get("parentOfTrees");
     return value!.toStringArray();
   }
 
-  set linkedFromTrees(value: Array<string>) {
-    this.set("linkedFromTrees", Value.fromStringArray(value));
+  set parentOfTrees(value: Array<string>) {
+    this.set("parentOfTrees", Value.fromStringArray(value));
   }
 
   get events(): Array<string> {

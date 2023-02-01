@@ -6,13 +6,21 @@ export function hatLevel(contractAddress: Address, hatId: BigInt): i32 {
   return hatsContract.getHatLevel(hatId);
 }
 
+export function hatLevelLocal(hatId: BigInt): i32 {
+  let prettyId = hatIdToPrettyId(hatId);
+  if (prettyId.length == 10) {
+    return 0;
+  }
+  return ((prettyId.length - 10) / 4);
+}
+
 export function hatIdToHex(hatId: BigInt): string {
   return "0x" + hatId.toHexString().slice(2).padStart(64, "0");
 }
 
 export function topHatDomainToHatId(domain: BigInt): string {
   let hexDomain = topHatDomainToHex(domain);
-  return hexDomain.padEnd(64, "0");
+  return hexDomain.padEnd(66, "0");
 }
 
 export function hatIdToPrettyId(hatId: BigInt): string {
@@ -51,6 +59,6 @@ export function getHatAdmin(
   level: i32
 ): string {
   let hatsContract = Hats.bind(contractAddress);
-  let admin = hatsContract.getAdminAtLevel(hatId, level);
+  let admin = hatsContract.getTreeAdminAtLevel(hatId, level);
   return hatIdToHex(admin);
 }

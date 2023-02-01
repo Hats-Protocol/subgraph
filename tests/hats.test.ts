@@ -124,7 +124,7 @@ describe("basic test", () => {
       assert.fieldEquals(
         "Hat",
         "0x0000000100000000000000000000000000000000000000000000000000000000",
-        "level",
+        "levelAtLocalTree",
         "0"
       );
       assert.fieldEquals(
@@ -240,7 +240,7 @@ describe("basic test", () => {
         assert.fieldEquals(
           "Hat",
           "0x0000000200000000000000000000000000000000000000000000000000000000",
-          "level",
+          "levelAtLocalTree",
           "0"
         );
         assert.fieldEquals(
@@ -275,7 +275,7 @@ describe("basic test", () => {
         );
         assert.fieldEquals("Tree", "0x00000002", "id", "0x00000002");
       });
-
+      
       describe("and tree 0x00000002 is linked to 0x00000001", () => {
         beforeEach(() => {
           let topHatLinkRequestedEvent = mockTopHatLinkRequestedEvent(
@@ -295,7 +295,7 @@ describe("basic test", () => {
           assert.fieldEquals(
             "Tree",
             "0x00000002",
-            "linkedToTree",
+            "childOfTree",
             "0x00000001"
           );
           assert.fieldEquals(
@@ -316,7 +316,7 @@ describe("basic test", () => {
           });
 
           test("test tree linked", () => {
-            assert.fieldEquals("Tree", "0x00000002", "linkedToTree", "null");
+            assert.fieldEquals("Tree", "0x00000002", "childOfTree", "null");
             assert.fieldEquals("Tree", "0x00000002", "linkedToHat", "null");
           });
         });
@@ -421,7 +421,7 @@ describe("basic test", () => {
         assert.fieldEquals(
           "Hat",
           "0x0000000100010000000000000000000000000000000000000000000000000000",
-          "level",
+          "levelAtLocalTree",
           "1"
         );
         assert.fieldEquals(
