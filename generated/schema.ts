@@ -123,13 +123,13 @@ export class Hat extends Entity {
     this.set("imageUri", Value.fromString(value));
   }
 
-  get level(): i32 {
-    let value = this.get("level");
+  get levelAtLocalTree(): i32 {
+    let value = this.get("levelAtLocalTree");
     return value!.toI32();
   }
 
-  set level(value: i32) {
-    this.set("level", Value.fromI32(value));
+  set levelAtLocalTree(value: i32) {
+    this.set("levelAtLocalTree", Value.fromI32(value));
   }
 
   get currentSupply(): BigInt {
@@ -168,6 +168,15 @@ export class Hat extends Entity {
     this.set("admin", Value.fromString(value));
   }
 
+  get badStandings(): Array<string> {
+    let value = this.get("badStandings");
+    return value!.toStringArray();
+  }
+
+  set badStandings(value: Array<string>) {
+    this.set("badStandings", Value.fromStringArray(value));
+  }
+
   get subHats(): Array<string> {
     let value = this.get("subHats");
     return value!.toStringArray();
@@ -175,6 +184,15 @@ export class Hat extends Entity {
 
   set subHats(value: Array<string>) {
     this.set("subHats", Value.fromStringArray(value));
+  }
+
+  get linkedTrees(): Array<string> {
+    let value = this.get("linkedTrees");
+    return value!.toStringArray();
+  }
+
+  set linkedTrees(value: Array<string>) {
+    this.set("linkedTrees", Value.fromStringArray(value));
   }
 
   get events(): Array<string> {
@@ -277,6 +295,40 @@ export class Tree extends Entity {
     this.set("id", Value.fromString(value));
   }
 
+  get childOfTree(): string | null {
+    let value = this.get("childOfTree");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set childOfTree(value: string | null) {
+    if (!value) {
+      this.unset("childOfTree");
+    } else {
+      this.set("childOfTree", Value.fromString(<string>value));
+    }
+  }
+
+  get linkedToHat(): string | null {
+    let value = this.get("linkedToHat");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set linkedToHat(value: string | null) {
+    if (!value) {
+      this.unset("linkedToHat");
+    } else {
+      this.set("linkedToHat", Value.fromString(<string>value));
+    }
+  }
+
   get hats(): Array<string> {
     let value = this.get("hats");
     return value!.toStringArray();
@@ -284,6 +336,15 @@ export class Tree extends Entity {
 
   set hats(value: Array<string>) {
     this.set("hats", Value.fromStringArray(value));
+  }
+
+  get parentOfTrees(): Array<string> {
+    let value = this.get("parentOfTrees");
+    return value!.toStringArray();
+  }
+
+  set parentOfTrees(value: Array<string>) {
+    this.set("parentOfTrees", Value.fromStringArray(value));
   }
 
   get events(): Array<string> {
@@ -370,15 +431,6 @@ export class HatCreatedEvent extends Entity {
 
   set transactionID(value: Bytes) {
     this.set("transactionID", Value.fromBytes(value));
-  }
-
-  get hatId(): string {
-    let value = this.get("hatId");
-    return value!.toString();
-  }
-
-  set hatId(value: string) {
-    this.set("hatId", Value.fromString(value));
   }
 
   get hatDetails(): string {
@@ -512,15 +564,6 @@ export class HatMintedEvent extends Entity {
     this.set("transactionID", Value.fromBytes(value));
   }
 
-  get hatId(): string {
-    let value = this.get("hatId");
-    return value!.toString();
-  }
-
-  set hatId(value: string) {
-    this.set("hatId", Value.fromString(value));
-  }
-
   get wearer(): string {
     let value = this.get("wearer");
     return value!.toString();
@@ -614,15 +657,6 @@ export class HatBurnedEvent extends Entity {
 
   set transactionID(value: Bytes) {
     this.set("transactionID", Value.fromBytes(value));
-  }
-
-  get hatId(): string {
-    let value = this.get("hatId");
-    return value!.toString();
-  }
-
-  set hatId(value: string) {
-    this.set("hatId", Value.fromString(value));
   }
 
   get wearer(): string {
@@ -725,15 +759,6 @@ export class HatStatusChangedEvent extends Entity {
     this.set("transactionID", Value.fromBytes(value));
   }
 
-  get hatId(): string {
-    let value = this.get("hatId");
-    return value!.toString();
-  }
-
-  set hatId(value: string) {
-    this.set("hatId", Value.fromString(value));
-  }
-
   get hatNewStatus(): boolean {
     let value = this.get("hatNewStatus");
     return value!.toBoolean();
@@ -823,15 +848,6 @@ export class HatDetailsChangedEvent extends Entity {
 
   set transactionID(value: Bytes) {
     this.set("transactionID", Value.fromBytes(value));
-  }
-
-  get hatId(): string {
-    let value = this.get("hatId");
-    return value!.toString();
-  }
-
-  set hatId(value: string) {
-    this.set("hatId", Value.fromString(value));
   }
 
   get hatNewDetails(): string {
@@ -925,15 +941,6 @@ export class HatEligibilityChangedEvent extends Entity {
     this.set("transactionID", Value.fromBytes(value));
   }
 
-  get hatId(): string {
-    let value = this.get("hatId");
-    return value!.toString();
-  }
-
-  set hatId(value: string) {
-    this.set("hatId", Value.fromString(value));
-  }
-
   get hatNewEligibility(): string {
     let value = this.get("hatNewEligibility");
     return value!.toString();
@@ -1023,15 +1030,6 @@ export class HatToggleChangedEvent extends Entity {
 
   set transactionID(value: Bytes) {
     this.set("transactionID", Value.fromBytes(value));
-  }
-
-  get hatId(): string {
-    let value = this.get("hatId");
-    return value!.toString();
-  }
-
-  set hatId(value: string) {
-    this.set("hatId", Value.fromString(value));
   }
 
   get hatNewToggle(): string {
@@ -1124,15 +1122,6 @@ export class HatMutabilityChangedEvent extends Entity {
   set transactionID(value: Bytes) {
     this.set("transactionID", Value.fromBytes(value));
   }
-
-  get hatId(): string {
-    let value = this.get("hatId");
-    return value!.toString();
-  }
-
-  set hatId(value: string) {
-    this.set("hatId", Value.fromString(value));
-  }
 }
 
 export class HatMaxSupplyChangedEvent extends Entity {
@@ -1214,15 +1203,6 @@ export class HatMaxSupplyChangedEvent extends Entity {
 
   set transactionID(value: Bytes) {
     this.set("transactionID", Value.fromBytes(value));
-  }
-
-  get hatId(): string {
-    let value = this.get("hatId");
-    return value!.toString();
-  }
-
-  set hatId(value: string) {
-    this.set("hatId", Value.fromString(value));
   }
 
   get hatNewMaxSupply(): BigInt {
@@ -1316,15 +1296,6 @@ export class HatImageURIChangedEvent extends Entity {
     this.set("transactionID", Value.fromBytes(value));
   }
 
-  get hatId(): string {
-    let value = this.get("hatId");
-    return value!.toString();
-  }
-
-  set hatId(value: string) {
-    this.set("hatId", Value.fromString(value));
-  }
-
   get hatNewImageURI(): string {
     let value = this.get("hatNewImageURI");
     return value!.toString();
@@ -1332,5 +1303,284 @@ export class HatImageURIChangedEvent extends Entity {
 
   set hatNewImageURI(value: string) {
     this.set("hatNewImageURI", Value.fromString(value));
+  }
+}
+
+export class TopHatLinkRequestedEvent extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(
+      id != null,
+      "Cannot save TopHatLinkRequestedEvent entity without an ID"
+    );
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type TopHatLinkRequestedEvent must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("TopHatLinkRequestedEvent", id.toString(), this);
+    }
+  }
+
+  static load(id: string): TopHatLinkRequestedEvent | null {
+    return changetype<TopHatLinkRequestedEvent | null>(
+      store.get("TopHatLinkRequestedEvent", id)
+    );
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get tree(): string {
+    let value = this.get("tree");
+    return value!.toString();
+  }
+
+  set tree(value: string) {
+    this.set("tree", Value.fromString(value));
+  }
+
+  get hat(): string {
+    let value = this.get("hat");
+    return value!.toString();
+  }
+
+  set hat(value: string) {
+    this.set("hat", Value.fromString(value));
+  }
+
+  get blockNumber(): i32 {
+    let value = this.get("blockNumber");
+    return value!.toI32();
+  }
+
+  set blockNumber(value: i32) {
+    this.set("blockNumber", Value.fromI32(value));
+  }
+
+  get timestamp(): BigInt {
+    let value = this.get("timestamp");
+    return value!.toBigInt();
+  }
+
+  set timestamp(value: BigInt) {
+    this.set("timestamp", Value.fromBigInt(value));
+  }
+
+  get transactionID(): Bytes {
+    let value = this.get("transactionID");
+    return value!.toBytes();
+  }
+
+  set transactionID(value: Bytes) {
+    this.set("transactionID", Value.fromBytes(value));
+  }
+
+  get newAdmin(): string {
+    let value = this.get("newAdmin");
+    return value!.toString();
+  }
+
+  set newAdmin(value: string) {
+    this.set("newAdmin", Value.fromString(value));
+  }
+}
+
+export class TopHatLinkedEvent extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save TopHatLinkedEvent entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type TopHatLinkedEvent must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("TopHatLinkedEvent", id.toString(), this);
+    }
+  }
+
+  static load(id: string): TopHatLinkedEvent | null {
+    return changetype<TopHatLinkedEvent | null>(
+      store.get("TopHatLinkedEvent", id)
+    );
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get tree(): string {
+    let value = this.get("tree");
+    return value!.toString();
+  }
+
+  set tree(value: string) {
+    this.set("tree", Value.fromString(value));
+  }
+
+  get hat(): string {
+    let value = this.get("hat");
+    return value!.toString();
+  }
+
+  set hat(value: string) {
+    this.set("hat", Value.fromString(value));
+  }
+
+  get blockNumber(): i32 {
+    let value = this.get("blockNumber");
+    return value!.toI32();
+  }
+
+  set blockNumber(value: i32) {
+    this.set("blockNumber", Value.fromI32(value));
+  }
+
+  get timestamp(): BigInt {
+    let value = this.get("timestamp");
+    return value!.toBigInt();
+  }
+
+  set timestamp(value: BigInt) {
+    this.set("timestamp", Value.fromBigInt(value));
+  }
+
+  get transactionID(): Bytes {
+    let value = this.get("transactionID");
+    return value!.toBytes();
+  }
+
+  set transactionID(value: Bytes) {
+    this.set("transactionID", Value.fromBytes(value));
+  }
+
+  get newAdmin(): string {
+    let value = this.get("newAdmin");
+    return value!.toString();
+  }
+
+  set newAdmin(value: string) {
+    this.set("newAdmin", Value.fromString(value));
+  }
+}
+
+export class WearerStandingChangedEvent extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(
+      id != null,
+      "Cannot save WearerStandingChangedEvent entity without an ID"
+    );
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type WearerStandingChangedEvent must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("WearerStandingChangedEvent", id.toString(), this);
+    }
+  }
+
+  static load(id: string): WearerStandingChangedEvent | null {
+    return changetype<WearerStandingChangedEvent | null>(
+      store.get("WearerStandingChangedEvent", id)
+    );
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get tree(): string {
+    let value = this.get("tree");
+    return value!.toString();
+  }
+
+  set tree(value: string) {
+    this.set("tree", Value.fromString(value));
+  }
+
+  get hat(): string {
+    let value = this.get("hat");
+    return value!.toString();
+  }
+
+  set hat(value: string) {
+    this.set("hat", Value.fromString(value));
+  }
+
+  get blockNumber(): i32 {
+    let value = this.get("blockNumber");
+    return value!.toI32();
+  }
+
+  set blockNumber(value: i32) {
+    this.set("blockNumber", Value.fromI32(value));
+  }
+
+  get timestamp(): BigInt {
+    let value = this.get("timestamp");
+    return value!.toBigInt();
+  }
+
+  set timestamp(value: BigInt) {
+    this.set("timestamp", Value.fromBigInt(value));
+  }
+
+  get transactionID(): Bytes {
+    let value = this.get("transactionID");
+    return value!.toBytes();
+  }
+
+  set transactionID(value: Bytes) {
+    this.set("transactionID", Value.fromBytes(value));
+  }
+
+  get wearer(): string {
+    let value = this.get("wearer");
+    return value!.toString();
+  }
+
+  set wearer(value: string) {
+    this.set("wearer", Value.fromString(value));
+  }
+
+  get wearerStanding(): boolean {
+    let value = this.get("wearerStanding");
+    return value!.toBoolean();
+  }
+
+  set wearerStanding(value: boolean) {
+    this.set("wearerStanding", Value.fromBoolean(value));
   }
 }
