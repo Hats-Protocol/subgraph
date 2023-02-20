@@ -1,6 +1,7 @@
 type Hat @entity {
   id: ID!
   prettyId: String!
+  fullId: String!
   status: Boolean!
   createdAt: BigInt!
   details: String!

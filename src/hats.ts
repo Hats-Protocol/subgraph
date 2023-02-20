@@ -48,6 +48,7 @@ export function handleHatCreated(event: HatCreated): void {
   // create new hat
   let hat = new Hat(hatIdToHex(event.params.id));
   hat.prettyId = hatIdToPrettyId(event.params.id);
+  hat.fullId = event.params.id;
   hat.createdAt = event.block.timestamp;
   hat.wearers = [];
   hat.details = event.params.details;
