@@ -11,7 +11,8 @@ export function hatLevelLocal(hatId: BigInt): i32 {
   if (prettyId.length == 10) {
     return 0;
   }
-  return ((prettyId.length - 10) / 4);
+  // first 10 chars are the top hat domain. Afterwards, each 5 chars describe a level, e.g. ".0001"
+  return (prettyId.length - 10) / 5;
 }
 
 export function hatIdToHex(hatId: BigInt): string {
