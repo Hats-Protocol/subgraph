@@ -541,13 +541,16 @@ export class Hats extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  balanceOfBatch(owners: Array<Address>, ids: Array<BigInt>): Array<BigInt> {
+  balanceOfBatch(
+    _wearers: Array<Address>,
+    _hatIds: Array<BigInt>
+  ): Array<BigInt> {
     let result = super.call(
       "balanceOfBatch",
       "balanceOfBatch(address[],uint256[]):(uint256[])",
       [
-        ethereum.Value.fromAddressArray(owners),
-        ethereum.Value.fromUnsignedBigIntArray(ids)
+        ethereum.Value.fromAddressArray(_wearers),
+        ethereum.Value.fromUnsignedBigIntArray(_hatIds)
       ]
     );
 
@@ -555,15 +558,15 @@ export class Hats extends ethereum.SmartContract {
   }
 
   try_balanceOfBatch(
-    owners: Array<Address>,
-    ids: Array<BigInt>
+    _wearers: Array<Address>,
+    _hatIds: Array<BigInt>
   ): ethereum.CallResult<Array<BigInt>> {
     let result = super.tryCall(
       "balanceOfBatch",
       "balanceOfBatch(address[],uint256[]):(uint256[])",
       [
-        ethereum.Value.fromAddressArray(owners),
-        ethereum.Value.fromUnsignedBigIntArray(ids)
+        ethereum.Value.fromAddressArray(_wearers),
+        ethereum.Value.fromUnsignedBigIntArray(_hatIds)
       ]
     );
     if (result.reverted) {
@@ -814,13 +817,13 @@ export class Hats extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  getAdminAtLevel(_hatId: BigInt, _level: i32): BigInt {
+  getAdminAtLevel(_hatId: BigInt, _level: BigInt): BigInt {
     let result = super.call(
       "getAdminAtLevel",
-      "getAdminAtLevel(uint256,uint8):(uint256)",
+      "getAdminAtLevel(uint256,uint32):(uint256)",
       [
         ethereum.Value.fromUnsignedBigInt(_hatId),
-        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(_level))
+        ethereum.Value.fromUnsignedBigInt(_level)
       ]
     );
 
@@ -829,14 +832,14 @@ export class Hats extends ethereum.SmartContract {
 
   try_getAdminAtLevel(
     _hatId: BigInt,
-    _level: i32
+    _level: BigInt
   ): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
       "getAdminAtLevel",
-      "getAdminAtLevel(uint256,uint8):(uint256)",
+      "getAdminAtLevel(uint256,uint32):(uint256)",
       [
         ethereum.Value.fromUnsignedBigInt(_hatId),
-        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(_level))
+        ethereum.Value.fromUnsignedBigInt(_level)
       ]
     );
     if (result.reverted) {
@@ -846,23 +849,55 @@ export class Hats extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  getHatLevel(_hatId: BigInt): i32 {
-    let result = super.call("getHatLevel", "getHatLevel(uint256):(uint8)", [
+  getAdminAtLocalLevel(_hatId: BigInt, _level: BigInt): BigInt {
+    let result = super.call(
+      "getAdminAtLocalLevel",
+      "getAdminAtLocalLevel(uint256,uint32):(uint256)",
+      [
+        ethereum.Value.fromUnsignedBigInt(_hatId),
+        ethereum.Value.fromUnsignedBigInt(_level)
+      ]
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_getAdminAtLocalLevel(
+    _hatId: BigInt,
+    _level: BigInt
+  ): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "getAdminAtLocalLevel",
+      "getAdminAtLocalLevel(uint256,uint32):(uint256)",
+      [
+        ethereum.Value.fromUnsignedBigInt(_hatId),
+        ethereum.Value.fromUnsignedBigInt(_level)
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  getHatLevel(_hatId: BigInt): BigInt {
+    let result = super.call("getHatLevel", "getHatLevel(uint256):(uint32)", [
       ethereum.Value.fromUnsignedBigInt(_hatId)
     ]);
 
-    return result[0].toI32();
+    return result[0].toBigInt();
   }
 
-  try_getHatLevel(_hatId: BigInt): ethereum.CallResult<i32> {
-    let result = super.tryCall("getHatLevel", "getHatLevel(uint256):(uint8)", [
+  try_getHatLevel(_hatId: BigInt): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("getHatLevel", "getHatLevel(uint256):(uint32)", [
       ethereum.Value.fromUnsignedBigInt(_hatId)
     ]);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toI32());
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   getImageURIForHat(_hatId: BigInt): string {
@@ -888,6 +923,29 @@ export class Hats extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toString());
   }
 
+  getLocalHatLevel(_hatId: BigInt): BigInt {
+    let result = super.call(
+      "getLocalHatLevel",
+      "getLocalHatLevel(uint256):(uint32)",
+      [ethereum.Value.fromUnsignedBigInt(_hatId)]
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_getLocalHatLevel(_hatId: BigInt): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "getLocalHatLevel",
+      "getLocalHatLevel(uint256):(uint32)",
+      [ethereum.Value.fromUnsignedBigInt(_hatId)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
   getNextId(_admin: BigInt): BigInt {
     let result = super.call("getNextId", "getNextId(uint256):(uint256)", [
       ethereum.Value.fromUnsignedBigInt(_admin)
@@ -907,20 +965,20 @@ export class Hats extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  getTippyTophatDomain(_topHatDomain: BigInt): BigInt {
+  getTippyTopHatDomain(_topHatDomain: BigInt): BigInt {
     let result = super.call(
-      "getTippyTophatDomain",
-      "getTippyTophatDomain(uint32):(uint32)",
+      "getTippyTopHatDomain",
+      "getTippyTopHatDomain(uint32):(uint32)",
       [ethereum.Value.fromUnsignedBigInt(_topHatDomain)]
     );
 
     return result[0].toBigInt();
   }
 
-  try_getTippyTophatDomain(_topHatDomain: BigInt): ethereum.CallResult<BigInt> {
+  try_getTippyTopHatDomain(_topHatDomain: BigInt): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
-      "getTippyTophatDomain",
-      "getTippyTophatDomain(uint32):(uint32)",
+      "getTippyTopHatDomain",
+      "getTippyTopHatDomain(uint32):(uint32)",
       [ethereum.Value.fromUnsignedBigInt(_topHatDomain)]
     );
     if (result.reverted) {
@@ -930,53 +988,21 @@ export class Hats extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  getTophatDomain(_hatId: BigInt): BigInt {
+  getTopHatDomain(_hatId: BigInt): BigInt {
     let result = super.call(
-      "getTophatDomain",
-      "getTophatDomain(uint256):(uint32)",
+      "getTopHatDomain",
+      "getTopHatDomain(uint256):(uint32)",
       [ethereum.Value.fromUnsignedBigInt(_hatId)]
     );
 
     return result[0].toBigInt();
   }
 
-  try_getTophatDomain(_hatId: BigInt): ethereum.CallResult<BigInt> {
+  try_getTopHatDomain(_hatId: BigInt): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
-      "getTophatDomain",
-      "getTophatDomain(uint256):(uint32)",
+      "getTopHatDomain",
+      "getTopHatDomain(uint256):(uint32)",
       [ethereum.Value.fromUnsignedBigInt(_hatId)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBigInt());
-  }
-
-  getTreeAdminAtLevel(_hatId: BigInt, _level: i32): BigInt {
-    let result = super.call(
-      "getTreeAdminAtLevel",
-      "getTreeAdminAtLevel(uint256,uint8):(uint256)",
-      [
-        ethereum.Value.fromUnsignedBigInt(_hatId),
-        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(_level))
-      ]
-    );
-
-    return result[0].toBigInt();
-  }
-
-  try_getTreeAdminAtLevel(
-    _hatId: BigInt,
-    _level: i32
-  ): ethereum.CallResult<BigInt> {
-    let result = super.tryCall(
-      "getTreeAdminAtLevel",
-      "getTreeAdminAtLevel(uint256,uint8):(uint256)",
-      [
-        ethereum.Value.fromUnsignedBigInt(_hatId),
-        ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(_level))
-      ]
     );
     if (result.reverted) {
       return new ethereum.CallResult();
@@ -1126,6 +1152,27 @@ export class Hats extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
+  isLocalTopHat(_hatId: BigInt): boolean {
+    let result = super.call("isLocalTopHat", "isLocalTopHat(uint256):(bool)", [
+      ethereum.Value.fromUnsignedBigInt(_hatId)
+    ]);
+
+    return result[0].toBoolean();
+  }
+
+  try_isLocalTopHat(_hatId: BigInt): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "isLocalTopHat",
+      "isLocalTopHat(uint256):(bool)",
+      [ethereum.Value.fromUnsignedBigInt(_hatId)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
   isTopHat(_hatId: BigInt): boolean {
     let result = super.call("isTopHat", "isTopHat(uint256):(bool)", [
       ethereum.Value.fromUnsignedBigInt(_hatId)
@@ -1136,6 +1183,25 @@ export class Hats extends ethereum.SmartContract {
 
   try_isTopHat(_hatId: BigInt): ethereum.CallResult<boolean> {
     let result = super.tryCall("isTopHat", "isTopHat(uint256):(bool)", [
+      ethereum.Value.fromUnsignedBigInt(_hatId)
+    ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  isValidHatId(_hatId: BigInt): boolean {
+    let result = super.call("isValidHatId", "isValidHatId(uint256):(bool)", [
+      ethereum.Value.fromUnsignedBigInt(_hatId)
+    ]);
+
+    return result[0].toBoolean();
+  }
+
+  try_isValidHatId(_hatId: BigInt): ethereum.CallResult<boolean> {
+    let result = super.tryCall("isValidHatId", "isValidHatId(uint256):(bool)", [
       ethereum.Value.fromUnsignedBigInt(_hatId)
     ]);
     if (result.reverted) {
@@ -1341,10 +1407,10 @@ export class Hats extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  sameTippyTophatDomain(_topHatDomain: BigInt, _newAdminHat: BigInt): boolean {
+  sameTippyTopHatDomain(_topHatDomain: BigInt, _newAdminHat: BigInt): boolean {
     let result = super.call(
-      "sameTippyTophatDomain",
-      "sameTippyTophatDomain(uint32,uint256):(bool)",
+      "sameTippyTopHatDomain",
+      "sameTippyTopHatDomain(uint32,uint256):(bool)",
       [
         ethereum.Value.fromUnsignedBigInt(_topHatDomain),
         ethereum.Value.fromUnsignedBigInt(_newAdminHat)
@@ -1354,13 +1420,13 @@ export class Hats extends ethereum.SmartContract {
     return result[0].toBoolean();
   }
 
-  try_sameTippyTophatDomain(
+  try_sameTippyTopHatDomain(
     _topHatDomain: BigInt,
     _newAdminHat: BigInt
   ): ethereum.CallResult<boolean> {
     let result = super.tryCall(
-      "sameTippyTophatDomain",
-      "sameTippyTophatDomain(uint32,uint256):(bool)",
+      "sameTippyTopHatDomain",
+      "sameTippyTopHatDomain(uint32,uint256):(bool)",
       [
         ethereum.Value.fromUnsignedBigInt(_topHatDomain),
         ethereum.Value.fromUnsignedBigInt(_newAdminHat)
@@ -1594,6 +1660,22 @@ export class ApproveLinkTopHatToTreeCall__Inputs {
   get _newAdminHat(): BigInt {
     return this._call.inputValues[1].value.toBigInt();
   }
+
+  get _eligibility(): Address {
+    return this._call.inputValues[2].value.toAddress();
+  }
+
+  get _toggle(): Address {
+    return this._call.inputValues[3].value.toAddress();
+  }
+
+  get _details(): string {
+    return this._call.inputValues[4].value.toString();
+  }
+
+  get _imageURI(): string {
+    return this._call.inputValues[5].value.toString();
+  }
 }
 
 export class ApproveLinkTopHatToTreeCall__Outputs {
@@ -1657,7 +1739,7 @@ export class BatchCreateHatsCall__Outputs {
     this._call = call;
   }
 
-  get value0(): boolean {
+  get success(): boolean {
     return this._call.outputValues[0].value.toBoolean();
   }
 }
@@ -1695,7 +1777,7 @@ export class BatchMintHatsCall__Outputs {
     this._call = call;
   }
 
-  get value0(): boolean {
+  get success(): boolean {
     return this._call.outputValues[0].value.toBoolean();
   }
 }
@@ -1899,7 +1981,7 @@ export class CheckHatStatusCall__Outputs {
     this._call = call;
   }
 
-  get value0(): boolean {
+  get toggled(): boolean {
     return this._call.outputValues[0].value.toBoolean();
   }
 }
@@ -1937,7 +2019,7 @@ export class CheckHatWearerStatusCall__Outputs {
     this._call = call;
   }
 
-  get value0(): boolean {
+  get updated(): boolean {
     return this._call.outputValues[0].value.toBoolean();
   }
 }
@@ -2063,7 +2145,7 @@ export class MintHatCall__Outputs {
     this._call = call;
   }
 
-  get value0(): boolean {
+  get success(): boolean {
     return this._call.outputValues[0].value.toBoolean();
   }
 }
@@ -2133,6 +2215,22 @@ export class RelinkTopHatWithinTreeCall__Inputs {
 
   get _newAdminHat(): BigInt {
     return this._call.inputValues[1].value.toBigInt();
+  }
+
+  get _eligibility(): Address {
+    return this._call.inputValues[2].value.toAddress();
+  }
+
+  get _toggle(): Address {
+    return this._call.inputValues[3].value.toAddress();
+  }
+
+  get _details(): string {
+    return this._call.inputValues[4].value.toString();
+  }
+
+  get _imageURI(): string {
+    return this._call.inputValues[5].value.toString();
   }
 }
 
@@ -2241,7 +2339,7 @@ export class SetHatStatusCall__Outputs {
     this._call = call;
   }
 
-  get value0(): boolean {
+  get toggled(): boolean {
     return this._call.outputValues[0].value.toBoolean();
   }
 }
@@ -2287,7 +2385,7 @@ export class SetHatWearerStatusCall__Outputs {
     this._call = call;
   }
 
-  get value0(): boolean {
+  get updated(): boolean {
     return this._call.outputValues[0].value.toBoolean();
   }
 }

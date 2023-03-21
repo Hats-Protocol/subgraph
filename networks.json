@@ -1,20 +1,44 @@
 {
   "goerli": {
     "Hats": {
-      "address": "0x96bD657Fcc04c71B47f896a829E5728415cbcAa1",
-      "startBlock": 8376439
+      "address": "0x850f3384829D7bab6224D141AFeD9A559d745E3D",
+      "startBlock": 8677958
     }
   },
-  "polygon": {
+  "sepolia": {
     "Hats": {
-      "address": "0x95647F88dcbC12986046fc4f49064Edd11a25d38",
-      "startBlock": 36556828
+      "address": "0x850f3384829D7bab6224D141AFeD9A559d745E3D",
+      "startBlock": 8677958
+    }
+  },
+  "mainnet": {
+    "Hats": {
+      "address": "0x850f3384829D7bab6224D141AFeD9A559d745E3D",
+      "startBlock": 16856978
+    }
+  },
+  "matic": {
+    "Hats": {
+      "address": "0x850f3384829D7bab6224D141AFeD9A559d745E3D",
+      "startBlock": 40576409
     }
   },
   "gnosis": {
     "Hats": {
-      "address": "0x6B49b86D21aBc1D60611bD85c843a9766B5493DB",
-      "startBlock": 25339814
+      "address": "0x850f3384829D7bab6224D141AFeD9A559d745E3D",
+      "startBlock": 27039637
+    }
+  },
+  "arbitrum-one": {
+    "Hats": {
+      "address": "0x850f3384829D7bab6224D141AFeD9A559d745E3D",
+      "startBlock": 106839
+    }
+  },
+  "optimism": {
+    "Hats": {
+      "address": "0x850f3384829D7bab6224D141AFeD9A559d745E3D",
+      "startBlock": 82472627
     }
   }
 }
