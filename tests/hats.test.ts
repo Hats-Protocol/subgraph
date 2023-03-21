@@ -313,6 +313,18 @@ describe("basic test", () => {
           test("test tree linked", () => {
             assert.fieldEquals("Tree", "0x00000002", "childOfTree", "null");
             assert.fieldEquals("Tree", "0x00000002", "linkedToHat", "null");
+            assert.fieldEquals(
+              "Hat",
+              "0x0000000200000000000000000000000000000000000000000000000000000000",
+              "eligibility",
+              Address.zero().toHexString()
+            );
+            assert.fieldEquals(
+              "Hat",
+              "0x0000000200000000000000000000000000000000000000000000000000000000",
+              "toggle",
+              Address.zero().toHexString()
+            );
           });
         });
       });
