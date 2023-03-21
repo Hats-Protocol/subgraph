@@ -33,7 +33,6 @@ import {
   WearerStandingChangedEvent,
 } from "../generated/schema";
 import {
-  hatLevel,
   hatIdToHex,
   topHatDomain,
   createEventID,
@@ -57,7 +56,7 @@ export function handleHatCreated(event: HatCreated): void {
   hat.mutable = event.params.mutable_;
   hat.imageUri = event.params.imageURI;
   hat.status = true;
-  hat.levelAtLocalTree = hatLevelLocal(event.params.id);
+  hat.levelAtLocalTree = hatLevelLocal(event.address, event.params.id);
   hat.currentSupply = BigInt.fromU32(0);
   hat.badStandings = [];
   if (hat.levelAtLocalTree == 0) {
@@ -70,7 +69,11 @@ export function handleHatCreated(event: HatCreated): void {
     hat.tree = tree.id;
     tree.save();
   } else {
-    hat.admin = getHatAdmin(event.address, event.params.id, hat.levelAtLocalTree - 1);
+    hat.admin = getHatAdmin(
+      event.address,
+      event.params.id,
+      hat.levelAtLocalTree - 1
+    );
     hat.tree = topHatDomain(event.params.id);
   }
 
@@ -299,11 +302,16 @@ export function handleTopHatLinkRequested(event: TopHatLinkRequested): void {
 export function handleTopHatLinked(event: TopHatLinked): void {
   let tree = Tree.load(topHatDomainToHex(event.params.domain)) as Tree;
   let topHat = Hat.load(topHatDomainToHatId(event.params.domain)) as Hat;
-  if (event.params.newAdmin == BigInt.zero()) { // delink tree 
+  if (event.params.newAdmin == BigInt.zero()) {
+    // delink tree
     tree.linkedToHat = null;
     tree.childOfTree = null;
     topHat.admin = topHat.id; // tophat returns to be its own admin
-  } else { // link tree
+    // non linked top hats have zero eligibility and toggle
+    topHat.eligibility = Address.zero().toHexString();
+    topHat.toggle = Address.zero().toHexString();
+  } else {
+    // link tree
     tree.linkedToHat = hatIdToHex(event.params.newAdmin);
     tree.childOfTree = topHatDomain(event.params.newAdmin);
     topHat.admin = hatIdToHex(event.params.newAdmin); // tophat is no longer its own admin after linkage

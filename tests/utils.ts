@@ -534,28 +534,11 @@ export function createHatCreatedEvent(
     imageURI
   );
 
-  if (level == 0) {
+  if (level > 0) {
     createMockedFunction(
       hatCreatedEvent.address,
-      "getAdminAtLevel",
-      "getAdminAtLevel(uint256,uint8):(uint256)"
-    )
-      .withArgs([
-        ethereum.Value.fromUnsignedBigInt(
-          BigInt.fromByteArray(ByteArray.fromHexString(changeEndianness(id)))
-        ),
-        ethereum.Value.fromUnsignedBigInt(BigInt.fromU32(level)),
-      ])
-      .returns([
-        ethereum.Value.fromUnsignedBigInt(
-          BigInt.fromByteArray(ByteArray.fromHexString(changeEndianness(admin)))
-        ),
-      ]);
-  } else {
-    createMockedFunction(
-      hatCreatedEvent.address,
-      "getTreeAdminAtLevel",
-      "getTreeAdminAtLevel(uint256,uint8):(uint256)"
+      "getAdminAtLocalLevel",
+      "getAdminAtLocalLevel(uint256,uint32):(uint256)"
     )
       .withArgs([
         ethereum.Value.fromUnsignedBigInt(
@@ -569,6 +552,18 @@ export function createHatCreatedEvent(
         ),
       ]);
   }
+
+  createMockedFunction(
+    hatCreatedEvent.address,
+    "getLocalHatLevel",
+    "getLocalHatLevel(uint256):(uint32)"
+  )
+    .withArgs([
+      ethereum.Value.fromUnsignedBigInt(
+        BigInt.fromByteArray(ByteArray.fromHexString(changeEndianness(id)))
+      ),
+    ])
+    .returns([ethereum.Value.fromUnsignedBigInt(BigInt.fromU32(level))]);
 
   return hatCreatedEvent;
 }

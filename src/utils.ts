@@ -1,18 +1,9 @@
 import { BigInt, Address, ethereum } from "@graphprotocol/graph-ts";
 import { Hats } from "../generated/Hats/Hats";
 
-export function hatLevel(contractAddress: Address, hatId: BigInt): i32 {
+export function hatLevelLocal(contractAddress: Address, hatId: BigInt): i32 {
   let hatsContract = Hats.bind(contractAddress);
-  return hatsContract.getHatLevel(hatId);
-}
-
-export function hatLevelLocal(hatId: BigInt): i32 {
-  let prettyId = hatIdToPrettyId(hatId);
-  if (prettyId.length == 10) {
-    return 0;
-  }
-  // first 10 chars are the top hat domain. Afterwards, each 5 chars describe a level, e.g. ".0001"
-  return (prettyId.length - 10) / 5;
+  return hatsContract.getLocalHatLevel(hatId).toI32();
 }
 
 export function hatIdToHex(hatId: BigInt): string {
@@ -60,6 +51,6 @@ export function getHatAdmin(
   level: i32
 ): string {
   let hatsContract = Hats.bind(contractAddress);
-  let admin = hatsContract.getTreeAdminAtLevel(hatId, level);
+  let admin = hatsContract.getAdminAtLocalLevel(hatId, BigInt.fromI32(level));
   return hatIdToHex(admin);
 }
