@@ -275,7 +275,7 @@ describe("basic test", () => {
         );
         assert.fieldEquals("Tree", "0x00000002", "id", "0x00000002");
       });
-      
+
       describe("and tree 0x00000002 is linked to 0x00000001", () => {
         beforeEach(() => {
           let topHatLinkRequestedEvent = mockTopHatLinkRequestedEvent(
@@ -292,12 +292,7 @@ describe("basic test", () => {
         });
 
         test("test tree linked", () => {
-          assert.fieldEquals(
-            "Tree",
-            "0x00000002",
-            "childOfTree",
-            "0x00000001"
-          );
+          assert.fieldEquals("Tree", "0x00000002", "childOfTree", "0x00000001");
           assert.fieldEquals(
             "Tree",
             "0x00000002",
@@ -460,6 +455,69 @@ describe("basic test", () => {
           "currentHats",
           "[0x0000000100000000000000000000000000000000000000000000000000000000]"
         );
+      });
+
+      describe("and 0x00000001.0001.0001 is created", () => {
+        beforeEach(() => {
+          let hatCreatedEvent = createHatCreatedEvent(
+            "0x0000000100010001000000000000000000000000000000000000000000000000",
+            "hat_details_0000000100010001",
+            BigInt.fromI32(3),
+            Address.fromString(address1),
+            Address.fromString(address1),
+            true,
+            "imageURI_0000000100010001",
+            2,
+            "0x0000000100010000000000000000000000000000000000000000000000000000"
+          );
+
+          handleHatCreated(hatCreatedEvent);
+        });
+
+        describe("and 0x00000001.0001.0001.0001 is created", () => {
+          beforeEach(() => {
+            let hatCreatedEvent = createHatCreatedEvent(
+              "0x0000000100010001000100000000000000000000000000000000000000000000",
+              "hat_details_00000001000100010001",
+              BigInt.fromI32(3),
+              Address.fromString(address1),
+              Address.fromString(address1),
+              true,
+              "imageURI_00000001000100010001",
+              3,
+              "0x0000000100010001000000000000000000000000000000000000000000000000"
+            );
+
+            handleHatCreated(hatCreatedEvent);
+          });
+
+          describe("and 0x00000001.0001.0001.0001.0001 is created", () => {
+            beforeEach(() => {
+              let hatCreatedEvent = createHatCreatedEvent(
+                "0x0000000100010001000100010000000000000000000000000000000000000000",
+                "hat_details_000000010001000100010001",
+                BigInt.fromI32(3),
+                Address.fromString(address1),
+                Address.fromString(address1),
+                true,
+                "imageURI_000000010001000100010001",
+                4,
+                "0x0000000100010001000100000000000000000000000000000000000000000000"
+              );
+
+              handleHatCreated(hatCreatedEvent);
+            });
+
+            test("assert hat 0x00000001.0001.0001.0001.0001 level", () => {
+              assert.fieldEquals(
+                "Hat",
+                "0x0000000100010001000100010000000000000000000000000000000000000000",
+                "levelAtLocalTree",
+                "4"
+              );
+            });
+          });
+        });
       });
 
       describe("and 0x00000001.0001 is minted to wearer2", () => {
