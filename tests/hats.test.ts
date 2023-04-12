@@ -160,6 +160,115 @@ describe("basic test", () => {
       assert.fieldEquals("Tree", "0x00000001", "id", "0x00000001");
     });
 
+    describe("and 0x00000001 is linked to non existent 0x000000020001", () => {
+      beforeEach(() => {
+        let topHatLinkRequestedEvent = mockTopHatLinkRequestedEvent(
+          "0x00000001",
+          "0x0000000200010000000000000000000000000000000000000000000000000000"
+        );
+        handleTopHatLinkRequested(topHatLinkRequestedEvent);
+
+        let topHatLinkedEvent = mockTopHatLinkedEvent(
+          "0x00000001",
+          "0x0000000200010000000000000000000000000000000000000000000000000000"
+        );
+        handleTopHatLinked(topHatLinkedEvent);
+      });
+
+      test("test tree linked", () => {
+        assert.fieldEquals("Tree", "0x00000001", "childOfTree", "0x00000002");
+        assert.fieldEquals(
+          "Tree",
+          "0x00000001",
+          "linkedToHat",
+          "0x0000000200010000000000000000000000000000000000000000000000000000"
+        );
+      });
+
+      test("check hat 0x00000002 fields", () => {
+        //logStore();
+        assert.fieldEquals(
+          "Hat",
+          "0x0000000200000000000000000000000000000000000000000000000000000000",
+          "eligibility",
+          Address.zero().toHexString()
+        );
+        assert.fieldEquals(
+          "Hat",
+          "0x0000000200000000000000000000000000000000000000000000000000000000",
+          "toggle",
+          Address.zero().toHexString()
+        );
+        assert.fieldEquals(
+          "Hat",
+          "0x0000000200000000000000000000000000000000000000000000000000000000",
+          "id",
+          "0x0000000200000000000000000000000000000000000000000000000000000000"
+        );
+        assert.fieldEquals(
+          "Hat",
+          "0x0000000200000000000000000000000000000000000000000000000000000000",
+          "details",
+          ""
+        );
+        assert.fieldEquals(
+          "Hat",
+          "0x0000000200000000000000000000000000000000000000000000000000000000",
+          "maxSupply",
+          "0"
+        );
+        assert.fieldEquals(
+          "Hat",
+          "0x0000000200000000000000000000000000000000000000000000000000000000",
+          "mutable",
+          "false"
+        );
+        assert.fieldEquals(
+          "Hat",
+          "0x0000000200000000000000000000000000000000000000000000000000000000",
+          "imageUri",
+          "ipfs://bafybeigcimbqwfajsnhoq7fqnbdllz7kye7cpdy3adj2sob3wku2llu5bi"
+        );
+        assert.fieldEquals(
+          "Hat",
+          "0x0000000200000000000000000000000000000000000000000000000000000000",
+          "prettyId",
+          "0x00000002"
+        );
+        assert.fieldEquals(
+          "Hat",
+          "0x0000000200000000000000000000000000000000000000000000000000000000",
+          "levelAtLocalTree",
+          "0"
+        );
+        assert.fieldEquals(
+          "Hat",
+          "0x0000000200000000000000000000000000000000000000000000000000000000",
+          "currentSupply",
+          "0"
+        );
+        assert.fieldEquals(
+          "Hat",
+          "0x0000000200000000000000000000000000000000000000000000000000000000",
+          "tree",
+          "0x00000002"
+        );
+        assert.fieldEquals(
+          "Hat",
+          "0x0000000200000000000000000000000000000000000000000000000000000000",
+          "wearers",
+          "[]"
+        );
+        assert.fieldEquals(
+          "Hat",
+          "0x0000000200000000000000000000000000000000000000000000000000000000",
+          "admin",
+          "0x0000000200000000000000000000000000000000000000000000000000000000"
+        );
+        assert.fieldEquals("Tree", "0x00000002", "id", "0x00000002");
+      });
+    });
+
     describe("and 0x00000002 is created and minted to wearer3", () => {
       beforeEach(() => {
         let hatCreatedEvent = createHatCreatedEvent(
@@ -266,12 +375,6 @@ describe("basic test", () => {
           "0x0000000200000000000000000000000000000000000000000000000000000000",
           "admin",
           "0x0000000200000000000000000000000000000000000000000000000000000000"
-        );
-        assert.fieldEquals(
-          "Hat",
-          "0x0000000200000000000000000000000000000000000000000000000000000000",
-          "subHats",
-          "[0x0000000200000000000000000000000000000000000000000000000000000000]"
         );
         assert.fieldEquals("Tree", "0x00000002", "id", "0x00000002");
       });

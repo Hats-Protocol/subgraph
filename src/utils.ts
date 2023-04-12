@@ -74,3 +74,14 @@ export function getHatAdmin(
   let admin = hatsContract.getAdminAtLocalLevel(hatId, BigInt.fromI32(level));
   return hatIdToHex(admin);
 }
+
+export function changeEndianness(s: string): string {
+  const res = new Array<string>();
+  res.push("0x");
+  let pos = s.length - 2;
+  while (pos >= 2) {
+    res.push(s.substring(pos, pos + 2));
+    pos -= 2;
+  }
+  return res.join("");
+}

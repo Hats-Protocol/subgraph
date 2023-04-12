@@ -57,6 +57,54 @@ export function mockTopHatLinkRequestedEvent(
   topHatLinkRequestedEvent.parameters.push(domainParam);
   topHatLinkRequestedEvent.parameters.push(newAdminParam);
 
+  let level = 0;
+  for (let i = 10; i < newAdmin.length; i += 4) {
+    let currentHatId = newAdmin.substring(0, i).padEnd(66, "0");
+    let prevHatId = newAdmin.substring(0, i - 4).padEnd(66, "0");
+    createMockedFunction(
+      topHatLinkRequestedEvent.address,
+      "getLocalHatLevel",
+      "getLocalHatLevel(uint256):(uint32)"
+    )
+      .withArgs([
+        ethereum.Value.fromUnsignedBigInt(
+          BigInt.fromByteArray(
+            ByteArray.fromHexString(changeEndianness(currentHatId))
+          )
+        ),
+      ])
+      .returns([ethereum.Value.fromUnsignedBigInt(BigInt.fromU32(level))]);
+
+    if (level > 0) {
+      createMockedFunction(
+        topHatLinkRequestedEvent.address,
+        "getAdminAtLocalLevel",
+        "getAdminAtLocalLevel(uint256,uint32):(uint256)"
+      )
+        .withArgs([
+          ethereum.Value.fromUnsignedBigInt(
+            BigInt.fromByteArray(
+              ByteArray.fromHexString(changeEndianness(currentHatId))
+            )
+          ),
+          ethereum.Value.fromUnsignedBigInt(BigInt.fromU32(level - 1)),
+        ])
+        .returns([
+          ethereum.Value.fromUnsignedBigInt(
+            BigInt.fromByteArray(
+              ByteArray.fromHexString(changeEndianness(prevHatId))
+            )
+          ),
+        ]);
+    }
+
+    let domainAtNextLevel = newAdmin.substring(i, i + 4);
+    if (domainAtNextLevel == "0000") {
+      break;
+    }
+    level += 1;
+  }
+
   return topHatLinkRequestedEvent;
 }
 

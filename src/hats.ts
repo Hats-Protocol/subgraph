@@ -1,4 +1,4 @@
-import { BigInt, Address, log } from "@graphprotocol/graph-ts";
+import { BigInt, Address, log, Bytes } from "@graphprotocol/graph-ts";
 import {
   Hats,
   HatCreated,
@@ -44,6 +44,7 @@ import {
   hatIdHexToPrettyId,
   hexTopHatDomain,
   topHatDomainHexToHatId,
+  changeEndianness,
 } from "./utils";
 
 export function handleHatCreated(event: HatCreated): void {
@@ -293,7 +294,7 @@ export function handleTopHatLinkRequested(event: TopHatLinkRequested): void {
     topHatDomainToHex(event.params.domain)
   ) as Tree;
 
-  // load tree of new admin and create dummy if don't wxist
+  // load tree of new admin and create dummy if don't exist
   let newAdminTree = Tree.load(topHatDomain(event.params.newAdmin));
   if (newAdminTree === null) {
     createDummyTree(topHatDomain(event.params.newAdmin));
@@ -411,7 +412,7 @@ function createDummyTree(treeDomain: string): void {
 
 function createDummyHats(hatId: string, contractAddress: Address): void {
   for (let i = 10; i < hatId.length; i += 4) {
-    let currentHatId = hatId.substring(i).padEnd(66, "0");
+    let currentHatId = hatId.substring(0, i).padEnd(66, "0");
     let hat = Hat.load(currentHatId);
     if (hat === null) {
       createDummyHat(currentHatId, contractAddress);
@@ -439,15 +440,21 @@ function createDummyHat(hatId: string, contractAddress: Address): void {
   hat.status = false;
   hat.levelAtLocalTree = hatLevelLocal(
     contractAddress,
-    BigInt.fromString(hatId)
+    BigInt.fromUnsignedBytes(Bytes.fromHexString(changeEndianness(hatId)))
   );
   hat.currentSupply = BigInt.fromI32(0);
   hat.badStandings = [];
-  hat.admin = getHatAdmin(
-    contractAddress,
-    BigInt.fromString(hatId),
-    hat.levelAtLocalTree - 1
-  );
+
+  if (hat.levelAtLocalTree == 0) {
+    hat.admin = hat.id;
+  } else {
+    hat.admin = getHatAdmin(
+      contractAddress,
+      BigInt.fromUnsignedBytes(Bytes.fromHexString(changeEndianness(hatId))),
+      hat.levelAtLocalTree - 1
+    );
+  }
+
   hat.tree = hexTopHatDomain(hatId);
 
   hat.save();
