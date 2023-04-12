@@ -582,36 +582,55 @@ export function createHatCreatedEvent(
     imageURI
   );
 
-  if (level > 0) {
+  let currentLevel = 0;
+  for (let i = 10; i < id.length; i += 4) {
+    let currentHatId = id.substring(0, i).padEnd(66, "0");
+    let prevHatId = id.substring(0, i - 4).padEnd(66, "0");
     createMockedFunction(
       hatCreatedEvent.address,
-      "getAdminAtLocalLevel",
-      "getAdminAtLocalLevel(uint256,uint32):(uint256)"
+      "getLocalHatLevel",
+      "getLocalHatLevel(uint256):(uint32)"
     )
       .withArgs([
         ethereum.Value.fromUnsignedBigInt(
-          BigInt.fromByteArray(ByteArray.fromHexString(changeEndianness(id)))
+          BigInt.fromByteArray(
+            ByteArray.fromHexString(changeEndianness(currentHatId))
+          )
         ),
-        ethereum.Value.fromUnsignedBigInt(BigInt.fromU32(level - 1)),
       ])
       .returns([
-        ethereum.Value.fromUnsignedBigInt(
-          BigInt.fromByteArray(ByteArray.fromHexString(changeEndianness(admin)))
-        ),
+        ethereum.Value.fromUnsignedBigInt(BigInt.fromU32(currentLevel)),
       ]);
-  }
 
-  createMockedFunction(
-    hatCreatedEvent.address,
-    "getLocalHatLevel",
-    "getLocalHatLevel(uint256):(uint32)"
-  )
-    .withArgs([
-      ethereum.Value.fromUnsignedBigInt(
-        BigInt.fromByteArray(ByteArray.fromHexString(changeEndianness(id)))
-      ),
-    ])
-    .returns([ethereum.Value.fromUnsignedBigInt(BigInt.fromU32(level))]);
+    if (currentLevel > 0) {
+      createMockedFunction(
+        hatCreatedEvent.address,
+        "getAdminAtLocalLevel",
+        "getAdminAtLocalLevel(uint256,uint32):(uint256)"
+      )
+        .withArgs([
+          ethereum.Value.fromUnsignedBigInt(
+            BigInt.fromByteArray(
+              ByteArray.fromHexString(changeEndianness(currentHatId))
+            )
+          ),
+          ethereum.Value.fromUnsignedBigInt(BigInt.fromU32(currentLevel - 1)),
+        ])
+        .returns([
+          ethereum.Value.fromUnsignedBigInt(
+            BigInt.fromByteArray(
+              ByteArray.fromHexString(changeEndianness(prevHatId))
+            )
+          ),
+        ]);
+    }
+
+    let domainAtNextLevel = id.substring(i, i + 4);
+    if (domainAtNextLevel == "0000") {
+      break;
+    }
+    currentLevel += 1;
+  }
 
   return hatCreatedEvent;
 }

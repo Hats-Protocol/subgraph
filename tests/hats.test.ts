@@ -433,6 +433,106 @@ describe("basic test", () => {
       });
     });
 
+    describe("and 0x00000001.0001.0001.0001 is created with non existent admins", () => {
+      beforeEach(() => {
+        let hatCreatedEvent = createHatCreatedEvent(
+          "0x0000000100010001000100000000000000000000000000000000000000000000",
+          "hat_details_00000001000100010001",
+          BigInt.fromI32(1),
+          Address.fromString(address3),
+          Address.fromString(address3),
+          false,
+          "imageURI_00000001000100010001",
+          3,
+          "0x0000000100010001000000000000000000000000000000000000000000000000"
+        );
+
+        handleHatCreated(hatCreatedEvent);
+      });
+
+      test("check hat 0x00000001.0001.0001 fields", () => {
+        //logStore();
+        assert.fieldEquals(
+          "Hat",
+          "0x0000000100010001000000000000000000000000000000000000000000000000",
+          "eligibility",
+          Address.zero().toHexString()
+        );
+        assert.fieldEquals(
+          "Hat",
+          "0x0000000100010001000000000000000000000000000000000000000000000000",
+          "toggle",
+          Address.zero().toHexString()
+        );
+        assert.fieldEquals(
+          "Hat",
+          "0x0000000100010001000000000000000000000000000000000000000000000000",
+          "id",
+          "0x0000000100010001000000000000000000000000000000000000000000000000"
+        );
+        assert.fieldEquals(
+          "Hat",
+          "0x0000000100010001000000000000000000000000000000000000000000000000",
+          "details",
+          ""
+        );
+        assert.fieldEquals(
+          "Hat",
+          "0x0000000100010001000000000000000000000000000000000000000000000000",
+          "maxSupply",
+          "0"
+        );
+        assert.fieldEquals(
+          "Hat",
+          "0x0000000100010001000000000000000000000000000000000000000000000000",
+          "mutable",
+          "false"
+        );
+        assert.fieldEquals(
+          "Hat",
+          "0x0000000100010001000000000000000000000000000000000000000000000000",
+          "imageUri",
+          "ipfs://bafybeigcimbqwfajsnhoq7fqnbdllz7kye7cpdy3adj2sob3wku2llu5bi"
+        );
+        assert.fieldEquals(
+          "Hat",
+          "0x0000000100010001000000000000000000000000000000000000000000000000",
+          "prettyId",
+          "0x00000001.0001.0001"
+        );
+        assert.fieldEquals(
+          "Hat",
+          "0x0000000100010001000000000000000000000000000000000000000000000000",
+          "levelAtLocalTree",
+          "2"
+        );
+        assert.fieldEquals(
+          "Hat",
+          "0x0000000100010001000000000000000000000000000000000000000000000000",
+          "currentSupply",
+          "0"
+        );
+        assert.fieldEquals(
+          "Hat",
+          "0x0000000100010001000000000000000000000000000000000000000000000000",
+          "tree",
+          "0x00000001"
+        );
+        assert.fieldEquals(
+          "Hat",
+          "0x0000000100010001000000000000000000000000000000000000000000000000",
+          "wearers",
+          "[]"
+        );
+        assert.fieldEquals(
+          "Hat",
+          "0x0000000100010001000000000000000000000000000000000000000000000000",
+          "admin",
+          "0x0000000100010000000000000000000000000000000000000000000000000000"
+        );
+      });
+    });
+
     describe("and 0x00000001 is renounced by wearer1", () => {
       beforeEach(() => {
         let transferSingleEvent = mockTransferSingleEvent(
@@ -557,12 +657,6 @@ describe("basic test", () => {
           "0x0000000100010000000000000000000000000000000000000000000000000000",
           "admin",
           "0x0000000100000000000000000000000000000000000000000000000000000000"
-        );
-        assert.fieldEquals(
-          "Hat",
-          "0x0000000100010000000000000000000000000000000000000000000000000000",
-          "subHats",
-          "[]"
         );
         assert.fieldEquals(
           "Wearer",

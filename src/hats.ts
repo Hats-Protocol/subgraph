@@ -73,11 +73,17 @@ export function handleHatCreated(event: HatCreated): void {
     hat.tree = tree.id;
     tree.save();
   } else {
-    hat.admin = getHatAdmin(
+    let adminId = getHatAdmin(
       event.address,
       event.params.id,
       hat.levelAtLocalTree - 1
     );
+    let adminHat = Hat.load(adminId);
+    // if admin hat dont exist, create dummy hats for any non existent hat along the admin chain
+    if (adminHat === null) {
+      createDummyHats(adminId, event.address);
+    }
+    hat.admin = adminId;
     hat.tree = topHatDomain(event.params.id);
   }
 
