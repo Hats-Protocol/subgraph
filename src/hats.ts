@@ -315,6 +315,7 @@ export function handleTopHatLinkRequested(event: TopHatLinkRequested): void {
 
   requestingTree.requestedLinkToTree = newAdminTree.id;
   requestingTree.requestedLinkToAdminHat = newAdminHat.id;
+  requestingTree.save();
 
   // create new TopHatLinkRequestedEvent
   let topHatLinkRequestedEvent = new TopHatLinkRequestedEvent(
@@ -345,6 +346,10 @@ export function handleTopHatLinked(event: TopHatLinked): void {
     tree.linkedToHat = hatIdToHex(event.params.newAdmin);
     tree.childOfTree = topHatDomain(event.params.newAdmin);
     topHat.admin = hatIdToHex(event.params.newAdmin); // tophat is no longer its own admin after linkage
+
+    // remove request
+    tree.requestedLinkToAdminHat = null;
+    tree.requestedLinkToTree = null;
   }
   tree.save();
   topHat.save();
