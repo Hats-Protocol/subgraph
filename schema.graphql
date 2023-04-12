@@ -2,7 +2,7 @@ type Hat @entity {
   id: ID!
   prettyId: String!
   status: Boolean!
-  createdAt: BigInt!
+  createdAt: BigInt
   details: String!
   maxSupply: BigInt!
   eligibility: String!
@@ -15,6 +15,7 @@ type Hat @entity {
   wearers: [Wearer!]!
   admin: Hat!
   badStandings: [Wearer!]!
+  requestedLinkFromTree: Tree @derivedFrom(field: "requestedLinkToAdminHat")
   subHats: [Hat!]! @derivedFrom(field: "admin")
   linkedTrees: [Tree!]! @derivedFrom(field: "linkedToHat")
   events: [HatsEvent!]! @derivedFrom(field: "hat")
@@ -32,6 +33,9 @@ type Tree @entity {
   id: ID!
   childOfTree: Tree
   linkedToHat: Hat
+  requestedLinkToTree: Tree
+  requestedLinkToAdminHat: Hat
+  requestedLinkFromTree: Tree @derivedFrom(field: "requestedLinkToTree")
   hats: [Hat!]! @derivedFrom(field: "tree")
   parentOfTrees: [Tree!]! @derivedFrom(field: "childOfTree")
   events: [HatsEvent!]! @derivedFrom(field: "tree")

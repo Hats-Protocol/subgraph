@@ -41,6 +41,9 @@ import {
   topHatDomainToHex,
   topHatDomainToHatId,
   hatLevelLocal,
+  hatIdHexToPrettyId,
+  hexTopHatDomain,
+  topHatDomainHexToHatId,
 } from "./utils";
 
 export function handleHatCreated(event: HatCreated): void {
@@ -286,6 +289,26 @@ export function handleWearerStandingChanged(
 }
 
 export function handleTopHatLinkRequested(event: TopHatLinkRequested): void {
+  let requestingTree = Tree.load(
+    topHatDomainToHex(event.params.domain)
+  ) as Tree;
+
+  // load tree of new admin and create dummy if don't wxist
+  let newAdminTree = Tree.load(topHatDomain(event.params.newAdmin));
+  if (newAdminTree === null) {
+    createDummyTree(topHatDomain(event.params.newAdmin));
+    newAdminTree = Tree.load(topHatDomain(event.params.newAdmin)) as Tree;
+  }
+  // load new admin hat. If not exist, create dummmy hats for the whole admin chain
+  let newAdminHat = Hat.load(hatIdToHex(event.params.newAdmin));
+  if (newAdminHat === null) {
+    createDummyHats(hatIdToHex(event.params.newAdmin), event.address);
+    newAdminHat = Hat.load(hatIdToHex(event.params.newAdmin)) as Hat;
+  }
+
+  requestingTree.requestedLinkToTree = newAdminTree.id;
+  requestingTree.requestedLinkToAdminHat = newAdminHat.id;
+
   // create new TopHatLinkRequestedEvent
   let topHatLinkRequestedEvent = new TopHatLinkRequestedEvent(
     createEventID(event, "TopHatLinkRequested")
@@ -379,4 +402,53 @@ function removeHat(hat: Hat, event: TransferSingle): void {
   hatBurnedEvent.tree = topHatDomain(event.params.id);
   hatBurnedEvent.hat = hatIdToHex(event.params.id);
   hatBurnedEvent.save();
+}
+
+function createDummyTree(treeDomain: string): void {
+  let tree = new Tree(treeDomain);
+  tree.save();
+}
+
+function createDummyHats(hatId: string, contractAddress: Address): void {
+  for (let i = 10; i < hatId.length; i += 4) {
+    let currentHatId = hatId.substring(i).padEnd(66, "0");
+    let hat = Hat.load(currentHatId);
+    if (hat === null) {
+      createDummyHat(currentHatId, contractAddress);
+    }
+
+    let domainAtNextLevel = hatId.substring(i, i + 4);
+    if (domainAtNextLevel == "0000") {
+      break;
+    }
+  }
+}
+
+function createDummyHat(hatId: string, contractAddress: Address): void {
+  let hat = new Hat(hatId);
+  hat.prettyId = hatIdHexToPrettyId(hatId);
+  hat.createdAt = null;
+  hat.wearers = [];
+  hat.details = "";
+  hat.maxSupply = BigInt.fromI32(0);
+  hat.eligibility = "0x0000000000000000000000000000000000000000";
+  hat.toggle = "0x0000000000000000000000000000000000000000";
+  hat.mutable = false;
+  hat.imageUri =
+    "ipfs://bafybeigcimbqwfajsnhoq7fqnbdllz7kye7cpdy3adj2sob3wku2llu5bi";
+  hat.status = false;
+  hat.levelAtLocalTree = hatLevelLocal(
+    contractAddress,
+    BigInt.fromString(hatId)
+  );
+  hat.currentSupply = BigInt.fromI32(0);
+  hat.badStandings = [];
+  hat.admin = getHatAdmin(
+    contractAddress,
+    BigInt.fromString(hatId),
+    hat.levelAtLocalTree - 1
+  );
+  hat.tree = hexTopHatDomain(hatId);
+
+  hat.save();
 }

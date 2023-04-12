@@ -881,6 +881,29 @@ export class Hats extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  getHatEligibilityModule(_hatId: BigInt): Address {
+    let result = super.call(
+      "getHatEligibilityModule",
+      "getHatEligibilityModule(uint256):(address)",
+      [ethereum.Value.fromUnsignedBigInt(_hatId)]
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_getHatEligibilityModule(_hatId: BigInt): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "getHatEligibilityModule",
+      "getHatEligibilityModule(uint256):(address)",
+      [ethereum.Value.fromUnsignedBigInt(_hatId)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
   getHatLevel(_hatId: BigInt): BigInt {
     let result = super.call("getHatLevel", "getHatLevel(uint256):(uint32)", [
       ethereum.Value.fromUnsignedBigInt(_hatId)
@@ -898,6 +921,52 @@ export class Hats extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  getHatMaxSupply(_hatId: BigInt): BigInt {
+    let result = super.call(
+      "getHatMaxSupply",
+      "getHatMaxSupply(uint256):(uint32)",
+      [ethereum.Value.fromUnsignedBigInt(_hatId)]
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_getHatMaxSupply(_hatId: BigInt): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "getHatMaxSupply",
+      "getHatMaxSupply(uint256):(uint32)",
+      [ethereum.Value.fromUnsignedBigInt(_hatId)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  getHatToggleModule(_hatId: BigInt): Address {
+    let result = super.call(
+      "getHatToggleModule",
+      "getHatToggleModule(uint256):(address)",
+      [ethereum.Value.fromUnsignedBigInt(_hatId)]
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_getHatToggleModule(_hatId: BigInt): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "getHatToggleModule",
+      "getHatToggleModule(uint256):(address)",
+      [ethereum.Value.fromUnsignedBigInt(_hatId)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   getImageURIForHat(_hatId: BigInt): string {
@@ -1028,6 +1097,25 @@ export class Hats extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  isActive(_hatId: BigInt): boolean {
+    let result = super.call("isActive", "isActive(uint256):(bool)", [
+      ethereum.Value.fromUnsignedBigInt(_hatId)
+    ]);
+
+    return result[0].toBoolean();
+  }
+
+  try_isActive(_hatId: BigInt): ethereum.CallResult<boolean> {
+    let result = super.tryCall("isActive", "isActive(uint256):(bool)", [
+      ethereum.Value.fromUnsignedBigInt(_hatId)
+    ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
   isAdminOfHat(_user: Address, _hatId: BigInt): boolean {
@@ -2447,6 +2535,10 @@ export class UnlinkTopHatFromTreeCall__Inputs {
 
   get _topHatDomain(): BigInt {
     return this._call.inputValues[0].value.toBigInt();
+  }
+
+  get _wearer(): Address {
+    return this._call.inputValues[1].value.toAddress();
   }
 }
 
