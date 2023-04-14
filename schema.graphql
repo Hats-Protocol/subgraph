@@ -15,7 +15,7 @@ type Hat @entity {
   wearers: [Wearer!]!
   admin: Hat!
   badStandings: [Wearer!]!
-  requestedLinkFromTree: Tree @derivedFrom(field: "requestedLinkToAdminHat")
+  linkRequestFromTree: Tree @derivedFrom(field: "requestedLinkToHat")
   subHats: [Hat!]! @derivedFrom(field: "admin")
   linkedTrees: [Tree!]! @derivedFrom(field: "linkedToHat")
   events: [HatsEvent!]! @derivedFrom(field: "hat")
@@ -34,8 +34,8 @@ type Tree @entity {
   childOfTree: Tree
   linkedToHat: Hat
   requestedLinkToTree: Tree
-  requestedLinkToAdminHat: Hat
-  requestedLinkFromTree: Tree @derivedFrom(field: "requestedLinkToTree")
+  requestedLinkToHat: Hat
+  linkRequestFromTree: Tree @derivedFrom(field: "requestedLinkToTree")
   hats: [Hat!]! @derivedFrom(field: "tree")
   parentOfTrees: [Tree!]! @derivedFrom(field: "childOfTree")
   events: [HatsEvent!]! @derivedFrom(field: "tree")

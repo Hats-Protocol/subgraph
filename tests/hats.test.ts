@@ -227,7 +227,7 @@ describe("basic test", () => {
           "Hat",
           "0x0000000200000000000000000000000000000000000000000000000000000000",
           "imageUri",
-          "ipfs://bafybeigcimbqwfajsnhoq7fqnbdllz7kye7cpdy3adj2sob3wku2llu5bi"
+          ""
         );
         assert.fieldEquals(
           "Hat",
@@ -492,7 +492,7 @@ describe("basic test", () => {
           "Hat",
           "0x0000000100010001000000000000000000000000000000000000000000000000",
           "imageUri",
-          "ipfs://bafybeigcimbqwfajsnhoq7fqnbdllz7kye7cpdy3adj2sob3wku2llu5bi"
+          ""
         );
         assert.fieldEquals(
           "Hat",

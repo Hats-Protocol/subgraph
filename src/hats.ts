@@ -446,8 +446,7 @@ function createDummyHat(hatId: string, contractAddress: Address): void {
   hat.eligibility = "0x0000000000000000000000000000000000000000";
   hat.toggle = "0x0000000000000000000000000000000000000000";
   hat.mutable = false;
-  hat.imageUri =
-    "ipfs://bafybeigcimbqwfajsnhoq7fqnbdllz7kye7cpdy3adj2sob3wku2llu5bi";
+  hat.imageUri = "";
   hat.status = false;
   hat.levelAtLocalTree = hatLevelLocal(
     contractAddress,
