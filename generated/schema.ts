@@ -60,13 +60,21 @@ export class Hat extends Entity {
     this.set("status", Value.fromBoolean(value));
   }
 
-  get createdAt(): BigInt {
+  get createdAt(): BigInt | null {
     let value = this.get("createdAt");
-    return value!.toBigInt();
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
   }
 
-  set createdAt(value: BigInt) {
-    this.set("createdAt", Value.fromBigInt(value));
+  set createdAt(value: BigInt | null) {
+    if (!value) {
+      this.unset("createdAt");
+    } else {
+      this.set("createdAt", Value.fromBigInt(<BigInt>value));
+    }
   }
 
   get details(): string {
@@ -175,6 +183,23 @@ export class Hat extends Entity {
 
   set badStandings(value: Array<string>) {
     this.set("badStandings", Value.fromStringArray(value));
+  }
+
+  get requestedLinkFromTree(): string | null {
+    let value = this.get("requestedLinkFromTree");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set requestedLinkFromTree(value: string | null) {
+    if (!value) {
+      this.unset("requestedLinkFromTree");
+    } else {
+      this.set("requestedLinkFromTree", Value.fromString(<string>value));
+    }
   }
 
   get subHats(): Array<string> {
@@ -326,6 +351,57 @@ export class Tree extends Entity {
       this.unset("linkedToHat");
     } else {
       this.set("linkedToHat", Value.fromString(<string>value));
+    }
+  }
+
+  get requestedLinkToTree(): string | null {
+    let value = this.get("requestedLinkToTree");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set requestedLinkToTree(value: string | null) {
+    if (!value) {
+      this.unset("requestedLinkToTree");
+    } else {
+      this.set("requestedLinkToTree", Value.fromString(<string>value));
+    }
+  }
+
+  get requestedLinkToAdminHat(): string | null {
+    let value = this.get("requestedLinkToAdminHat");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set requestedLinkToAdminHat(value: string | null) {
+    if (!value) {
+      this.unset("requestedLinkToAdminHat");
+    } else {
+      this.set("requestedLinkToAdminHat", Value.fromString(<string>value));
+    }
+  }
+
+  get requestedLinkFromTree(): string | null {
+    let value = this.get("requestedLinkFromTree");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set requestedLinkFromTree(value: string | null) {
+    if (!value) {
+      this.unset("requestedLinkFromTree");
+    } else {
+      this.set("requestedLinkFromTree", Value.fromString(<string>value));
     }
   }
 

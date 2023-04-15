@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: Hats
-    network: optimism
+    network: goerli
     source:
       abi: Hats
       address: "0x9D2dfd6066d5935267291718E8AA16C8Ab729E9d"
-      startBlock: 85185169
+      startBlock: 8749972
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7

@@ -1,4 +1,4 @@
-import { BigInt, Address, log } from "@graphprotocol/graph-ts";
+import { BigInt, Address, log, Bytes } from "@graphprotocol/graph-ts";
 import {
   Hats,
   HatCreated,
@@ -41,6 +41,10 @@ import {
   topHatDomainToHex,
   topHatDomainToHatId,
   hatLevelLocal,
+  hatIdHexToPrettyId,
+  hexTopHatDomain,
+  topHatDomainHexToHatId,
+  changeEndianness,
 } from "./utils";
 
 export function handleHatCreated(event: HatCreated): void {
@@ -69,11 +73,17 @@ export function handleHatCreated(event: HatCreated): void {
     hat.tree = tree.id;
     tree.save();
   } else {
-    hat.admin = getHatAdmin(
+    let adminId = getHatAdmin(
       event.address,
       event.params.id,
       hat.levelAtLocalTree - 1
     );
+    let adminHat = Hat.load(adminId);
+    // if admin hat dont exist, create dummy hats for any non existent hat along the admin chain
+    if (adminHat === null) {
+      createDummyHats(adminId, event.address);
+    }
+    hat.admin = adminId;
     hat.tree = topHatDomain(event.params.id);
   }
 
@@ -286,6 +296,27 @@ export function handleWearerStandingChanged(
 }
 
 export function handleTopHatLinkRequested(event: TopHatLinkRequested): void {
+  let requestingTree = Tree.load(
+    topHatDomainToHex(event.params.domain)
+  ) as Tree;
+
+  // load tree of new admin and create dummy if don't exist
+  let newAdminTree = Tree.load(topHatDomain(event.params.newAdmin));
+  if (newAdminTree === null) {
+    createDummyTree(topHatDomain(event.params.newAdmin));
+    newAdminTree = Tree.load(topHatDomain(event.params.newAdmin)) as Tree;
+  }
+  // load new admin hat. If not exist, create dummmy hats for the whole admin chain
+  let newAdminHat = Hat.load(hatIdToHex(event.params.newAdmin));
+  if (newAdminHat === null) {
+    createDummyHats(hatIdToHex(event.params.newAdmin), event.address);
+    newAdminHat = Hat.load(hatIdToHex(event.params.newAdmin)) as Hat;
+  }
+
+  requestingTree.requestedLinkToTree = newAdminTree.id;
+  requestingTree.requestedLinkToAdminHat = newAdminHat.id;
+  requestingTree.save();
+
   // create new TopHatLinkRequestedEvent
   let topHatLinkRequestedEvent = new TopHatLinkRequestedEvent(
     createEventID(event, "TopHatLinkRequested")
@@ -315,6 +346,10 @@ export function handleTopHatLinked(event: TopHatLinked): void {
     tree.linkedToHat = hatIdToHex(event.params.newAdmin);
     tree.childOfTree = topHatDomain(event.params.newAdmin);
     topHat.admin = hatIdToHex(event.params.newAdmin); // tophat is no longer its own admin after linkage
+
+    // remove request
+    tree.requestedLinkToAdminHat = null;
+    tree.requestedLinkToTree = null;
   }
   tree.save();
   topHat.save();
@@ -379,4 +414,58 @@ function removeHat(hat: Hat, event: TransferSingle): void {
   hatBurnedEvent.tree = topHatDomain(event.params.id);
   hatBurnedEvent.hat = hatIdToHex(event.params.id);
   hatBurnedEvent.save();
+}
+
+function createDummyTree(treeDomain: string): void {
+  let tree = new Tree(treeDomain);
+  tree.save();
+}
+
+function createDummyHats(hatId: string, contractAddress: Address): void {
+  for (let i = 10; i < hatId.length; i += 4) {
+    let currentHatId = hatId.substring(0, i).padEnd(66, "0");
+    let hat = Hat.load(currentHatId);
+    if (hat === null) {
+      createDummyHat(currentHatId, contractAddress);
+    }
+
+    let domainAtNextLevel = hatId.substring(i, i + 4);
+    if (domainAtNextLevel == "0000") {
+      break;
+    }
+  }
+}
+
+function createDummyHat(hatId: string, contractAddress: Address): void {
+  let hat = new Hat(hatId);
+  hat.prettyId = hatIdHexToPrettyId(hatId);
+  hat.createdAt = null;
+  hat.wearers = [];
+  hat.details = "";
+  hat.maxSupply = BigInt.fromI32(0);
+  hat.eligibility = "0x0000000000000000000000000000000000000000";
+  hat.toggle = "0x0000000000000000000000000000000000000000";
+  hat.mutable = false;
+  hat.imageUri = "";
+  hat.status = false;
+  hat.levelAtLocalTree = hatLevelLocal(
+    contractAddress,
+    BigInt.fromUnsignedBytes(Bytes.fromHexString(changeEndianness(hatId)))
+  );
+  hat.currentSupply = BigInt.fromI32(0);
+  hat.badStandings = [];
+
+  if (hat.levelAtLocalTree == 0) {
+    hat.admin = hat.id;
+  } else {
+    hat.admin = getHatAdmin(
+      contractAddress,
+      BigInt.fromUnsignedBytes(Bytes.fromHexString(changeEndianness(hatId))),
+      hat.levelAtLocalTree - 1
+    );
+  }
+
+  hat.tree = hexTopHatDomain(hatId);
+
+  hat.save();
 }
