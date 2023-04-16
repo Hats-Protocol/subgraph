@@ -426,6 +426,18 @@ describe("basic test", () => {
               "linkedToHat",
               "0x0000000100000000000000000000000000000000000000000000000000000000"
             );
+            assert.fieldEquals(
+              "Tree",
+              "0x00000002",
+              "requestedLinkToTree",
+              "null"
+            );
+            assert.fieldEquals(
+              "Tree",
+              "0x00000002",
+              "requestedLinkToHat",
+              "null"
+            );
           });
 
           describe("and tree 0x00000002 is delinked from 0x00000001", () => {
