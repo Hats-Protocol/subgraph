@@ -379,55 +379,92 @@ describe("basic test", () => {
         assert.fieldEquals("Tree", "0x00000002", "id", "0x00000002");
       });
 
-      describe("and tree 0x00000002 is linked to 0x00000001", () => {
+      describe("and tree 0x00000002 requests to link to 0x00000001", () => {
         beforeEach(() => {
           let topHatLinkRequestedEvent = mockTopHatLinkRequestedEvent(
             "0x00000002",
             "0x0000000100000000000000000000000000000000000000000000000000000000"
           );
           handleTopHatLinkRequested(topHatLinkRequestedEvent);
-
-          let topHatLinkedEvent = mockTopHatLinkedEvent(
-            "0x00000002",
-            "0x0000000100000000000000000000000000000000000000000000000000000000"
-          );
-          handleTopHatLinked(topHatLinkedEvent);
         });
 
-        test("test tree linked", () => {
-          assert.fieldEquals("Tree", "0x00000002", "childOfTree", "0x00000001");
+        test("test request properties", () => {
           assert.fieldEquals(
             "Tree",
             "0x00000002",
-            "linkedToHat",
+            "requestedLinkToTree",
+            "0x00000001"
+          );
+
+          assert.fieldEquals(
+            "Tree",
+            "0x00000002",
+            "requestedLinkToHat",
             "0x0000000100000000000000000000000000000000000000000000000000000000"
           );
         });
 
-        describe("and tree 0x00000002 is delinked from 0x00000001", () => {
+        describe("and tree 0x00000001 accepts linkage", () => {
           beforeEach(() => {
             let topHatLinkedEvent = mockTopHatLinkedEvent(
               "0x00000002",
-              "0x0000000000000000000000000000000000000000000000000000000000000000"
+              "0x0000000100000000000000000000000000000000000000000000000000000000"
             );
             handleTopHatLinked(topHatLinkedEvent);
           });
 
           test("test tree linked", () => {
-            assert.fieldEquals("Tree", "0x00000002", "childOfTree", "null");
-            assert.fieldEquals("Tree", "0x00000002", "linkedToHat", "null");
             assert.fieldEquals(
-              "Hat",
-              "0x0000000200000000000000000000000000000000000000000000000000000000",
-              "eligibility",
-              Address.zero().toHexString()
+              "Tree",
+              "0x00000002",
+              "childOfTree",
+              "0x00000001"
             );
             assert.fieldEquals(
-              "Hat",
-              "0x0000000200000000000000000000000000000000000000000000000000000000",
-              "toggle",
-              Address.zero().toHexString()
+              "Tree",
+              "0x00000002",
+              "linkedToHat",
+              "0x0000000100000000000000000000000000000000000000000000000000000000"
             );
+            assert.fieldEquals(
+              "Tree",
+              "0x00000002",
+              "requestedLinkToTree",
+              "null"
+            );
+            assert.fieldEquals(
+              "Tree",
+              "0x00000002",
+              "requestedLinkToHat",
+              "null"
+            );
+          });
+
+          describe("and tree 0x00000002 is delinked from 0x00000001", () => {
+            beforeEach(() => {
+              let topHatLinkedEvent = mockTopHatLinkedEvent(
+                "0x00000002",
+                "0x0000000000000000000000000000000000000000000000000000000000000000"
+              );
+              handleTopHatLinked(topHatLinkedEvent);
+            });
+
+            test("test tree linked", () => {
+              assert.fieldEquals("Tree", "0x00000002", "childOfTree", "null");
+              assert.fieldEquals("Tree", "0x00000002", "linkedToHat", "null");
+              assert.fieldEquals(
+                "Hat",
+                "0x0000000200000000000000000000000000000000000000000000000000000000",
+                "eligibility",
+                Address.zero().toHexString()
+              );
+              assert.fieldEquals(
+                "Hat",
+                "0x0000000200000000000000000000000000000000000000000000000000000000",
+                "toggle",
+                Address.zero().toHexString()
+              );
+            });
           });
         });
       });

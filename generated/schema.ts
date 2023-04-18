@@ -185,21 +185,13 @@ export class Hat extends Entity {
     this.set("badStandings", Value.fromStringArray(value));
   }
 
-  get requestedLinkFromTree(): string | null {
-    let value = this.get("requestedLinkFromTree");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
+  get linkRequestFromTree(): Array<string> {
+    let value = this.get("linkRequestFromTree");
+    return value!.toStringArray();
   }
 
-  set requestedLinkFromTree(value: string | null) {
-    if (!value) {
-      this.unset("requestedLinkFromTree");
-    } else {
-      this.set("requestedLinkFromTree", Value.fromString(<string>value));
-    }
+  set linkRequestFromTree(value: Array<string>) {
+    this.set("linkRequestFromTree", Value.fromStringArray(value));
   }
 
   get subHats(): Array<string> {
@@ -371,8 +363,8 @@ export class Tree extends Entity {
     }
   }
 
-  get requestedLinkToAdminHat(): string | null {
-    let value = this.get("requestedLinkToAdminHat");
+  get requestedLinkToHat(): string | null {
+    let value = this.get("requestedLinkToHat");
     if (!value || value.kind == ValueKind.NULL) {
       return null;
     } else {
@@ -380,29 +372,21 @@ export class Tree extends Entity {
     }
   }
 
-  set requestedLinkToAdminHat(value: string | null) {
+  set requestedLinkToHat(value: string | null) {
     if (!value) {
-      this.unset("requestedLinkToAdminHat");
+      this.unset("requestedLinkToHat");
     } else {
-      this.set("requestedLinkToAdminHat", Value.fromString(<string>value));
+      this.set("requestedLinkToHat", Value.fromString(<string>value));
     }
   }
 
-  get requestedLinkFromTree(): string | null {
-    let value = this.get("requestedLinkFromTree");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
+  get linkRequestFromTree(): Array<string> {
+    let value = this.get("linkRequestFromTree");
+    return value!.toStringArray();
   }
 
-  set requestedLinkFromTree(value: string | null) {
-    if (!value) {
-      this.unset("requestedLinkFromTree");
-    } else {
-      this.set("requestedLinkFromTree", Value.fromString(<string>value));
-    }
+  set linkRequestFromTree(value: Array<string>) {
+    this.set("linkRequestFromTree", Value.fromStringArray(value));
   }
 
   get hats(): Array<string> {
