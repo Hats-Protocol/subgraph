@@ -185,6 +185,24 @@ export class Hat extends Entity {
     this.set("badStandings", Value.fromStringArray(value));
   }
 
+  get claimableBy(): Array<string> {
+    let value = this.get("claimableBy");
+    return value!.toStringArray();
+  }
+
+  set claimableBy(value: Array<string>) {
+    this.set("claimableBy", Value.fromStringArray(value));
+  }
+
+  get claimableForBy(): Array<string> {
+    let value = this.get("claimableForBy");
+    return value!.toStringArray();
+  }
+
+  set claimableForBy(value: Array<string>) {
+    this.set("claimableForBy", Value.fromStringArray(value));
+  }
+
   get linkRequestFromTree(): Array<string> {
     let value = this.get("linkRequestFromTree");
     return value!.toStringArray();
@@ -1642,5 +1660,55 @@ export class WearerStandingChangedEvent extends Entity {
 
   set wearerStanding(value: boolean) {
     this.set("wearerStanding", Value.fromBoolean(value));
+  }
+}
+
+export class ClaimsHatter extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(id != null, "Cannot save ClaimsHatter entity without an ID");
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type ClaimsHatter must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
+      );
+      store.set("ClaimsHatter", id.toString(), this);
+    }
+  }
+
+  static load(id: string): ClaimsHatter | null {
+    return changetype<ClaimsHatter | null>(store.get("ClaimsHatter", id));
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    return value!.toString();
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get claimableHats(): Array<string> {
+    let value = this.get("claimableHats");
+    return value!.toStringArray();
+  }
+
+  set claimableHats(value: Array<string>) {
+    this.set("claimableHats", Value.fromStringArray(value));
+  }
+
+  get claimableForHats(): Array<string> {
+    let value = this.get("claimableForHats");
+    return value!.toStringArray();
+  }
+
+  set claimableForHats(value: Array<string>) {
+    this.set("claimableForHats", Value.fromStringArray(value));
   }
 }

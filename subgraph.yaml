@@ -47,3 +47,44 @@ dataSources:
         - event: TopHatLinked(uint32,uint256)
           handler: handleTopHatLinked
       file: ./src/hats.ts
+  - kind: ethereum
+    name: HatsModuleFactory
+    network: mainnet
+    source:
+      abi: HatsModuleFactory
+      address: "0xfE661c01891172046feE16D3a57c3Cf456729efA"
+      startBlock: 9713194
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - ClaimsHatter
+      abis:
+        - name: HatsModuleFactory
+          file: ./abis/HatsModuleFactory.json
+      eventHandlers:
+        - event: HatsModuleFactory_ModuleDeployed(address,address,uint256,bytes,bytes)
+          handler: handleModuleDeployed
+      file: ./src/hatsModuleFactory.ts
+templates:
+  - name: MultiClaimsHatter
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      abi: MultiClaimsHatter
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/multiClaimsHatter.ts
+      entities:
+        - ClaimsHatter
+      abis:
+        - name: MultiClaimsHatter
+          file: ./abis/MultiClaimsHatter.json
+      eventHandlers:
+        - event: HatsClaimabilityEdited(uint256[],uint8[])
+          handler: handleHatsClaimabilityEdited
+        - event: HatClaimabilityEdited(uint256,uint8)
+          handler: handleHatClaimabilityEdited
