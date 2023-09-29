@@ -23,10 +23,7 @@ import {
 import { MULTI_CLAIMS_HATTER_IMPLEMENTATION } from "../src/constants";
 
 const address1: string = "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-const address2: string = "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb";
-const address3: string = "0xcccccccccccccccccccccccccccccccccccccccc";
 const claimsHatter1: string = "0xdddddddddddddddddddddddddddddddddddddddd";
-const claimsHatter2: string = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
 const topHatId1 =
   "0x0000000100000000000000000000000000000000000000000000000000000000";
 

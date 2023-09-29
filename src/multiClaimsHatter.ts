@@ -1,4 +1,4 @@
-import { BigInt, Address, log, Bytes, ethereum } from "@graphprotocol/graph-ts";
+//import { log } from "@graphprotocol/graph-ts";
 import {
   HatsClaimabilityEdited,
   HatClaimabilityEdited,
@@ -9,7 +9,7 @@ import { hatIdToHex } from "./utils";
 export function handleHatClaimabilityEdited(
   event: HatClaimabilityEdited
 ): void {
-  let claimsHatter = ClaimsHatter.load(
+  const claimsHatter = ClaimsHatter.load(
     event.address.toHexString()
   ) as ClaimsHatter;
 
@@ -47,7 +47,7 @@ export function handleHatClaimabilityEdited(
 export function handleHatsClaimabilityEdited(
   event: HatsClaimabilityEdited
 ): void {
-  let claimsHatter = ClaimsHatter.load(
+  const claimsHatter = ClaimsHatter.load(
     event.address.toHexString()
   ) as ClaimsHatter;
 
@@ -86,7 +86,7 @@ export function handleHatsClaimabilityEdited(
 
 function removeClaimableHat(claimsHatter: ClaimsHatter, hatId: string): void {
   const currentClaimableHats = claimsHatter.claimableHats;
-  let index = currentClaimableHats.indexOf(hatId);
+  const index = currentClaimableHats.indexOf(hatId);
   currentClaimableHats.splice(index, 1);
   claimsHatter.claimableHats = currentClaimableHats;
 }
@@ -96,7 +96,7 @@ function removeClaimableForHat(
   hatId: string
 ): void {
   const currentClaimableForHats = claimsHatter.claimableForHats;
-  let index = currentClaimableForHats.indexOf(hatId);
+  const index = currentClaimableForHats.indexOf(hatId);
   currentClaimableForHats.splice(index, 1);
   claimsHatter.claimableForHats = currentClaimableForHats;
 }
