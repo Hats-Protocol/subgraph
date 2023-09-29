@@ -15,6 +15,8 @@ type Hat @entity {
   wearers: [Wearer!]!
   admin: Hat!
   badStandings: [Wearer!]!
+  claimableBy: [ClaimsHatter!]! @derivedFrom(field: "claimableHats")
+  claimableForBy: [ClaimsHatter!]! @derivedFrom(field: "claimableForHats")
   linkRequestFromTree: [Tree!]! @derivedFrom(field: "requestedLinkToHat")
   subHats: [Hat!]! @derivedFrom(field: "admin")
   linkedTrees: [Tree!]! @derivedFrom(field: "linkedToHat")
@@ -187,4 +189,10 @@ type WearerStandingChangedEvent implements HatsEvent @entity {
   transactionID: Bytes!
   wearer: Wearer!
   wearerStanding: Boolean!
+}
+
+type ClaimsHatter @entity {
+  id: ID!
+  claimableHats: [Hat!]!
+  claimableForHats: [Hat!]!
 }

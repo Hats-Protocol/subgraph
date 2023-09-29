@@ -1,25 +1,10 @@
 import { BigInt, Address, log, Bytes, ethereum } from "@graphprotocol/graph-ts";
-import { HatsModuleFactory_ModuleDeployed } from "../generated/HatsModuleFactory/HatsModuleFactory";
 import {
   HatsClaimabilityEdited,
   HatClaimabilityEdited,
 } from "../generated/templates/MultiClaimsHatter/MultiClaimsHatter";
-import { Hat, ClaimsHatter } from "../generated/schema";
-import {
-  hatIdToHex,
-  topHatDomain,
-  createEventID,
-  getHatAdmin,
-  hatIdToPrettyId,
-  topHatDomainToHex,
-  topHatDomainToHatId,
-  hatLevelLocal,
-  hatIdHexToPrettyId,
-  hexTopHatDomain,
-  topHatDomainHexToHatId,
-  changeEndianness,
-} from "./utils";
-import { MultiClaimsHatter } from "../generated/templates";
+import { ClaimsHatter } from "../generated/schema";
+import { hatIdToHex } from "./utils";
 
 export function handleHatClaimabilityEdited(
   event: HatClaimabilityEdited
@@ -33,36 +18,97 @@ export function handleHatClaimabilityEdited(
   const hatIsCurrentlyClaimableFor =
     claimsHatter.claimableForHats.includes(hatId);
 
-  if (event.params.claimType === 0) {
+  if (event.params.claimType == 0) {
     if (hatIsCurrentlyClaimable) {
       removeClaimableHat(claimsHatter, hatId);
     }
     if (hatIsCurrentlyClaimableFor) {
       removeClaimableForHat(claimsHatter, hatId);
     }
-  } else if (event.params.claimType === 1) {
+  } else if (event.params.claimType == 1) {
+    if (!hatIsCurrentlyClaimable) {
+      addClaimableHat(claimsHatter, hatId);
+    }
+    if (hatIsCurrentlyClaimableFor) {
+      removeClaimableForHat(claimsHatter, hatId);
+    }
+  } else if (event.params.claimType == 2) {
+    if (!hatIsCurrentlyClaimable) {
+      addClaimableHat(claimsHatter, hatId);
+    }
+    if (!hatIsCurrentlyClaimableFor) {
+      addClaimableForHat(claimsHatter, hatId);
+    }
   }
 
   claimsHatter.save();
 }
 
-function removeClaimableHat(claimsHatter: ClaimsHatter, hatId: string) {
+export function handleHatsClaimabilityEdited(
+  event: HatsClaimabilityEdited
+): void {
+  let claimsHatter = ClaimsHatter.load(
+    event.address.toHexString()
+  ) as ClaimsHatter;
+
+  for (let i = 0; i < event.params.hatIds.length; i++) {
+    const hatId = hatIdToHex(event.params.hatIds[i]);
+    const hatIsCurrentlyClaimable = claimsHatter.claimableHats.includes(hatId);
+    const hatIsCurrentlyClaimableFor =
+      claimsHatter.claimableForHats.includes(hatId);
+
+    if (event.params.claimTypes[i] == 0) {
+      if (hatIsCurrentlyClaimable) {
+        removeClaimableHat(claimsHatter, hatId);
+      }
+      if (hatIsCurrentlyClaimableFor) {
+        removeClaimableForHat(claimsHatter, hatId);
+      }
+    } else if (event.params.claimTypes[i] == 1) {
+      if (!hatIsCurrentlyClaimable) {
+        addClaimableHat(claimsHatter, hatId);
+      }
+      if (hatIsCurrentlyClaimableFor) {
+        removeClaimableForHat(claimsHatter, hatId);
+      }
+    } else if (event.params.claimTypes[i] == 2) {
+      if (!hatIsCurrentlyClaimable) {
+        addClaimableHat(claimsHatter, hatId);
+      }
+      if (!hatIsCurrentlyClaimableFor) {
+        addClaimableForHat(claimsHatter, hatId);
+      }
+    }
+  }
+
+  claimsHatter.save();
+}
+
+function removeClaimableHat(claimsHatter: ClaimsHatter, hatId: string): void {
   const currentClaimableHats = claimsHatter.claimableHats;
   let index = currentClaimableHats.indexOf(hatId);
   currentClaimableHats.splice(index, 1);
   claimsHatter.claimableHats = currentClaimableHats;
 }
 
-function removeClaimableForHat(claimsHatter: ClaimsHatter, hatId: string) {
+function removeClaimableForHat(
+  claimsHatter: ClaimsHatter,
+  hatId: string
+): void {
   const currentClaimableForHats = claimsHatter.claimableForHats;
   let index = currentClaimableForHats.indexOf(hatId);
   currentClaimableForHats.splice(index, 1);
   claimsHatter.claimableForHats = currentClaimableForHats;
 }
 
-function addClaimableHat(claimsHatter: ClaimsHatter, hatId: string) {
+function addClaimableHat(claimsHatter: ClaimsHatter, hatId: string): void {
   const currentClaimableHats = claimsHatter.claimableHats;
-  let index = currentClaimableHats.indexOf(hatId);
-  currentClaimableHats.splice(index, 1);
+  currentClaimableHats.push(hatId);
   claimsHatter.claimableHats = currentClaimableHats;
+}
+
+function addClaimableForHat(claimsHatter: ClaimsHatter, hatId: string): void {
+  const currentClaimableForHats = claimsHatter.claimableForHats;
+  currentClaimableForHats.push(hatId);
+  claimsHatter.claimableForHats = currentClaimableForHats;
 }
