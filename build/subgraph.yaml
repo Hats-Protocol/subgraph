@@ -83,7 +83,7 @@ templates:
         - name: MultiClaimsHatter
           file: MultiClaimsHatter/abis/MultiClaimsHatter.json
       eventHandlers:
-        - event: HatsClaimabilityEdited(uint256[],uint8[])
-          handler: handleHatsClaimabilityEdited
-        - event: HatClaimabilityEdited(uint256,uint8)
-          handler: handleHatClaimabilityEdited
+        - event: HatsClaimabilitySet(uint256[],uint8[])
+          handler: handleHatsClaimabilitySet
+        - event: HatClaimabilitySet(uint256,uint8)
+          handler: handleHatClaimabilitySet

@@ -10,14 +10,14 @@ import {
 import { handleHatCreated, handleTransferSingle } from "../src/hats";
 import { handleModuleDeployed } from "../src/hatsModuleFactory";
 import {
-  handleHatClaimabilityEdited,
-  handleHatsClaimabilityEdited,
+  handleHatClaimabilitySet,
+  handleHatsClaimabilitySet,
 } from "../src/multiClaimsHatter";
 import {
   createHatCreatedEvent,
   mockTransferSingleEvent,
   mockHatsModuleFactory_ModuleDeployedEvent,
-  mockHatClaimabilityEditedEvent,
+  mockHatClaimabilitySetEvent,
   mockHatsClaimabilityEditedEvent,
 } from "./utils";
 import { MULTI_CLAIMS_HATTER_IMPLEMENTATION } from "../src/constants";
@@ -141,19 +141,19 @@ describe("basic test", () => {
 
       describe("And hats 0x00000001.0001.0001, 0x00000001.0001.0001.0001 are registered", () => {
         beforeEach(() => {
-          let hatClaimabilityEditedEvent1 = mockHatClaimabilityEditedEvent(
+          let hatClaimabilityEditedEvent1 = mockHatClaimabilitySetEvent(
             Address.fromString(claimsHatter1),
             "0x0000000100010001000000000000000000000000000000000000000000000000",
             1
           );
-          handleHatClaimabilityEdited(hatClaimabilityEditedEvent1);
+          handleHatClaimabilitySet(hatClaimabilityEditedEvent1);
 
-          let hatClaimabilityEditedEvent2 = mockHatClaimabilityEditedEvent(
+          let hatClaimabilityEditedEvent2 = mockHatClaimabilitySetEvent(
             Address.fromString(claimsHatter1),
             "0x0000000100010001000100000000000000000000000000000000000000000000",
             2
           );
-          handleHatClaimabilityEdited(hatClaimabilityEditedEvent2);
+          handleHatClaimabilitySet(hatClaimabilityEditedEvent2);
         });
 
         test("Test hats registered", () => {
@@ -173,12 +173,12 @@ describe("basic test", () => {
 
         describe("And hat 0x00000001.0001.0001 is unregistered", () => {
           beforeEach(() => {
-            let hatUnregisteredEvent = mockHatClaimabilityEditedEvent(
+            let hatUnregisteredEvent = mockHatClaimabilitySetEvent(
               Address.fromString(claimsHatter1),
               "0x0000000100010001000000000000000000000000000000000000000000000000",
               0
             );
-            handleHatClaimabilityEdited(hatUnregisteredEvent);
+            handleHatClaimabilitySet(hatUnregisteredEvent);
           });
 
           test("Test hats registered", () => {
@@ -221,7 +221,7 @@ describe("basic test", () => {
           initialClaimableHats,
           initialClaimabilityTypes
         );
-        handleHatsClaimabilityEdited(hatsClaimabilityEditedEvent);
+        handleHatsClaimabilitySet(hatsClaimabilityEditedEvent);
 
         let transferSingleEvent2 = mockTransferSingleEvent(
           Address.fromString(address1),

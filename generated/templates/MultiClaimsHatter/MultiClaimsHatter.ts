@@ -10,16 +10,16 @@ import {
   BigInt
 } from "@graphprotocol/graph-ts";
 
-export class HatClaimabilityEdited extends ethereum.Event {
-  get params(): HatClaimabilityEdited__Params {
-    return new HatClaimabilityEdited__Params(this);
+export class HatClaimabilitySet extends ethereum.Event {
+  get params(): HatClaimabilitySet__Params {
+    return new HatClaimabilitySet__Params(this);
   }
 }
 
-export class HatClaimabilityEdited__Params {
-  _event: HatClaimabilityEdited;
+export class HatClaimabilitySet__Params {
+  _event: HatClaimabilitySet;
 
-  constructor(event: HatClaimabilityEdited) {
+  constructor(event: HatClaimabilitySet) {
     this._event = event;
   }
 
@@ -32,16 +32,16 @@ export class HatClaimabilityEdited__Params {
   }
 }
 
-export class HatsClaimabilityEdited extends ethereum.Event {
-  get params(): HatsClaimabilityEdited__Params {
-    return new HatsClaimabilityEdited__Params(this);
+export class HatsClaimabilitySet extends ethereum.Event {
+  get params(): HatsClaimabilitySet__Params {
+    return new HatsClaimabilitySet__Params(this);
   }
 }
 
-export class HatsClaimabilityEdited__Params {
-  _event: HatsClaimabilityEdited;
+export class HatsClaimabilitySet__Params {
+  _event: HatsClaimabilitySet;
 
-  constructor(event: HatsClaimabilityEdited) {
+  constructor(event: HatsClaimabilitySet) {
     this._event = event;
   }
 
@@ -209,52 +209,6 @@ export class MultiClaimsHatter extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
-  hatIsClaimableBy(_hatId: BigInt): boolean {
-    let result = super.call(
-      "hatIsClaimableBy",
-      "hatIsClaimableBy(uint256):(bool)",
-      [ethereum.Value.fromUnsignedBigInt(_hatId)]
-    );
-
-    return result[0].toBoolean();
-  }
-
-  try_hatIsClaimableBy(_hatId: BigInt): ethereum.CallResult<boolean> {
-    let result = super.tryCall(
-      "hatIsClaimableBy",
-      "hatIsClaimableBy(uint256):(bool)",
-      [ethereum.Value.fromUnsignedBigInt(_hatId)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBoolean());
-  }
-
-  hatIsClaimableFor(_hatId: BigInt): boolean {
-    let result = super.call(
-      "hatIsClaimableFor",
-      "hatIsClaimableFor(uint256):(bool)",
-      [ethereum.Value.fromUnsignedBigInt(_hatId)]
-    );
-
-    return result[0].toBoolean();
-  }
-
-  try_hatIsClaimableFor(_hatId: BigInt): ethereum.CallResult<boolean> {
-    let result = super.tryCall(
-      "hatIsClaimableFor",
-      "hatIsClaimableFor(uint256):(bool)",
-      [ethereum.Value.fromUnsignedBigInt(_hatId)]
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBoolean());
-  }
-
   hatToClaimType(hatId: BigInt): i32 {
     let result = super.call(
       "hatToClaimType",
@@ -276,6 +230,50 @@ export class MultiClaimsHatter extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toI32());
+  }
+
+  isClaimableBy(_hatId: BigInt): boolean {
+    let result = super.call("isClaimableBy", "isClaimableBy(uint256):(bool)", [
+      ethereum.Value.fromUnsignedBigInt(_hatId)
+    ]);
+
+    return result[0].toBoolean();
+  }
+
+  try_isClaimableBy(_hatId: BigInt): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "isClaimableBy",
+      "isClaimableBy(uint256):(bool)",
+      [ethereum.Value.fromUnsignedBigInt(_hatId)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  isClaimableFor(_hatId: BigInt): boolean {
+    let result = super.call(
+      "isClaimableFor",
+      "isClaimableFor(uint256):(bool)",
+      [ethereum.Value.fromUnsignedBigInt(_hatId)]
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_isClaimableFor(_hatId: BigInt): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "isClaimableFor",
+      "isClaimableFor(uint256):(bool)",
+      [ethereum.Value.fromUnsignedBigInt(_hatId)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
   setHatClaimabilityAndCreateModule(

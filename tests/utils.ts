@@ -21,8 +21,8 @@ import {
   WearerStandingChanged,
 } from "../generated/Hats/Hats";
 import {
-  HatsClaimabilityEdited,
-  HatClaimabilityEdited,
+  HatsClaimabilitySet,
+  HatClaimabilitySet,
 } from "../generated/templates/MultiClaimsHatter/MultiClaimsHatter";
 import { HatsModuleFactory_ModuleDeployed } from "../generated/HatsModuleFactory/HatsModuleFactory";
 import { newMockEvent, createMockedFunction } from "matchstick-as";
@@ -694,11 +694,11 @@ export function mockHatsModuleFactory_ModuleDeployedEvent(
   return moduleDeployedEvent;
 }
 
-export function mockHatClaimabilityEditedEvent(
+export function mockHatClaimabilitySetEvent(
   instance: Address,
   hatId: string,
   claimType: i32
-): HatClaimabilityEdited {
+): HatClaimabilitySet {
   // prepare event parameters array
   let hatIdParam = new ethereum.EventParam(
     "hatId",
@@ -713,7 +713,7 @@ export function mockHatClaimabilityEditedEvent(
 
   // create mocked event
   let mockEvent = newMockEvent();
-  let hatClaimabilityEditedEvent = new HatClaimabilityEdited(
+  let hatClaimabilityEditedEvent = new HatClaimabilitySet(
     instance,
     mockEvent.logIndex,
     mockEvent.transactionLogIndex,
@@ -735,7 +735,7 @@ export function mockHatsClaimabilityEditedEvent(
   instance: Address,
   hatIds: string[],
   claimTypes: i32[]
-): HatsClaimabilityEdited {
+): HatsClaimabilitySet {
   // prepare event parameters array
   let hatIdsArray: BigInt[] = [];
   for (let i = 0; i < hatIds.length; i++) {
@@ -755,7 +755,7 @@ export function mockHatsClaimabilityEditedEvent(
 
   // create mocked event
   let mockEvent = newMockEvent();
-  let hatsClaimabilityEditedEvent = new HatsClaimabilityEdited(
+  let hatsClaimabilityEditedEvent = new HatsClaimabilitySet(
     instance,
     mockEvent.logIndex,
     mockEvent.transactionLogIndex,

@@ -1,14 +1,12 @@
 //import { log } from "@graphprotocol/graph-ts";
 import {
-  HatsClaimabilityEdited,
-  HatClaimabilityEdited,
+  HatsClaimabilitySet,
+  HatClaimabilitySet,
 } from "../generated/templates/MultiClaimsHatter/MultiClaimsHatter";
 import { ClaimsHatter } from "../generated/schema";
 import { hatIdToHex } from "./utils";
 
-export function handleHatClaimabilityEdited(
-  event: HatClaimabilityEdited
-): void {
+export function handleHatClaimabilitySet(event: HatClaimabilitySet): void {
   const claimsHatter = ClaimsHatter.load(
     event.address.toHexString()
   ) as ClaimsHatter;
@@ -44,9 +42,7 @@ export function handleHatClaimabilityEdited(
   claimsHatter.save();
 }
 
-export function handleHatsClaimabilityEdited(
-  event: HatsClaimabilityEdited
-): void {
+export function handleHatsClaimabilitySet(event: HatsClaimabilitySet): void {
   const claimsHatter = ClaimsHatter.load(
     event.address.toHexString()
   ) as ClaimsHatter;
