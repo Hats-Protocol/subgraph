@@ -20,6 +20,11 @@ import {
   TopHatLinked,
   WearerStandingChanged,
 } from "../generated/Hats/Hats";
+import {
+  HatsClaimabilitySet,
+  HatClaimabilitySet,
+} from "../generated/templates/MultiClaimsHatter/MultiClaimsHatter";
+import { HatsModuleFactory_ModuleDeployed } from "../generated/HatsModuleFactory/HatsModuleFactory";
 import { newMockEvent, createMockedFunction } from "matchstick-as";
 
 export function mockTopHatLinkRequestedEvent(
@@ -633,4 +638,137 @@ export function createHatCreatedEvent(
   }
 
   return hatCreatedEvent;
+}
+
+export function mockHatsModuleFactory_ModuleDeployedEvent(
+  implementation: Address,
+  instance: Address,
+  hatId: string,
+  otherImmutableArgs: Bytes,
+  initData: Bytes
+): HatsModuleFactory_ModuleDeployed {
+  // prepare event parameters array
+  let implementationParam = new ethereum.EventParam(
+    "implementation",
+    ethereum.Value.fromAddress(implementation)
+  );
+  let instanceParam = new ethereum.EventParam(
+    "instance",
+    ethereum.Value.fromAddress(instance)
+  );
+  let hatIdParam = new ethereum.EventParam(
+    "hatId",
+    ethereum.Value.fromUnsignedBigInt(
+      BigInt.fromUnsignedBytes(Bytes.fromHexString(changeEndianness(hatId)))
+    )
+  );
+  let otherImmutableArgsParam = new ethereum.EventParam(
+    "otherImmutableArgs",
+    ethereum.Value.fromBytes(otherImmutableArgs)
+  );
+  let initDataParam = new ethereum.EventParam(
+    "initData",
+    ethereum.Value.fromBytes(initData)
+  );
+
+  // create mocked event
+  let mockEvent = newMockEvent();
+  let moduleDeployedEvent = new HatsModuleFactory_ModuleDeployed(
+    mockEvent.address,
+    mockEvent.logIndex,
+    mockEvent.transactionLogIndex,
+    mockEvent.logType,
+    mockEvent.block,
+    mockEvent.transaction,
+    mockEvent.parameters,
+    mockEvent.receipt
+  );
+
+  moduleDeployedEvent.parameters = new Array<ethereum.EventParam>();
+  moduleDeployedEvent.parameters.push(implementationParam);
+  moduleDeployedEvent.parameters.push(instanceParam);
+  moduleDeployedEvent.parameters.push(hatIdParam);
+  moduleDeployedEvent.parameters.push(otherImmutableArgsParam);
+  moduleDeployedEvent.parameters.push(initDataParam);
+
+  return moduleDeployedEvent;
+}
+
+export function mockHatClaimabilitySetEvent(
+  instance: Address,
+  hatId: string,
+  claimType: i32
+): HatClaimabilitySet {
+  // prepare event parameters array
+  let hatIdParam = new ethereum.EventParam(
+    "hatId",
+    ethereum.Value.fromUnsignedBigInt(
+      BigInt.fromUnsignedBytes(Bytes.fromHexString(changeEndianness(hatId)))
+    )
+  );
+  let claimTypeParam = new ethereum.EventParam(
+    "claimType",
+    ethereum.Value.fromI32(claimType)
+  );
+
+  // create mocked event
+  let mockEvent = newMockEvent();
+  let hatClaimabilityEditedEvent = new HatClaimabilitySet(
+    instance,
+    mockEvent.logIndex,
+    mockEvent.transactionLogIndex,
+    mockEvent.logType,
+    mockEvent.block,
+    mockEvent.transaction,
+    mockEvent.parameters,
+    mockEvent.receipt
+  );
+
+  hatClaimabilityEditedEvent.parameters = new Array<ethereum.EventParam>();
+  hatClaimabilityEditedEvent.parameters.push(hatIdParam);
+  hatClaimabilityEditedEvent.parameters.push(claimTypeParam);
+
+  return hatClaimabilityEditedEvent;
+}
+
+export function mockHatsClaimabilityEditedEvent(
+  instance: Address,
+  hatIds: string[],
+  claimTypes: i32[]
+): HatsClaimabilitySet {
+  // prepare event parameters array
+  let hatIdsArray: BigInt[] = [];
+  for (let i = 0; i < hatIds.length; i++) {
+    hatIdsArray.push(
+      BigInt.fromUnsignedBytes(Bytes.fromHexString(changeEndianness(hatIds[i])))
+    );
+  }
+
+  let hatIdsParam = new ethereum.EventParam(
+    "hatIds",
+    ethereum.Value.fromUnsignedBigIntArray(hatIdsArray)
+  );
+  let claimTypesParam = new ethereum.EventParam(
+    "claimTypes",
+    ethereum.Value.fromI32Array(claimTypes)
+  );
+
+  // create mocked event
+  let mockEvent = newMockEvent();
+  let hatsClaimabilityEditedEvent = new HatsClaimabilitySet(
+    instance,
+    mockEvent.logIndex,
+    mockEvent.transactionLogIndex,
+    mockEvent.logType,
+    mockEvent.block,
+    mockEvent.transaction,
+    mockEvent.parameters,
+    mockEvent.receipt
+  );
+
+  hatsClaimabilityEditedEvent.parameters = new Array<ethereum.EventParam>();
+  hatsClaimabilityEditedEvent.parameters.push(hatIdsParam);
+  hatsClaimabilityEditedEvent.parameters.push(claimTypesParam);
+
+  return hatsClaimabilityEditedEvent;
 }

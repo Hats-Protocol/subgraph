@@ -3,6 +3,10 @@
     "Hats": {
       "address": "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137",
       "startBlock": 9319512
+    },
+    "HatsModuleFactory": {
+      "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
+      "startBlock": 9713194
     }
   },
   "mainnet": {
@@ -21,6 +25,10 @@
     "Hats": {
       "address": "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137",
       "startBlock": 28899000
+    },
+    "HatsModuleFactory": {
+      "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
+      "startBlock": 30023568
     }
   },
   "arbitrum-one": {
@@ -33,6 +41,10 @@
     "Hats": {
       "address": "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137",
       "startBlock": 106747286
+    },
+    "HatsModuleFactory": {
+      "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
+      "startBlock": 109695493
     }
   }
 }

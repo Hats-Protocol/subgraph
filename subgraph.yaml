@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: Hats
-    network: mainnet
+    network: goerli
     source:
       abi: Hats
       address: "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137"
-      startBlock: 17671864
+      startBlock: 9319512
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -47,3 +47,44 @@ dataSources:
         - event: TopHatLinked(uint32,uint256)
           handler: handleTopHatLinked
       file: ./src/hats.ts
+  - kind: ethereum
+    name: HatsModuleFactory
+    network: goerli
+    source:
+      abi: HatsModuleFactory
+      address: "0xfE661c01891172046feE16D3a57c3Cf456729efA"
+      startBlock: 9713194
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - ClaimsHatter
+      abis:
+        - name: HatsModuleFactory
+          file: ./abis/HatsModuleFactory.json
+      eventHandlers:
+        - event: HatsModuleFactory_ModuleDeployed(address,address,uint256,bytes,bytes)
+          handler: handleModuleDeployed
+      file: ./src/hatsModuleFactory.ts
+templates:
+  - name: MultiClaimsHatter
+    kind: ethereum/contract
+    network: goerli
+    source:
+      abi: MultiClaimsHatter
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/multiClaimsHatter.ts
+      entities:
+        - ClaimsHatter
+      abis:
+        - name: MultiClaimsHatter
+          file: ./abis/MultiClaimsHatter.json
+      eventHandlers:
+        - event: HatsClaimabilitySet(uint256[],uint8[])
+          handler: handleHatsClaimabilitySet
+        - event: HatClaimabilitySet(uint256,uint8)
+          handler: handleHatClaimabilitySet
