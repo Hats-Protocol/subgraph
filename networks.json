@@ -13,12 +13,20 @@
     "Hats": {
       "address": "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137",
       "startBlock": 17671864
+    },
+    "HatsModuleFactory": {
+      "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
+      "startBlock": 18265591
     }
   },
   "matic": {
     "Hats": {
       "address": "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137",
       "startBlock": 44952020
+    },
+    "HatsModuleFactory": {
+      "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
+      "startBlock": 48249962
     }
   },
   "gnosis": {
@@ -35,6 +43,10 @@
     "Hats": {
       "address": "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137",
       "startBlock": 110187292
+    },
+    "HatsModuleFactory": {
+      "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
+      "startBlock": 136870116
     }
   },
   "optimism": {
