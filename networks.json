@@ -9,6 +9,16 @@
       "startBlock": 9713194
     }
   },
+  "sepolia": {
+    "Hats": {
+      "address": "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137",
+      "startBlock": 4654775
+    },
+    "HatsModuleFactory": {
+      "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
+      "startBlock": 4655267
+    }
+  },
   "mainnet": {
     "Hats": {
       "address": "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137",
