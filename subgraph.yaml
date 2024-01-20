@@ -8,7 +8,7 @@ dataSources:
     source:
       abi: Hats
       address: "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137"
-      startBlock: 9319512
+      startBlock: 10404852
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -53,7 +53,7 @@ dataSources:
     source:
       abi: HatsModuleFactory
       address: "0xfE661c01891172046feE16D3a57c3Cf456729efA"
-      startBlock: 9713194
+      startBlock: 10404852
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -88,3 +88,18 @@ templates:
           handler: handleHatsClaimabilitySet
         - event: HatClaimabilitySet(uint256,uint8)
           handler: handleHatClaimabilitySet
+  - name: HatDetailsMetadata
+    kind: file/ipfs
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/hats.ts
+      handler: handleHatDetailsMetadata
+      entities:
+        - HatDetailsMetadata
+        - Hat
+      abis:
+        - name: Hats
+          file: ./abis/Hats.json
+    network: goerli

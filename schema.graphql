@@ -4,6 +4,7 @@ type Hat @entity {
   status: Boolean!
   createdAt: BigInt
   details: String!
+  detailsMetadata: HatDetailsMetadata
   maxSupply: BigInt!
   eligibility: String!
   toggle: String!
@@ -195,4 +196,13 @@ type ClaimsHatter @entity {
   id: ID!
   claimableHats: [Hat!]!
   claimableForHats: [Hat!]!
+}
+
+type HatDetailsMetadata @entity {
+  id: ID!
+  type: String!
+  name: String
+  description: String
+  guilds: [String!]
+  spaces: [String!]
 }

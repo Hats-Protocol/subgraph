@@ -1,4 +1,13 @@
-import { BigInt, Address, log, Bytes } from "@graphprotocol/graph-ts";
+import {
+  BigInt,
+  Address,
+  log,
+  Bytes,
+  dataSource,
+  json,
+  JSONValue,
+  DataSourceContext,
+} from "@graphprotocol/graph-ts";
 import {
   Hats,
   HatCreated,
@@ -31,7 +40,9 @@ import {
   TopHatLinkRequestedEvent,
   TopHatLinkedEvent,
   WearerStandingChangedEvent,
+  HatDetailsMetadata,
 } from "../generated/schema";
+import { HatDetailsMetadata as HatDetailsMetadataTemplate } from "../generated/templates";
 import {
   hatIdToHex,
   topHatDomain,
@@ -48,6 +59,7 @@ import {
 } from "./utils";
 
 export function handleHatCreated(event: HatCreated): void {
+  log.info("hat creation handler", []);
   // create new hat
   let hat = new Hat(hatIdToHex(event.params.id));
   hat.prettyId = hatIdToPrettyId(event.params.id);
@@ -63,6 +75,19 @@ export function handleHatCreated(event: HatCreated): void {
   hat.levelAtLocalTree = hatLevelLocal(event.address, event.params.id);
   hat.currentSupply = BigInt.fromU32(0);
   hat.badStandings = [];
+
+  // handle hat metadata
+  if (hat.details.slice(0, 7) == "ipfs://") {
+    log.info("handle hat metadata creation", []);
+    const cid = hat.details.slice(7);
+    log.info("cid: {}", [cid]);
+    let context = new DataSourceContext();
+    context.setString("hatId", hatIdToHex(event.params.id));
+    context.setString("cid", cid);
+    //hat.detailsMetadata = cid;
+    HatDetailsMetadataTemplate.createWithContext(cid, context);
+  }
+
   if (hat.levelAtLocalTree == 0) {
     // top hat is its own admin
     hat.admin = hat.id;
@@ -468,4 +493,56 @@ function createDummyHat(hatId: string, contractAddress: Address): void {
   hat.tree = hexTopHatDomain(hatId);
 
   hat.save();
+}
+
+export function handleHatDetailsMetadata(content: Bytes): void {
+  log.info("handler", []);
+
+  const value = json.fromBytes(content).toObject();
+  if (value) {
+    const type = value.get("type");
+    const rawData = value.get("data");
+
+    if (type != null && rawData != null && type.toString() == "1.0") {
+      let context = dataSource.context();
+      let cid = context.getString("cid");
+      log.info("cid from context: {}", [cid]);
+      let hatDetailsMetadata = new HatDetailsMetadata(cid);
+      hatDetailsMetadata.type = "1.0";
+      const data = rawData.toObject();
+      log.info("got data object", []);
+
+      //const name = value.get("name");
+      //const description = value.get("description");
+      //const guildsArray = value.get("guilds");
+      //const spacesArray = value.get("spaces");
+      //
+      //if (name && description && guildsArray && spacesArray) {
+      //  hatDetailsMetadata.type = type.toString();
+      //  hatDetailsMetadata.name = name.toString();
+      //  hatDetailsMetadata.description = description.toString();
+      //  const guilds = guildsArray.toArray();
+      //  const finalGuilds: string[] = [];
+      //  for (let i = 0; i < guilds.length; i++) {
+      //    finalGuilds.push(guilds[i].toString());
+      //  }
+      //  hatDetailsMetadata.guilds = finalGuilds;
+      //  const spaces = spacesArray.toArray();
+      //  const finalSpaces: string[] = [];
+      //  for (let i = 0; i < spaces.length; i++) {
+      //    finalSpaces.push(spaces[i].toString());
+      //  }
+      //  hatDetailsMetadata.spaces = finalSpaces;
+      //}
+
+      let hatId = context.getString("hatId");
+      log.info("hat ID: {}", [hatId]);
+      let hat = Hat.load(hatId) as Hat;
+      hat.detailsMetadata = hatDetailsMetadata.id;
+      log.info("metadata id: {}", [hatDetailsMetadata.id]);
+
+      hatDetailsMetadata.save();
+      hat.save();
+    }
+  }
 }
