@@ -496,8 +496,6 @@ function createDummyHat(hatId: string, contractAddress: Address): void {
 }
 
 export function handleHatDetailsMetadata(content: Bytes): void {
-  log.info("handler", []);
-
   const value = json.fromBytes(content).toObject();
   if (value) {
     const type = value.get("type");
@@ -506,40 +504,53 @@ export function handleHatDetailsMetadata(content: Bytes): void {
     if (type != null && rawData != null && type.toString() == "1.0") {
       let context = dataSource.context();
       let cid = context.getString("cid");
-      log.info("cid from context: {}", [cid]);
       let hatDetailsMetadata = new HatDetailsMetadata(cid);
       hatDetailsMetadata.type = "1.0";
       const data = rawData.toObject();
-      log.info("got data object", []);
 
-      //const name = value.get("name");
-      //const description = value.get("description");
-      //const guildsArray = value.get("guilds");
-      //const spacesArray = value.get("spaces");
-      //
-      //if (name && description && guildsArray && spacesArray) {
-      //  hatDetailsMetadata.type = type.toString();
-      //  hatDetailsMetadata.name = name.toString();
-      //  hatDetailsMetadata.description = description.toString();
-      //  const guilds = guildsArray.toArray();
-      //  const finalGuilds: string[] = [];
-      //  for (let i = 0; i < guilds.length; i++) {
-      //    finalGuilds.push(guilds[i].toString());
-      //  }
-      //  hatDetailsMetadata.guilds = finalGuilds;
-      //  const spaces = spacesArray.toArray();
-      //  const finalSpaces: string[] = [];
-      //  for (let i = 0; i < spaces.length; i++) {
-      //    finalSpaces.push(spaces[i].toString());
-      //  }
-      //  hatDetailsMetadata.spaces = finalSpaces;
+      //for (let i = 0; i < data.entries.length; i++) {
+      //  const entry = data.entries[i];
+      //  log.info("key: {}", [entry.key]);
       //}
 
+      // parse name
+      const name = data.get("name");
+      if (name) {
+        hatDetailsMetadata.name = name.toString();
+      }
+
+      // parse description
+      const description = data.get("description");
+      if (description) {
+        hatDetailsMetadata.description = description.toString();
+      }
+
+      // parse guilds
+      const guildsArray = data.get("guilds");
+      if (guildsArray) {
+        const guilds = guildsArray.toArray();
+        const finalGuilds: string[] = [];
+        for (let i = 0; i < guilds.length; i++) {
+          finalGuilds.push(guilds[i].toString());
+        }
+        hatDetailsMetadata.guilds = finalGuilds;
+      }
+
+      // parse spaces
+      const spacesArray = data.get("spaces");
+      if (spacesArray) {
+        const spaces = spacesArray.toArray();
+        const finalSpaces: string[] = [];
+        for (let i = 0; i < spaces.length; i++) {
+          finalSpaces.push(spaces[i].toString());
+        }
+        hatDetailsMetadata.spaces = finalSpaces;
+      }
+
+      // update hat entity
       let hatId = context.getString("hatId");
-      log.info("hat ID: {}", [hatId]);
       let hat = Hat.load(hatId) as Hat;
       hat.detailsMetadata = hatDetailsMetadata.id;
-      log.info("metadata id: {}", [hatDetailsMetadata.id]);
 
       hatDetailsMetadata.save();
       hat.save();

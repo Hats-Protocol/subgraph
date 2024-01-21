@@ -84,7 +84,7 @@ describe("basic test", () => {
       //dataSourceMock.setContext(context);
       //log.info("current dir: {}", [process.cwd()]);
 
-      const content = readFile(`./tests/metadata.json`);
+      const content = readFile(`./tests/ipfs/metadata1.json`);
       handleHatDetailsMetadata(content);
 
       //// 0x00000001.0001 is created
@@ -124,6 +124,30 @@ describe("basic test", () => {
         "bafkreiffngmobubcbw7l5blrftfdbrkfrokf6piaklksj73ictdj6mtpvq",
         "type",
         "1.0"
+      );
+      assert.fieldEquals(
+        "HatDetailsMetadata",
+        "bafkreiffngmobubcbw7l5blrftfdbrkfrokf6piaklksj73ictdj6mtpvq",
+        "name",
+        "test name"
+      );
+      assert.fieldEquals(
+        "HatDetailsMetadata",
+        "bafkreiffngmobubcbw7l5blrftfdbrkfrokf6piaklksj73ictdj6mtpvq",
+        "description",
+        "test description"
+      );
+      assert.fieldEquals(
+        "HatDetailsMetadata",
+        "bafkreiffngmobubcbw7l5blrftfdbrkfrokf6piaklksj73ictdj6mtpvq",
+        "guilds",
+        "[guild1, guild2]"
+      );
+      assert.fieldEquals(
+        "HatDetailsMetadata",
+        "bafkreiffngmobubcbw7l5blrftfdbrkfrokf6piaklksj73ictdj6mtpvq",
+        "spaces",
+        "[space1]"
       );
       assert.fieldEquals(
         "Hat",
