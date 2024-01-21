@@ -211,17 +211,17 @@ type HatDetailsMetadata @entity {
   responsabilityLinks: [String!]!
   responsabilityImageUrls: [String!]!
   "authority fields"
-  authorityLabels: [String!]
-  authorityDescriptions: [String!]
-  authorityLinks: [String!]
-  authorityImageUrls: [String!]
-  authorityGates: [String!]
+  authorityLabels: [String!]!
+  authorityDescriptions: [String!]!
+  authorityLinks: [String!]!
+  authorityImageUrls: [String!]!
+  authorityGates: [String!]!
   "eligibility fields"
-  eligibilityManual: Boolean
-  eligibilityLinks: [String!]
-  eligibilityLabels: [String!]
+  eligibilityManual: Boolean!
+  eligibilityCriteriaLinks: [String!]!
+  eligibilityCriteriaLabels: [String!]!
   "toggle fields"
-  toggleManual: Boolean
-  toggleLinks: [String!]
-  toggleLabels: [String!]
+  toggleManual: Boolean!
+  toggleCriteriaLinks: [String!]!
+  toggleCriteriaLabels: [String!]!
 }

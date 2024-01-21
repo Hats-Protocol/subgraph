@@ -149,6 +149,8 @@ describe("basic test", () => {
         "spaces",
         "[space1]"
       );
+
+      // responsabilities
       assert.fieldEquals(
         "HatDetailsMetadata",
         "bafkreiffngmobubcbw7l5blrftfdbrkfrokf6piaklksj73ictdj6mtpvq",
@@ -173,6 +175,85 @@ describe("basic test", () => {
         "responsabilityImageUrls",
         "[responsability image url 1]"
       );
+      assert.fieldEquals(
+        "Hat",
+        "0x0000000100000000000000000000000000000000000000000000000000000000",
+        "detailsMetadata",
+        "bafkreiffngmobubcbw7l5blrftfdbrkfrokf6piaklksj73ictdj6mtpvq"
+      );
+
+      // authorities
+      assert.fieldEquals(
+        "HatDetailsMetadata",
+        "bafkreiffngmobubcbw7l5blrftfdbrkfrokf6piaklksj73ictdj6mtpvq",
+        "authorityLabels",
+        "[authority label 1]"
+      );
+      assert.fieldEquals(
+        "HatDetailsMetadata",
+        "bafkreiffngmobubcbw7l5blrftfdbrkfrokf6piaklksj73ictdj6mtpvq",
+        "authorityDescriptions",
+        "[authority description 1]"
+      );
+      assert.fieldEquals(
+        "HatDetailsMetadata",
+        "bafkreiffngmobubcbw7l5blrftfdbrkfrokf6piaklksj73ictdj6mtpvq",
+        "authorityLinks",
+        "[authority link 1]"
+      );
+      assert.fieldEquals(
+        "HatDetailsMetadata",
+        "bafkreiffngmobubcbw7l5blrftfdbrkfrokf6piaklksj73ictdj6mtpvq",
+        "authorityImageUrls",
+        "[authority imageUrl 1]"
+      );
+      assert.fieldEquals(
+        "HatDetailsMetadata",
+        "bafkreiffngmobubcbw7l5blrftfdbrkfrokf6piaklksj73ictdj6mtpvq",
+        "authorityGates",
+        "[authority gate 1]"
+      );
+
+      // eligibility
+      assert.fieldEquals(
+        "HatDetailsMetadata",
+        "bafkreiffngmobubcbw7l5blrftfdbrkfrokf6piaklksj73ictdj6mtpvq",
+        "eligibilityManual",
+        "false"
+      );
+      assert.fieldEquals(
+        "HatDetailsMetadata",
+        "bafkreiffngmobubcbw7l5blrftfdbrkfrokf6piaklksj73ictdj6mtpvq",
+        "eligibilityCriteriaLinks",
+        "[eligibility link 1]"
+      );
+      assert.fieldEquals(
+        "HatDetailsMetadata",
+        "bafkreiffngmobubcbw7l5blrftfdbrkfrokf6piaklksj73ictdj6mtpvq",
+        "eligibilityCriteriaLabels",
+        "[eligibility label 1]"
+      );
+
+      // toggle
+      assert.fieldEquals(
+        "HatDetailsMetadata",
+        "bafkreiffngmobubcbw7l5blrftfdbrkfrokf6piaklksj73ictdj6mtpvq",
+        "toggleManual",
+        "false"
+      );
+      assert.fieldEquals(
+        "HatDetailsMetadata",
+        "bafkreiffngmobubcbw7l5blrftfdbrkfrokf6piaklksj73ictdj6mtpvq",
+        "toggleCriteriaLinks",
+        "[toggle link 1]"
+      );
+      assert.fieldEquals(
+        "HatDetailsMetadata",
+        "bafkreiffngmobubcbw7l5blrftfdbrkfrokf6piaklksj73ictdj6mtpvq",
+        "toggleCriteriaLabels",
+        "[toggle label 1]"
+      );
+
       assert.fieldEquals(
         "Hat",
         "0x0000000100000000000000000000000000000000000000000000000000000000",

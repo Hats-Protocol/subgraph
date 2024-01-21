@@ -59,7 +59,6 @@ import {
 } from "./utils";
 
 export function handleHatCreated(event: HatCreated): void {
-  log.info("hat creation handler", []);
   // create new hat
   let hat = new Hat(hatIdToHex(event.params.id));
   hat.prettyId = hatIdToPrettyId(event.params.id);
@@ -78,9 +77,7 @@ export function handleHatCreated(event: HatCreated): void {
 
   // handle hat metadata
   if (hat.details.slice(0, 7) == "ipfs://") {
-    log.info("handle hat metadata creation", []);
     const cid = hat.details.slice(7);
-    log.info("cid: {}", [cid]);
     let context = new DataSourceContext();
     context.setString("hatId", hatIdToHex(event.params.id));
     context.setString("cid", cid);
@@ -605,6 +602,166 @@ export function handleHatDetailsMetadata(content: Bytes): void {
           responsabilityDescriptions;
         hatDetailsMetadata.responsabilityLinks = responsabilityLinks;
         hatDetailsMetadata.responsabilityImageUrls = responsabilityImageUrls;
+      }
+
+      // parse authorities
+      const authoritiesArray = data.get("authorities");
+      if (authoritiesArray) {
+        const authorities = authoritiesArray.toArray();
+        const authorityLabels: string[] = [];
+        const authorityDescriptions: string[] = [];
+        const authorityLinks: string[] = [];
+        const authorityImageUrls: string[] = [];
+        const authorityGates: string[] = [];
+
+        for (let i = 0; i < authorities.length; i++) {
+          const authority = authorities[i].toObject();
+
+          // parse label
+          const label = authority.get("label");
+          if (label) {
+            authorityLabels.push(label.toString());
+          } else {
+            authorityLabels.push("");
+          }
+
+          // parse description
+          const description = authority.get("description");
+          if (description) {
+            authorityDescriptions.push(description.toString());
+          } else {
+            authorityDescriptions.push("");
+          }
+
+          // parse link
+          const link = authority.get("link");
+          if (link) {
+            authorityLinks.push(link.toString());
+          } else {
+            authorityLinks.push("");
+          }
+
+          // parse images url
+          const imageUrl = authority.get("imageUrl");
+          if (imageUrl) {
+            authorityImageUrls.push(imageUrl.toString());
+          } else {
+            authorityImageUrls.push("");
+          }
+
+          // parse gate
+          const gate = authority.get("gate");
+          if (gate) {
+            authorityGates.push(gate.toString());
+          } else {
+            authorityGates.push("");
+          }
+        }
+
+        hatDetailsMetadata.authorityLabels = authorityLabels;
+        hatDetailsMetadata.authorityDescriptions = authorityDescriptions;
+        hatDetailsMetadata.authorityLinks = authorityLinks;
+        hatDetailsMetadata.authorityImageUrls = authorityImageUrls;
+        hatDetailsMetadata.authorityGates = authorityGates;
+      }
+
+      // parse eligibility
+      const eligibilityData = data.get("eligibility");
+      if (eligibilityData) {
+        const eligibility = eligibilityData.toObject();
+
+        const eligibilityCriteriaLinks: string[] = [];
+        const eligibilityCriteriaLabels: string[] = [];
+
+        // parse criteria
+        const criteriaArray = eligibility.get("criteria");
+        if (criteriaArray) {
+          const criterias = criteriaArray.toArray();
+          for (let i = 0; i < criterias.length; i++) {
+            const criteria = criterias[i].toObject();
+
+            // parse link
+            const link = criteria.get("link");
+            if (link) {
+              eligibilityCriteriaLinks.push(link.toString());
+            } else {
+              eligibilityCriteriaLinks.push("");
+            }
+
+            // parse label
+            const label = criteria.get("label");
+            if (label) {
+              eligibilityCriteriaLabels.push(label.toString());
+            } else {
+              eligibilityCriteriaLabels.push("");
+            }
+          }
+        }
+
+        // parse manual
+        const manual = eligibility.get("manual");
+        if (manual) {
+          hatDetailsMetadata.eligibilityManual = manual.toBool();
+        } else {
+          hatDetailsMetadata.eligibilityManual = true;
+        }
+
+        hatDetailsMetadata.eligibilityCriteriaLinks = eligibilityCriteriaLinks;
+        hatDetailsMetadata.eligibilityCriteriaLabels =
+          eligibilityCriteriaLabels;
+      } else {
+        hatDetailsMetadata.eligibilityManual = true;
+        hatDetailsMetadata.eligibilityCriteriaLinks = [];
+        hatDetailsMetadata.eligibilityCriteriaLabels = [];
+      }
+
+      // parse toggle
+      const toggleData = data.get("toggle");
+      if (toggleData) {
+        const toggle = toggleData.toObject();
+
+        const toggleCriteriaLinks: string[] = [];
+        const toggleCriteriaLabels: string[] = [];
+
+        // parse criteria
+        const criteriaArray = toggle.get("criteria");
+        if (criteriaArray) {
+          const criterias = criteriaArray.toArray();
+          for (let i = 0; i < criterias.length; i++) {
+            const criteria = criterias[i].toObject();
+
+            // parse link
+            const link = criteria.get("link");
+            if (link) {
+              toggleCriteriaLinks.push(link.toString());
+            } else {
+              toggleCriteriaLinks.push("");
+            }
+
+            // parse label
+            const label = criteria.get("label");
+            if (label) {
+              toggleCriteriaLabels.push(label.toString());
+            } else {
+              toggleCriteriaLabels.push("");
+            }
+          }
+        }
+
+        // parse manual
+        const manual = toggle.get("manual");
+        if (manual) {
+          hatDetailsMetadata.toggleManual = manual.toBool();
+        } else {
+          hatDetailsMetadata.toggleManual = true;
+        }
+
+        hatDetailsMetadata.toggleCriteriaLinks = toggleCriteriaLinks;
+        hatDetailsMetadata.toggleCriteriaLabels = toggleCriteriaLabels;
+      } else {
+        hatDetailsMetadata.toggleManual = true;
+        hatDetailsMetadata.toggleCriteriaLinks = [];
+        hatDetailsMetadata.toggleCriteriaLabels = [];
       }
 
       // update hat entity
