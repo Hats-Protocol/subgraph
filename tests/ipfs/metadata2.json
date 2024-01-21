@@ -1,0 +1,19 @@
+{
+  "type": "1.0",
+  "data": {
+    "name": "",
+    "description": "",
+    "guilds": [],
+    "spaces": [],
+    "responsibilities": [],
+    "authorities": [],
+    "eligibility": {
+      "manual": true,
+      "criteria": []
+    },
+    "toggle": {
+      "manual": true,
+      "criteria": []
+    }
+  }
+}
