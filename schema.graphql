@@ -201,8 +201,27 @@ type ClaimsHatter @entity {
 type HatDetailsMetadata @entity {
   id: ID!
   type: String!
-  name: String
-  description: String
-  guilds: [String!]
-  spaces: [String!]
+  name: String!
+  description: String!
+  guilds: [String!]!
+  spaces: [String!]!
+  "responsability fields"
+  responsabilityLabels: [String!]!
+  responsabilityDescriptions: [String!]!
+  responsabilityLinks: [String!]!
+  responsabilityImageUrls: [String!]!
+  "authority fields"
+  authorityLabels: [String!]
+  authorityDescriptions: [String!]
+  authorityLinks: [String!]
+  authorityImageUrls: [String!]
+  authorityGates: [String!]
+  "eligibility fields"
+  eligibilityManual: Boolean
+  eligibilityLinks: [String!]
+  eligibilityLabels: [String!]
+  "toggle fields"
+  toggleManual: Boolean
+  toggleLinks: [String!]
+  toggleLabels: [String!]
 }

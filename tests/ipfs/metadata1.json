@@ -4,6 +4,14 @@
     "name": "test name",
     "description": "test description",
     "guilds": ["guild1, guild2"],
-    "spaces": ["space1"]
+    "spaces": ["space1"],
+    "responsibilities": [
+      {
+        "label": "responsability name 1",
+        "description": "responsability description 1",
+        "link": "responsability link 1",
+        "imageUrl": "responsability image url 1"
+      }
+    ]
   }
 }

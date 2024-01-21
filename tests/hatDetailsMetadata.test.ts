@@ -150,6 +150,30 @@ describe("basic test", () => {
         "[space1]"
       );
       assert.fieldEquals(
+        "HatDetailsMetadata",
+        "bafkreiffngmobubcbw7l5blrftfdbrkfrokf6piaklksj73ictdj6mtpvq",
+        "responsabilityLabels",
+        "[responsability name 1]"
+      );
+      assert.fieldEquals(
+        "HatDetailsMetadata",
+        "bafkreiffngmobubcbw7l5blrftfdbrkfrokf6piaklksj73ictdj6mtpvq",
+        "responsabilityDescriptions",
+        "[responsability description 1]"
+      );
+      assert.fieldEquals(
+        "HatDetailsMetadata",
+        "bafkreiffngmobubcbw7l5blrftfdbrkfrokf6piaklksj73ictdj6mtpvq",
+        "responsabilityLinks",
+        "[responsability link 1]"
+      );
+      assert.fieldEquals(
+        "HatDetailsMetadata",
+        "bafkreiffngmobubcbw7l5blrftfdbrkfrokf6piaklksj73ictdj6mtpvq",
+        "responsabilityImageUrls",
+        "[responsability image url 1]"
+      );
+      assert.fieldEquals(
         "Hat",
         "0x0000000100000000000000000000000000000000000000000000000000000000",
         "detailsMetadata",

@@ -517,12 +517,16 @@ export function handleHatDetailsMetadata(content: Bytes): void {
       const name = data.get("name");
       if (name) {
         hatDetailsMetadata.name = name.toString();
+      } else {
+        hatDetailsMetadata.name = "";
       }
 
       // parse description
       const description = data.get("description");
       if (description) {
         hatDetailsMetadata.description = description.toString();
+      } else {
+        hatDetailsMetadata.description = "";
       }
 
       // parse guilds
@@ -534,6 +538,8 @@ export function handleHatDetailsMetadata(content: Bytes): void {
           finalGuilds.push(guilds[i].toString());
         }
         hatDetailsMetadata.guilds = finalGuilds;
+      } else {
+        hatDetailsMetadata.guilds = [];
       }
 
       // parse spaces
@@ -545,6 +551,60 @@ export function handleHatDetailsMetadata(content: Bytes): void {
           finalSpaces.push(spaces[i].toString());
         }
         hatDetailsMetadata.spaces = finalSpaces;
+      } else {
+        hatDetailsMetadata.spaces = [];
+      }
+
+      // parse responsabilities
+      const responsabilitiesArray = data.get("responsibilities");
+      if (responsabilitiesArray) {
+        const responsabilities = responsabilitiesArray.toArray();
+        const responsabilityLabels: string[] = [];
+        const responsabilityDescriptions: string[] = [];
+        const responsabilityLinks: string[] = [];
+        const responsabilityImageUrls: string[] = [];
+
+        for (let i = 0; i < responsabilities.length; i++) {
+          const responsability = responsabilities[i].toObject();
+
+          // parse label
+          const label = responsability.get("label");
+          if (label) {
+            responsabilityLabels.push(label.toString());
+          } else {
+            responsabilityLabels.push("");
+          }
+
+          // parse description
+          const description = responsability.get("description");
+          if (description) {
+            responsabilityDescriptions.push(description.toString());
+          } else {
+            responsabilityDescriptions.push("");
+          }
+
+          // parse link
+          const link = responsability.get("link");
+          if (link) {
+            responsabilityLinks.push(link.toString());
+          } else {
+            responsabilityLinks.push("");
+          }
+
+          // parse images url
+          const imageUrl = responsability.get("imageUrl");
+          if (imageUrl) {
+            responsabilityImageUrls.push(imageUrl.toString());
+          } else {
+            responsabilityImageUrls.push("");
+          }
+        }
+
+        hatDetailsMetadata.responsabilityLabels = responsabilityLabels;
+        hatDetailsMetadata.responsabilityDescriptions =
+          responsabilityDescriptions;
+        hatDetailsMetadata.responsabilityLinks = responsabilityLinks;
+        hatDetailsMetadata.responsabilityImageUrls = responsabilityImageUrls;
       }
 
       // update hat entity
