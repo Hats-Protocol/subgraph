@@ -4,7 +4,7 @@ type Hat @entity {
   status: Boolean!
   createdAt: BigInt
   details: String!
-  detailsMetadata: HatDetailsMetadata
+  detailsMetaData: HatDetailsMetaData
   maxSupply: BigInt!
   eligibility: String!
   toggle: String!
@@ -198,7 +198,7 @@ type ClaimsHatter @entity {
   claimableForHats: [Hat!]!
 }
 
-type HatDetailsMetadata @entity {
+type HatDetailsMetaData @entity {
   id: ID!
   type: String!
   name: String!

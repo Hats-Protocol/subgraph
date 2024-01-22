@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: Hats
-    network: goerli
+    network: sepolia
     source:
       abi: Hats
       address: "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137"
-      startBlock: 10404852
+      startBlock: 4654775
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -49,11 +49,11 @@ dataSources:
       file: ./src/hats.ts
   - kind: ethereum
     name: HatsModuleFactory
-    network: goerli
+    network: sepolia
     source:
       abi: HatsModuleFactory
       address: "0xfE661c01891172046feE16D3a57c3Cf456729efA"
-      startBlock: 10404852
+      startBlock: 4655267
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -70,7 +70,7 @@ dataSources:
 templates:
   - name: MultiClaimsHatter
     kind: ethereum/contract
-    network: goerli
+    network: sepolia
     source:
       abi: MultiClaimsHatter
     mapping:
@@ -88,18 +88,18 @@ templates:
           handler: handleHatsClaimabilitySet
         - event: HatClaimabilitySet(uint256,uint8)
           handler: handleHatClaimabilitySet
-  - name: HatDetailsMetadata
+  - name: HatDetailsMetaData
     kind: file/ipfs
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
-      file: ./src/hats.ts
-      handler: handleHatDetailsMetadata
+      file: ./src/hatDetailsMetaData.ts
+      handler: handleHatDetailsMetaData
       entities:
-        - HatDetailsMetadata
+        - HatDetailsMetaData
         - Hat
       abis:
         - name: Hats
           file: ./abis/Hats.json
-    network: goerli
+    network: sepolia
