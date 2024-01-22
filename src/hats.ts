@@ -75,16 +75,6 @@ export function handleHatCreated(event: HatCreated): void {
   hat.currentSupply = BigInt.fromU32(0);
   hat.badStandings = [];
 
-  // handle hat metadata
-  if (hat.details.slice(0, 7) == "ipfs://") {
-    const cid = hat.details.slice(7);
-    const context = new DataSourceContext();
-    context.setString("hatId", hatIdToHex(event.params.id));
-    context.setString("cid", cid);
-    log.info("creating file data source with cid: {}", [cid]);
-    HatDetailsMetaDataTemplate.createWithContext(cid, context);
-  }
-
   if (hat.levelAtLocalTree == 0) {
     // top hat is its own admin
     hat.admin = hat.id;
@@ -125,6 +115,16 @@ export function handleHatCreated(event: HatCreated): void {
   hatCreatedEvent.tree = topHatDomain(event.params.id);
   hatCreatedEvent.hat = hatIdToHex(event.params.id);
   hatCreatedEvent.save();
+
+  // handle hat metadata
+  if (hat.details.slice(0, 7) == "ipfs://") {
+    const cid = hat.details.slice(7);
+    const context = new DataSourceContext();
+    context.setString("hatId", hatIdToHex(event.params.id));
+    context.setString("cid", cid);
+    log.info("creating file data source with cid: {}", [cid]);
+    HatDetailsMetaDataTemplate.createWithContext(cid, context);
+  }
 }
 
 export function handleHatDetailsChanged(event: HatDetailsChanged): void {
