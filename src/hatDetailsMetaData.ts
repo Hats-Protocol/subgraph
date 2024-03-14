@@ -2,22 +2,33 @@ import { log, Bytes, dataSource, json } from "@graphprotocol/graph-ts";
 import { Hat, HatDetailsMetaData } from "../generated/schema";
 
 export function handleHatDetailsMetaData(content: Bytes): void {
-  const value = json.fromBytes(content).toObject();
-  if (value) {
+  let context = dataSource.context();
+  let cid = context.getString("cid");
+
+  // check if already exists
+  const existing = HatDetailsMetaData.load(cid);
+  if (existing != null) {
+    return;
+  }
+
+  let hatDetailsMetaData = new HatDetailsMetaData(cid);
+
+  const parseResult = json.try_fromBytes(content);
+
+  if (parseResult.isOk) {
+    const value = parseResult.value.toObject();
     const type = value.get("type");
     const rawData = value.get("data");
 
     if (type != null && rawData != null && type.toString() == "1.0") {
-      let context = dataSource.context();
-      let cid = context.getString("cid");
-      let hatDetailsMetaData = new HatDetailsMetaData(cid);
       hatDetailsMetaData.type = "1.0";
+
       const data = rawData.toObject();
 
-      //for (let i = 0; i < data.entries.length; i++) {
-      //  const entry = data.entries[i];
-      //  log.info("key: {}", [entry.key]);
-      //}
+      for (let i = 0; i < data.entries.length; i++) {
+        const entry = data.entries[i];
+        log.info("key in json: {}", [entry.key]);
+      }
 
       // parse name
       const name = data.get("name");
@@ -26,7 +37,7 @@ export function handleHatDetailsMetaData(content: Bytes): void {
       } else {
         hatDetailsMetaData.name = "";
       }
-
+      /*
       // parse description
       const description = data.get("description");
       if (description) {
@@ -111,6 +122,11 @@ export function handleHatDetailsMetaData(content: Bytes): void {
           responsabilityDescriptions;
         hatDetailsMetaData.responsabilityLinks = responsabilityLinks;
         hatDetailsMetaData.responsabilityImageUrls = responsabilityImageUrls;
+      } else {
+        hatDetailsMetaData.responsabilityDescriptions = [];
+        hatDetailsMetaData.responsabilityImageUrls = [];
+        hatDetailsMetaData.responsabilityLabels = [];
+        hatDetailsMetaData.responsabilityLinks = [];
       }
 
       // parse authorities
@@ -172,6 +188,12 @@ export function handleHatDetailsMetaData(content: Bytes): void {
         hatDetailsMetaData.authorityLinks = authorityLinks;
         hatDetailsMetaData.authorityImageUrls = authorityImageUrls;
         hatDetailsMetaData.authorityGates = authorityGates;
+      } else {
+        hatDetailsMetaData.authorityLabels = [];
+        hatDetailsMetaData.authorityDescriptions = [];
+        hatDetailsMetaData.authorityLinks = [];
+        hatDetailsMetaData.authorityImageUrls = [];
+        hatDetailsMetaData.authorityGates = [];
       }
 
       // parse eligibility
@@ -273,13 +295,13 @@ export function handleHatDetailsMetaData(content: Bytes): void {
         hatDetailsMetaData.toggleCriteriaLabels = [];
       }
 
-      // update hat entity
-      let hatId = context.getString("hatId");
-      let hat = Hat.load(hatId) as Hat;
-      hat.detailsMetaData = hatDetailsMetaData.id;
-
-      hatDetailsMetaData.save();
-      hat.save();
+      */
+    } else {
+      hatDetailsMetaData.type = "unknown";
     }
+  } else {
+    hatDetailsMetaData.type = "unknown";
   }
+
+  hatDetailsMetaData.save();
 }

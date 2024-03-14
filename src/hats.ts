@@ -99,8 +99,6 @@ export function handleHatCreated(event: HatCreated): void {
     hat.tree = topHatDomain(event.params.id);
   }
 
-  hat.save();
-
   // create new HatCreatedEvent
   let hatCreatedEvent = new HatCreatedEvent(createEventID(event, "HatCreated"));
   hatCreatedEvent.blockNumber = event.block.number.toI32();
@@ -123,8 +121,11 @@ export function handleHatCreated(event: HatCreated): void {
     context.setString("hatId", hatIdToHex(event.params.id));
     context.setString("cid", cid);
     log.info("creating file data source with cid: {}", [cid]);
+    hat.detailsMetaData = cid;
     HatDetailsMetaDataTemplate.createWithContext(cid, context);
   }
+
+  hat.save();
 }
 
 export function handleHatDetailsChanged(event: HatDetailsChanged): void {
