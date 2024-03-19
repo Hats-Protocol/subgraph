@@ -25,10 +25,10 @@ export function handleHatDetailsMetaData(content: Bytes): void {
 
       const data = rawData.toObject();
 
-      for (let i = 0; i < data.entries.length; i++) {
-        const entry = data.entries[i];
-        log.info("key in json: {}", [entry.key]);
-      }
+      //for (let i = 0; i < data.entries.length; i++) {
+      //  const entry = data.entries[i];
+      //  log.info("key in json: {}", [entry.key]);
+      //}
 
       // parse name
       const name = data.get("name");
