@@ -1,22 +1,16 @@
 {
-  "goerli": {
-    "Hats": {
-      "address": "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137",
-      "startBlock": 9319512
-    },
-    "HatsModuleFactory": {
-      "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
-      "startBlock": 9713194
-    }
-  },
   "sepolia": {
     "Hats": {
       "address": "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137",
       "startBlock": 4654775
     },
-    "HatsModuleFactory": {
+    "HatsModuleFactoryV0_6_0": {
       "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
       "startBlock": 4655267
+    },
+    "HatsModuleFactoryV0_7_0": {
+      "address": "0x0a3f85fa597B6a967271286aA0724811acDF5CD9",
+      "startBlock": 5516083
     }
   },
   "mainnet": {
@@ -24,9 +18,13 @@
       "address": "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137",
       "startBlock": 17671864
     },
-    "HatsModuleFactory": {
+    "HatsModuleFactoryV0_6_0": {
       "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
       "startBlock": 18265591
+    },
+    "HatsModuleFactoryV0_7_0": {
+      "address": "0x0a3f85fa597B6a967271286aA0724811acDF5CD9",
+      "startBlock": 19467227
     }
   },
   "matic": {
@@ -34,9 +32,13 @@
       "address": "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137",
       "startBlock": 44952020
     },
-    "HatsModuleFactory": {
+    "HatsModuleFactoryV0_6_0": {
       "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
       "startBlock": 48249962
+    },
+    "HatsModuleFactoryV0_7_0": {
+      "address": "0x0a3f85fa597B6a967271286aA0724811acDF5CD9",
+      "startBlock": 54831711
     }
   },
   "gnosis": {
@@ -44,9 +46,13 @@
       "address": "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137",
       "startBlock": 28899000
     },
-    "HatsModuleFactory": {
+    "HatsModuleFactoryV0_6_0": {
       "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
       "startBlock": 30023568
+    },
+    "HatsModuleFactoryV0_7_0": {
+      "address": "0x0a3f85fa597B6a967271286aA0724811acDF5CD9",
+      "startBlock": 33005105
     }
   },
   "arbitrum-one": {
@@ -54,9 +60,13 @@
       "address": "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137",
       "startBlock": 110187292
     },
-    "HatsModuleFactory": {
+    "HatsModuleFactoryV0_6_0": {
       "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
       "startBlock": 136870116
+    },
+    "HatsModuleFactoryV0_7_0": {
+      "address": "0x0a3f85fa597B6a967271286aA0724811acDF5CD9",
+      "startBlock": 191914910
     }
   },
   "optimism": {
@@ -64,19 +74,13 @@
       "address": "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137",
       "startBlock": 106747286
     },
-    "HatsModuleFactory": {
+    "HatsModuleFactoryV0_6_0": {
       "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
       "startBlock": 109695493
-    }
-  },
-  "publicgoods": {
-    "Hats": {
-      "address": "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137",
-      "startBlock": 5490118
     },
-    "HatsModuleFactory": {
-      "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
-      "startBlock": 5490406
+    "HatsModuleFactoryV0_7_0": {
+      "address": "0x0a3f85fa597B6a967271286aA0724811acDF5CD9",
+      "startBlock": 117616123
     }
   },
   "celo": {
@@ -84,9 +88,13 @@
       "address": "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137",
       "startBlock": 22586096
     },
-    "HatsModuleFactory": {
+    "HatsModuleFactoryV0_6_0": {
       "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
       "startBlock": 22586287
+    },
+    "HatsModuleFactoryV0_7_0": {
+      "address": "0x0a3f85fa597B6a967271286aA0724811acDF5CD9",
+      "startBlock": 24632474
     }
   },
   "base": {
@@ -94,9 +102,13 @@
       "address": "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137",
       "startBlock": 7526679
     },
-    "HatsModuleFactory": {
+    "HatsModuleFactoryV0_6_0": {
       "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
       "startBlock": 7526983
+    },
+    "HatsModuleFactoryV0_7_0": {
+      "address": "0x0a3f85fa597B6a967271286aA0724811acDF5CD9",
+      "startBlock": 12021817
     }
   }
 }
