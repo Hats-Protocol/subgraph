@@ -1,5 +1,5 @@
 //import { log } from "@graphprotocol/graph-ts";
-import { HatsModuleFactory_ModuleDeployed } from "../generated/HatsModuleFactory/HatsModuleFactory";
+import { HatsModuleFactory_ModuleDeployed } from "../generated/HatsModuleFactoryV0_6_0/HatsModuleFactoryV0_6_0";
 import { MultiClaimsHatter } from "../generated/templates";
 import { ClaimsHatter } from "../generated/schema";
 import { MULTI_CLAIMS_HATTER_IMPLEMENTATION } from "./constants";
