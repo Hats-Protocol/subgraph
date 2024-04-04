@@ -1,4 +1,13 @@
-import { BigInt, Address, log, Bytes } from "@graphprotocol/graph-ts";
+import {
+  BigInt,
+  Address,
+  log,
+  Bytes,
+  dataSource,
+  json,
+  JSONValue,
+  DataSourceContext,
+} from "@graphprotocol/graph-ts";
 import {
   Hats,
   HatCreated,
@@ -31,7 +40,9 @@ import {
   TopHatLinkRequestedEvent,
   TopHatLinkedEvent,
   WearerStandingChangedEvent,
+  HatDetailsMetaData,
 } from "../generated/schema";
+import { HatDetailsMetaData as HatDetailsMetaDataTemplate } from "../generated/templates";
 import {
   hatIdToHex,
   topHatDomain,
@@ -63,6 +74,7 @@ export function handleHatCreated(event: HatCreated): void {
   hat.levelAtLocalTree = hatLevelLocal(event.address, event.params.id);
   hat.currentSupply = BigInt.fromU32(0);
   hat.badStandings = [];
+
   if (hat.levelAtLocalTree == 0) {
     // top hat is its own admin
     hat.admin = hat.id;
@@ -87,8 +99,6 @@ export function handleHatCreated(event: HatCreated): void {
     hat.tree = topHatDomain(event.params.id);
   }
 
-  hat.save();
-
   // create new HatCreatedEvent
   let hatCreatedEvent = new HatCreatedEvent(createEventID(event, "HatCreated"));
   hatCreatedEvent.blockNumber = event.block.number.toI32();
@@ -103,12 +113,37 @@ export function handleHatCreated(event: HatCreated): void {
   hatCreatedEvent.tree = topHatDomain(event.params.id);
   hatCreatedEvent.hat = hatIdToHex(event.params.id);
   hatCreatedEvent.save();
+
+  // handle hat metadata
+  if (hat.details.slice(0, 7) == "ipfs://") {
+    const cid = hat.details.slice(7);
+    const context = new DataSourceContext();
+    context.setString("hatId", hatIdToHex(event.params.id));
+    context.setString("cid", cid);
+    //log.info("creating file data source with cid: {}", [cid]);
+    hat.detailsMetaData = hatIdToHex(event.params.id) + "-" + cid;
+    HatDetailsMetaDataTemplate.createWithContext(cid, context);
+  }
+
+  hat.save();
 }
 
 export function handleHatDetailsChanged(event: HatDetailsChanged): void {
   // load hat and update the details field
   let hat = Hat.load(hatIdToHex(event.params.hatId)) as Hat;
   hat.details = event.params.newDetails;
+
+  // handle hat metadata
+  if (hat.details.slice(0, 7) == "ipfs://") {
+    const cid = hat.details.slice(7);
+    const context = new DataSourceContext();
+    context.setString("hatId", hatIdToHex(event.params.hatId));
+    context.setString("cid", cid);
+    //log.info("creating file data source with cid: {}", [cid]);
+    hat.detailsMetaData = hatIdToHex(event.params.hatId) + "-" + cid;
+    HatDetailsMetaDataTemplate.createWithContext(cid, context);
+  }
+
   hat.save();
 
   // create new HatDetailsChangedEvent
