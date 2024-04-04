@@ -1,51 +1,56 @@
-import { log, Bytes, dataSource, json } from "@graphprotocol/graph-ts";
+import {
+  log,
+  Bytes,
+  dataSource,
+  json,
+  JSONValueKind,
+} from "@graphprotocol/graph-ts";
 import { Hat, HatDetailsMetaData } from "../generated/schema";
 
 export function handleHatDetailsMetaData(content: Bytes): void {
   let context = dataSource.context();
   let cid = context.getString("cid");
+  let hatId = context.getString("hatId");
 
   // check if already exists
-  const existing = HatDetailsMetaData.load(cid);
-  if (existing != null) {
-    return;
-  }
+  const existing = HatDetailsMetaData.load(hatId + "-" + cid);
+  if (existing == null) {
+    let hatDetailsMetaData = new HatDetailsMetaData(hatId + "-" + cid);
 
-  let hatDetailsMetaData = new HatDetailsMetaData(cid);
+    const parseResult = json.try_fromBytes(content);
 
-  const parseResult = json.try_fromBytes(content);
+    if (parseResult.isOk && parseResult.value.kind == JSONValueKind.OBJECT) {
+      const value = parseResult.value.toObject();
+      const rawType = value.get("type");
+      const rawData = value.get("data");
 
-  if (parseResult.isOk) {
-    const value = parseResult.value.toObject();
-    const type = value.get("type");
-    const rawData = value.get("data");
+      if (
+        rawType != null &&
+        rawType.kind == JSONValueKind.STRING &&
+        rawType.toString() == "1.0" &&
+        rawData != null &&
+        rawData.kind == JSONValueKind.OBJECT
+      ) {
+        hatDetailsMetaData.type = "1.0";
 
-    if (type != null && rawData != null && type.toString() == "1.0") {
-      hatDetailsMetaData.type = "1.0";
+        const data = rawData.toObject();
 
-      const data = rawData.toObject();
+        // parse name
+        const rawName = data.get("name");
+        if (rawName != null && rawName.kind == JSONValueKind.STRING) {
+          hatDetailsMetaData.name = rawName.toString();
+        }
 
-      //for (let i = 0; i < data.entries.length; i++) {
-      //  const entry = data.entries[i];
-      //  log.info("key in json: {}", [entry.key]);
-      //}
+        // parse description
+        const rawDescription = data.get("description");
+        if (
+          rawDescription != null &&
+          rawDescription.kind == JSONValueKind.STRING
+        ) {
+          hatDetailsMetaData.description = rawDescription.toString();
+        }
 
-      // parse name
-      const name = data.get("name");
-      if (name) {
-        hatDetailsMetaData.name = name.toString();
-      } else {
-        hatDetailsMetaData.name = "";
-      }
-      /*
-      // parse description
-      const description = data.get("description");
-      if (description) {
-        hatDetailsMetaData.description = description.toString();
-      } else {
-        hatDetailsMetaData.description = "";
-      }
-
+        /*
       // parse guilds
       const guildsArray = data.get("guilds");
       if (guildsArray) {
@@ -71,131 +76,147 @@ export function handleHatDetailsMetaData(content: Bytes): void {
       } else {
         hatDetailsMetaData.spaces = [];
       }
+      */
 
-      // parse responsabilities
-      const responsabilitiesArray = data.get("responsibilities");
-      if (responsabilitiesArray) {
-        const responsabilities = responsabilitiesArray.toArray();
-        const responsabilityLabels: string[] = [];
-        const responsabilityDescriptions: string[] = [];
-        const responsabilityLinks: string[] = [];
-        const responsabilityImageUrls: string[] = [];
+        // parse responsabilities
+        const rawResponsibilitiesArray = data.get("responsibilities");
+        if (
+          rawResponsibilitiesArray != null &&
+          rawResponsibilitiesArray.kind == JSONValueKind.ARRAY
+        ) {
+          const responsabilitiesArray = rawResponsibilitiesArray.toArray();
+          const responsabilityLabels: string[] = [];
+          const responsabilityDescriptions: string[] = [];
+          const responsabilityLinks: string[] = [];
+          const responsabilityImageUrls: string[] = [];
 
-        for (let i = 0; i < responsabilities.length; i++) {
-          const responsability = responsabilities[i].toObject();
+          for (let i = 0; i < responsabilitiesArray.length; i++) {
+            const rawResponsibility = responsabilitiesArray[i];
+            if (rawResponsibility.kind == JSONValueKind.OBJECT) {
+              const responsibility = rawResponsibility.toObject();
 
-          // parse label
-          const label = responsability.get("label");
-          if (label) {
-            responsabilityLabels.push(label.toString());
-          } else {
-            responsabilityLabels.push("");
+              // parse label
+              const rawLabel = responsibility.get("label");
+              if (rawLabel != null && rawLabel.kind == JSONValueKind.STRING) {
+                responsabilityLabels.push(rawLabel.toString());
+              } else {
+                responsabilityLabels.push("");
+              }
+
+              // parse description
+              const rawDescription = responsibility.get("description");
+              if (
+                rawDescription != null &&
+                rawDescription.kind == JSONValueKind.STRING
+              ) {
+                responsabilityDescriptions.push(rawDescription.toString());
+              } else {
+                responsabilityDescriptions.push("");
+              }
+
+              // parse link
+              const rawLink = responsibility.get("link");
+              if (rawLink != null && rawLink.kind == JSONValueKind.STRING) {
+                responsabilityLinks.push(rawLink.toString());
+              } else {
+                responsabilityLinks.push("");
+              }
+
+              // parse images url
+              const rawImageUrl = responsibility.get("imageUrl");
+              if (
+                rawImageUrl != null &&
+                rawImageUrl.kind == JSONValueKind.STRING
+              ) {
+                responsabilityImageUrls.push(rawImageUrl.toString());
+              } else {
+                responsabilityImageUrls.push("");
+              }
+            }
           }
 
-          // parse description
-          const description = responsability.get("description");
-          if (description) {
-            responsabilityDescriptions.push(description.toString());
-          } else {
-            responsabilityDescriptions.push("");
-          }
-
-          // parse link
-          const link = responsability.get("link");
-          if (link) {
-            responsabilityLinks.push(link.toString());
-          } else {
-            responsabilityLinks.push("");
-          }
-
-          // parse images url
-          const imageUrl = responsability.get("imageUrl");
-          if (imageUrl) {
-            responsabilityImageUrls.push(imageUrl.toString());
-          } else {
-            responsabilityImageUrls.push("");
-          }
+          hatDetailsMetaData.responsibilityLabels = responsabilityLabels;
+          hatDetailsMetaData.responsibilityDescriptions =
+            responsabilityDescriptions;
+          hatDetailsMetaData.responsibilityLinks = responsabilityLinks;
+          hatDetailsMetaData.responsibilityImageUrls = responsabilityImageUrls;
         }
 
-        hatDetailsMetaData.responsabilityLabels = responsabilityLabels;
-        hatDetailsMetaData.responsabilityDescriptions =
-          responsabilityDescriptions;
-        hatDetailsMetaData.responsabilityLinks = responsabilityLinks;
-        hatDetailsMetaData.responsabilityImageUrls = responsabilityImageUrls;
-      } else {
-        hatDetailsMetaData.responsabilityDescriptions = [];
-        hatDetailsMetaData.responsabilityImageUrls = [];
-        hatDetailsMetaData.responsabilityLabels = [];
-        hatDetailsMetaData.responsabilityLinks = [];
-      }
+        // parse authorities
+        const rawAuthoritiesArray = data.get("authorities");
+        if (
+          rawAuthoritiesArray != null &&
+          rawAuthoritiesArray.kind == JSONValueKind.ARRAY
+        ) {
+          const authoritiesArray = rawAuthoritiesArray.toArray();
 
-      // parse authorities
-      const authoritiesArray = data.get("authorities");
-      if (authoritiesArray) {
-        const authorities = authoritiesArray.toArray();
-        const authorityLabels: string[] = [];
-        const authorityDescriptions: string[] = [];
-        const authorityLinks: string[] = [];
-        const authorityImageUrls: string[] = [];
-        const authorityGates: string[] = [];
+          const authorityLabels: string[] = [];
+          const authorityDescriptions: string[] = [];
+          const authorityLinks: string[] = [];
+          const authorityImageUrls: string[] = [];
+          const authorityGates: string[] = [];
 
-        for (let i = 0; i < authorities.length; i++) {
-          const authority = authorities[i].toObject();
+          for (let i = 0; i < authoritiesArray.length; i++) {
+            const rawAuthority = authoritiesArray[i];
+            if (rawAuthority.kind == JSONValueKind.OBJECT) {
+              const authority = rawAuthority.toObject();
 
-          // parse label
-          const label = authority.get("label");
-          if (label) {
-            authorityLabels.push(label.toString());
-          } else {
-            authorityLabels.push("");
+              // parse label
+              const rawLabel = authority.get("label");
+              if (rawLabel != null && rawLabel.kind == JSONValueKind.STRING) {
+                authorityLabels.push(rawLabel.toString());
+              } else {
+                authorityLabels.push("");
+              }
+
+              // parse description
+              const rawDescription = authority.get("description");
+              if (
+                rawDescription != null &&
+                rawDescription.kind == JSONValueKind.STRING
+              ) {
+                authorityDescriptions.push(rawDescription.toString());
+              } else {
+                authorityDescriptions.push("");
+              }
+
+              // parse link
+              const rawlink = authority.get("link");
+              if (rawlink != null && rawlink.kind == JSONValueKind.STRING) {
+                authorityLinks.push(rawlink.toString());
+              } else {
+                authorityLinks.push("");
+              }
+
+              // parse images url
+              const rawImageUrl = authority.get("imageUrl");
+              if (
+                rawImageUrl != null &&
+                rawImageUrl.kind == JSONValueKind.STRING
+              ) {
+                authorityImageUrls.push(rawImageUrl.toString());
+              } else {
+                authorityImageUrls.push("");
+              }
+
+              // parse gate
+              const rawGate = authority.get("gate");
+              if (rawGate != null && rawGate.kind == JSONValueKind.STRING) {
+                authorityGates.push(rawGate.toString());
+              } else {
+                authorityGates.push("");
+              }
+            }
           }
 
-          // parse description
-          const description = authority.get("description");
-          if (description) {
-            authorityDescriptions.push(description.toString());
-          } else {
-            authorityDescriptions.push("");
-          }
-
-          // parse link
-          const link = authority.get("link");
-          if (link) {
-            authorityLinks.push(link.toString());
-          } else {
-            authorityLinks.push("");
-          }
-
-          // parse images url
-          const imageUrl = authority.get("imageUrl");
-          if (imageUrl) {
-            authorityImageUrls.push(imageUrl.toString());
-          } else {
-            authorityImageUrls.push("");
-          }
-
-          // parse gate
-          const gate = authority.get("gate");
-          if (gate) {
-            authorityGates.push(gate.toString());
-          } else {
-            authorityGates.push("");
-          }
+          hatDetailsMetaData.authorityLabels = authorityLabels;
+          hatDetailsMetaData.authorityDescriptions = authorityDescriptions;
+          hatDetailsMetaData.authorityLinks = authorityLinks;
+          hatDetailsMetaData.authorityImageUrls = authorityImageUrls;
+          hatDetailsMetaData.authorityGates = authorityGates;
         }
 
-        hatDetailsMetaData.authorityLabels = authorityLabels;
-        hatDetailsMetaData.authorityDescriptions = authorityDescriptions;
-        hatDetailsMetaData.authorityLinks = authorityLinks;
-        hatDetailsMetaData.authorityImageUrls = authorityImageUrls;
-        hatDetailsMetaData.authorityGates = authorityGates;
-      } else {
-        hatDetailsMetaData.authorityLabels = [];
-        hatDetailsMetaData.authorityDescriptions = [];
-        hatDetailsMetaData.authorityLinks = [];
-        hatDetailsMetaData.authorityImageUrls = [];
-        hatDetailsMetaData.authorityGates = [];
-      }
-
+        /*
       // parse eligibility
       const eligibilityData = data.get("eligibility");
       if (eligibilityData) {
@@ -294,14 +315,14 @@ export function handleHatDetailsMetaData(content: Bytes): void {
         hatDetailsMetaData.toggleCriteriaLinks = [];
         hatDetailsMetaData.toggleCriteriaLabels = [];
       }
-
       */
+      } else {
+        hatDetailsMetaData.type = "unknown";
+      }
     } else {
       hatDetailsMetaData.type = "unknown";
     }
-  } else {
-    hatDetailsMetaData.type = "unknown";
-  }
 
-  hatDetailsMetaData.save();
+    hatDetailsMetaData.save();
+  }
 }
