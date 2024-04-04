@@ -24,7 +24,8 @@ import {
   HatsClaimabilitySet,
   HatClaimabilitySet,
 } from "../generated/templates/MultiClaimsHatter/MultiClaimsHatter";
-import { HatsModuleFactory_ModuleDeployed } from "../generated/HatsModuleFactory/HatsModuleFactory";
+import { HatsModuleFactory_ModuleDeployed as HatsModuleFactory_ModuleDeployedV0_6_0 } from "../generated/HatsModuleFactoryV0_6_0/HatsModuleFactoryV0_6_0";
+import { HatsModuleFactory_ModuleDeployed as HatsModuleFactory_ModuleDeployedV0_7_0 } from "../generated/HatsModuleFactoryV0_7_0/HatsModuleFactoryV0_7_0";
 import { newMockEvent, createMockedFunction } from "matchstick-as";
 
 export function mockTopHatLinkRequestedEvent(
@@ -640,13 +641,13 @@ export function createHatCreatedEvent(
   return hatCreatedEvent;
 }
 
-export function mockHatsModuleFactory_ModuleDeployedEvent(
+export function mockHatsModuleFactory_ModuleDeployedEventV0_6_0(
   implementation: Address,
   instance: Address,
   hatId: string,
   otherImmutableArgs: Bytes,
   initData: Bytes
-): HatsModuleFactory_ModuleDeployed {
+): HatsModuleFactory_ModuleDeployedV0_6_0 {
   // prepare event parameters array
   let implementationParam = new ethereum.EventParam(
     "implementation",
@@ -673,7 +674,7 @@ export function mockHatsModuleFactory_ModuleDeployedEvent(
 
   // create mocked event
   let mockEvent = newMockEvent();
-  let moduleDeployedEvent = new HatsModuleFactory_ModuleDeployed(
+  let moduleDeployedEvent = new HatsModuleFactory_ModuleDeployedV0_6_0(
     mockEvent.address,
     mockEvent.logIndex,
     mockEvent.transactionLogIndex,
@@ -690,6 +691,66 @@ export function mockHatsModuleFactory_ModuleDeployedEvent(
   moduleDeployedEvent.parameters.push(hatIdParam);
   moduleDeployedEvent.parameters.push(otherImmutableArgsParam);
   moduleDeployedEvent.parameters.push(initDataParam);
+
+  return moduleDeployedEvent;
+}
+
+export function mockHatsModuleFactory_ModuleDeployedEventV0_7_0(
+  implementation: Address,
+  instance: Address,
+  hatId: string,
+  otherImmutableArgs: Bytes,
+  initData: Bytes,
+  saltNonce: BigInt
+): HatsModuleFactory_ModuleDeployedV0_7_0 {
+  // prepare event parameters array
+  let implementationParam = new ethereum.EventParam(
+    "implementation",
+    ethereum.Value.fromAddress(implementation)
+  );
+  let instanceParam = new ethereum.EventParam(
+    "instance",
+    ethereum.Value.fromAddress(instance)
+  );
+  let hatIdParam = new ethereum.EventParam(
+    "hatId",
+    ethereum.Value.fromUnsignedBigInt(
+      BigInt.fromUnsignedBytes(Bytes.fromHexString(changeEndianness(hatId)))
+    )
+  );
+  let otherImmutableArgsParam = new ethereum.EventParam(
+    "otherImmutableArgs",
+    ethereum.Value.fromBytes(otherImmutableArgs)
+  );
+  let initDataParam = new ethereum.EventParam(
+    "initData",
+    ethereum.Value.fromBytes(initData)
+  );
+  let saltNonceParam = new ethereum.EventParam(
+    "saltNonce",
+    ethereum.Value.fromUnsignedBigInt(saltNonce)
+  );
+
+  // create mocked event
+  let mockEvent = newMockEvent();
+  let moduleDeployedEvent = new HatsModuleFactory_ModuleDeployedV0_7_0(
+    mockEvent.address,
+    mockEvent.logIndex,
+    mockEvent.transactionLogIndex,
+    mockEvent.logType,
+    mockEvent.block,
+    mockEvent.transaction,
+    mockEvent.parameters,
+    mockEvent.receipt
+  );
+
+  moduleDeployedEvent.parameters = new Array<ethereum.EventParam>();
+  moduleDeployedEvent.parameters.push(implementationParam);
+  moduleDeployedEvent.parameters.push(instanceParam);
+  moduleDeployedEvent.parameters.push(hatIdParam);
+  moduleDeployedEvent.parameters.push(otherImmutableArgsParam);
+  moduleDeployedEvent.parameters.push(initDataParam);
+  moduleDeployedEvent.parameters.push(saltNonceParam);
 
   return moduleDeployedEvent;
 }

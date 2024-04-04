@@ -48,10 +48,10 @@ dataSources:
           handler: handleTopHatLinked
       file: ./src/hats.ts
   - kind: ethereum
-    name: HatsModuleFactory
+    name: HatsModuleFactoryV0_6_0
     network: sepolia
     source:
-      abi: HatsModuleFactory
+      abi: HatsModuleFactoryV0_6_0
       address: "0xfE661c01891172046feE16D3a57c3Cf456729efA"
       startBlock: 4655267
     mapping:
@@ -61,12 +61,32 @@ dataSources:
       entities:
         - ClaimsHatter
       abis:
-        - name: HatsModuleFactory
-          file: ./abis/HatsModuleFactory.json
+        - name: HatsModuleFactoryV0_6_0
+          file: ./abis/HatsModuleFactoryV0_6_0.json
       eventHandlers:
         - event: HatsModuleFactory_ModuleDeployed(address,address,uint256,bytes,bytes)
           handler: handleModuleDeployed
-      file: ./src/hatsModuleFactory.ts
+      file: ./src/hatsModuleFactoryV0_6_0.ts
+  - kind: ethereum
+    name: HatsModuleFactoryV0_7_0
+    network: sepolia
+    source:
+      abi: HatsModuleFactoryV0_7_0
+      address: "0x0a3f85fa597B6a967271286aA0724811acDF5CD9"
+      startBlock: 5516083
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - ClaimsHatter
+      abis:
+        - name: HatsModuleFactoryV0_7_0
+          file: ./abis/HatsModuleFactoryV0_7_0.json
+      eventHandlers:
+        - event: HatsModuleFactory_ModuleDeployed(address,address,uint256,bytes,bytes,uint256)
+          handler: handleModuleDeployed
+      file: ./src/hatsModuleFactoryV0_7_0.ts
 templates:
   - name: MultiClaimsHatter
     kind: ethereum/contract
