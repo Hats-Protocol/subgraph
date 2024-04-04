@@ -3,14 +3,12 @@
   "data": {
     "name": "test name",
     "description": "test description",
-    "guilds": ["guild1, guild2"],
-    "spaces": ["space1"],
     "responsibilities": [
       {
-        "label": "responsability name 1",
-        "description": "responsability description 1",
-        "link": "responsability link 1",
-        "imageUrl": "responsability image url 1"
+        "label": "responsibility name 1",
+        "description": "responsibility description 1",
+        "link": "responsibility link 1",
+        "imageUrl": "responsibility image url 1"
       }
     ],
     "authorities": [
@@ -21,24 +19,6 @@
         "gate": "authority gate 1",
         "imageUrl": "authority imageUrl 1"
       }
-    ],
-    "eligibility": {
-      "manual": false,
-      "criteria": [
-        {
-          "link": "eligibility link 1",
-          "label": "eligibility label 1"
-        }
-      ]
-    },
-    "toggle": {
-      "manual": false,
-      "criteria": [
-        {
-          "link": "toggle link 1",
-          "label": "toggle label 1"
-        }
-      ]
-    }
+    ]
   }
 }

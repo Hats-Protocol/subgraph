@@ -29,6 +29,9 @@ const topHatId2 =
 const cid1 = "bafkreiffngmobubcbw7l5blrftfdbrkfrokf6piaklksj73ictdj6mtpvq";
 const cid2 = "bafkreiffngmobubcbw7l5blrftfdbrkfrokf6piaklksj73ictdj6mtpv1";
 
+const detailsMetadataId1 = topHatId1 + "-" + cid1;
+const detailsMetadataId2 = topHatId2 + "-" + cid2;
+
 describe("basic test", () => {
   describe("Scenario 1", () => {
     beforeEach(() => {
@@ -74,124 +77,100 @@ describe("basic test", () => {
     });
 
     test("Test data source created", () => {
+      logDataSources("HatDetailsMetaData");
       assert.dataSourceCount("HatDetailsMetaData", 1);
       assert.dataSourceExists("HatDetailsMetaData", cid1);
-      //logDataSources("HatDetailsMetaData");
     });
 
     test("Test HatDetailsMetaData entity", () => {
-      assert.fieldEquals("HatDetailsMetaData", cid1, "id", cid1);
-      assert.fieldEquals("HatDetailsMetaData", cid1, "type", "1.0");
-      assert.fieldEquals("HatDetailsMetaData", cid1, "name", "test name");
       assert.fieldEquals(
         "HatDetailsMetaData",
-        cid1,
+        detailsMetadataId1,
+        "id",
+        detailsMetadataId1
+      );
+      assert.fieldEquals(
+        "HatDetailsMetaData",
+        detailsMetadataId1,
+        "type",
+        "1.0"
+      );
+      assert.fieldEquals(
+        "HatDetailsMetaData",
+        detailsMetadataId1,
+        "name",
+        "test name"
+      );
+      assert.fieldEquals(
+        "HatDetailsMetaData",
+        detailsMetadataId1,
         "description",
         "test description"
       );
-      assert.fieldEquals(
-        "HatDetailsMetaData",
-        cid1,
-        "guilds",
-        "[guild1, guild2]"
-      );
-      assert.fieldEquals("HatDetailsMetaData", cid1, "spaces", "[space1]");
-
       // responsabilities
       assert.fieldEquals(
         "HatDetailsMetaData",
-        cid1,
-        "responsabilityLabels",
-        "[responsability name 1]"
+        detailsMetadataId1,
+        "responsibilityLabels",
+        "[responsibility name 1]"
       );
       assert.fieldEquals(
         "HatDetailsMetaData",
-        cid1,
-        "responsabilityDescriptions",
-        "[responsability description 1]"
+        detailsMetadataId1,
+        "responsibilityDescriptions",
+        "[responsibility description 1]"
       );
       assert.fieldEquals(
         "HatDetailsMetaData",
-        cid1,
-        "responsabilityLinks",
-        "[responsability link 1]"
+        detailsMetadataId1,
+        "responsibilityLinks",
+        "[responsibility link 1]"
       );
       assert.fieldEquals(
         "HatDetailsMetaData",
-        cid1,
-        "responsabilityImageUrls",
-        "[responsability image url 1]"
+        detailsMetadataId1,
+        "responsibilityImageUrls",
+        "[responsibility image url 1]"
       );
-      assert.fieldEquals("Hat", topHatId1, "detailsMetaData", cid1);
 
       // authorities
       assert.fieldEquals(
         "HatDetailsMetaData",
-        cid1,
+        detailsMetadataId1,
         "authorityLabels",
         "[authority label 1]"
       );
       assert.fieldEquals(
         "HatDetailsMetaData",
-        cid1,
+        detailsMetadataId1,
         "authorityDescriptions",
         "[authority description 1]"
       );
       assert.fieldEquals(
         "HatDetailsMetaData",
-        cid1,
+        detailsMetadataId1,
         "authorityLinks",
         "[authority link 1]"
       );
       assert.fieldEquals(
         "HatDetailsMetaData",
-        cid1,
+        detailsMetadataId1,
         "authorityImageUrls",
         "[authority imageUrl 1]"
       );
       assert.fieldEquals(
         "HatDetailsMetaData",
-        cid1,
+        detailsMetadataId1,
         "authorityGates",
         "[authority gate 1]"
       );
 
-      // eligibility
       assert.fieldEquals(
-        "HatDetailsMetaData",
-        cid1,
-        "eligibilityManual",
-        "false"
+        "Hat",
+        topHatId1,
+        "detailsMetaData",
+        detailsMetadataId1
       );
-      assert.fieldEquals(
-        "HatDetailsMetaData",
-        cid1,
-        "eligibilityCriteriaLinks",
-        "[eligibility link 1]"
-      );
-      assert.fieldEquals(
-        "HatDetailsMetaData",
-        cid1,
-        "eligibilityCriteriaLabels",
-        "[eligibility label 1]"
-      );
-
-      // toggle
-      assert.fieldEquals("HatDetailsMetaData", cid1, "toggleManual", "false");
-      assert.fieldEquals(
-        "HatDetailsMetaData",
-        cid1,
-        "toggleCriteriaLinks",
-        "[toggle link 1]"
-      );
-      assert.fieldEquals(
-        "HatDetailsMetaData",
-        cid1,
-        "toggleCriteriaLabels",
-        "[toggle label 1]"
-      );
-
-      assert.fieldEquals("Hat", topHatId1, "detailsMetaData", cid1);
     });
   });
 
@@ -245,93 +224,95 @@ describe("basic test", () => {
     });
 
     test("Test HatDetailsMetaData entity", () => {
-      assert.fieldEquals("HatDetailsMetaData", cid2, "id", cid2);
-      assert.fieldEquals("HatDetailsMetaData", cid2, "type", "1.0");
-      assert.fieldEquals("HatDetailsMetaData", cid2, "name", "");
-      assert.fieldEquals("HatDetailsMetaData", cid2, "description", "");
-      assert.fieldEquals("HatDetailsMetaData", cid2, "guilds", "[]");
-      assert.fieldEquals("HatDetailsMetaData", cid2, "spaces", "[]");
+      assert.fieldEquals(
+        "HatDetailsMetaData",
+        detailsMetadataId2,
+        "id",
+        detailsMetadataId2
+      );
+      assert.fieldEquals(
+        "HatDetailsMetaData",
+        detailsMetadataId2,
+        "type",
+        "1.0"
+      );
+      assert.fieldEquals(
+        "HatDetailsMetaData",
+        detailsMetadataId2,
+        "name",
+        "null"
+      );
+      assert.fieldEquals(
+        "HatDetailsMetaData",
+        detailsMetadataId2,
+        "description",
+        "null"
+      );
 
-      // responsabilities
+      // responsibilities
       assert.fieldEquals(
         "HatDetailsMetaData",
-        cid2,
-        "responsabilityLabels",
+        detailsMetadataId2,
+        "responsibilityLabels",
         "[]"
       );
       assert.fieldEquals(
         "HatDetailsMetaData",
-        cid2,
-        "responsabilityDescriptions",
+        detailsMetadataId2,
+        "responsibilityDescriptions",
         "[]"
       );
       assert.fieldEquals(
         "HatDetailsMetaData",
-        cid2,
-        "responsabilityLinks",
+        detailsMetadataId2,
+        "responsibilityLinks",
         "[]"
       );
       assert.fieldEquals(
         "HatDetailsMetaData",
-        cid2,
-        "responsabilityImageUrls",
+        detailsMetadataId2,
+        "responsibilityImageUrls",
         "[]"
       );
-      assert.fieldEquals("Hat", topHatId2, "detailsMetaData", cid2);
 
       // authorities
-      assert.fieldEquals("HatDetailsMetaData", cid2, "authorityLabels", "[]");
       assert.fieldEquals(
         "HatDetailsMetaData",
-        cid2,
+        detailsMetadataId2,
+        "authorityLabels",
+        "[]"
+      );
+      assert.fieldEquals(
+        "HatDetailsMetaData",
+        detailsMetadataId2,
         "authorityDescriptions",
         "[]"
       );
-      assert.fieldEquals("HatDetailsMetaData", cid2, "authorityLinks", "[]");
       assert.fieldEquals(
         "HatDetailsMetaData",
-        cid2,
+        detailsMetadataId2,
+        "authorityLinks",
+        "[]"
+      );
+      assert.fieldEquals(
+        "HatDetailsMetaData",
+        detailsMetadataId2,
         "authorityImageUrls",
         "[]"
       );
-      assert.fieldEquals("HatDetailsMetaData", cid2, "authorityGates", "[]");
-
-      // eligibility
       assert.fieldEquals(
         "HatDetailsMetaData",
-        cid2,
-        "eligibilityManual",
-        "true"
-      );
-      assert.fieldEquals(
-        "HatDetailsMetaData",
-        cid2,
-        "eligibilityCriteriaLinks",
-        "[]"
-      );
-      assert.fieldEquals(
-        "HatDetailsMetaData",
-        cid2,
-        "eligibilityCriteriaLabels",
+        detailsMetadataId2,
+        "authorityGates",
         "[]"
       );
 
-      // toggle
-      assert.fieldEquals("HatDetailsMetaData", cid2, "toggleManual", "true");
       assert.fieldEquals(
-        "HatDetailsMetaData",
-        cid2,
-        "toggleCriteriaLinks",
-        "[]"
+        "Hat",
+        topHatId2,
+        "detailsMetaData",
+        detailsMetadataId2
       );
-      assert.fieldEquals(
-        "HatDetailsMetaData",
-        cid2,
-        "toggleCriteriaLabels",
-        "[]"
-      );
-
-      assert.fieldEquals("Hat", topHatId2, "detailsMetaData", cid2);
     });
   });
 });
