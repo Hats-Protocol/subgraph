@@ -108,3 +108,17 @@ templates:
           handler: handleHatsClaimabilitySet
         - event: HatClaimabilitySet(uint256,uint8)
           handler: handleHatClaimabilitySet
+  - name: HatDetailsMetaData
+    kind: file/ipfs
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      file: ./src/hatDetailsMetaData.ts
+      handler: handleHatDetailsMetaData
+      entities:
+        - HatDetailsMetaData
+      abis:
+        - name: Hats
+          file: ./abis/Hats.json
+    network: sepolia
