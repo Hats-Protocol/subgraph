@@ -4,15 +4,15 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ hats-protocol/hats-v1-mainnet",
-    "create-local": "graph create --node http://localhost:8020/ hats-protocol/hats-protocol-goerli",
-    "remove-local": "graph remove --node http://localhost:8020/ hats-protocol/hats-protocol-goerli",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 hats-protocol/hats-protocol-goerli",
+    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ hats-v1-base-sepolia --network base-sepolia",
+    "create-local": "graph create --node http://localhost:8020/ hats-v1-base-sepolia",
+    "remove-local": "graph remove --node http://localhost:8020/ hats-v1-base-sepolia",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 hats-v1-base-sepolia",
     "test": "graph test"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "0.37.1",
-    "@graphprotocol/graph-ts": "^0.27.0"
+    "@graphprotocol/graph-cli": "0.96.0",
+    "@graphprotocol/graph-ts": "^0.38.0"
   },
   "devDependencies": {
     "matchstick-as": "0.5.0",

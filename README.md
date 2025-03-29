@@ -428,3 +428,12 @@ The following query will get a sub tree, in which a specific hat is a root of:
   }
 }
 ```
+
+### Publishing
+
+To publish the subgraph, run the following command:
+
+```bash
+graph publish --node https://api.studio.thegraph.com/deploy/ hats-protocol/hats-v1-mainnet
+```
+

@@ -110,5 +110,19 @@
       "address": "0x0a3f85fa597B6a967271286aA0724811acDF5CD9",
       "startBlock": 12021817
     }
+  },
+  "base-sepolia": {
+    "Hats": {
+      "address": "0x3bc1A0Ad72417f2d411118085256fC53CBdDd137",
+      "startBlock": 22023802
+    },
+    "HatsModuleFactoryV0_6_0": {
+      "address": "0xfE661c01891172046feE16D3a57c3Cf456729efA",
+      "startBlock": 23658258
+    },
+    "HatsModuleFactoryV0_7_0": {
+      "address": "0x0a3f85fa597B6a967271286aA0724811acDF5CD9",
+      "startBlock": 23145901
+    }
   }
 }
