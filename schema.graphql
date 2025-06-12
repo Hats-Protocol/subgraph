@@ -1,4 +1,4 @@
-type Hat @entity {
+type Hat @entity(immutable: false) {
   id: ID!
   prettyId: String!
   status: Boolean!
@@ -23,14 +23,14 @@ type Hat @entity {
   events: [HatsEvent!]! @derivedFrom(field: "hat")
 }
 
-type Wearer @entity {
+type Wearer @entity(immutable: false) {
   id: ID!
   currentHats: [Hat!]! @derivedFrom(field: "wearers")
   mintEvent: [HatMintedEvent!]! @derivedFrom(field: "wearer")
   burnEvent: [HatBurnedEvent!]! @derivedFrom(field: "wearer")
 }
 
-type Tree @entity {
+type Tree @entity(immutable: false) {
   "Tree ID is its top hat domain - first 4 bytes of the top hat ID"
   id: ID!
   childOfTree: Tree
@@ -52,7 +52,7 @@ interface HatsEvent {
   transactionID: Bytes!
 }
 
-type HatCreatedEvent implements HatsEvent @entity {
+type HatCreatedEvent implements HatsEvent @entity(immutable: true) {
   id: ID!
   tree: Tree!
   hat: Hat!
@@ -67,7 +67,7 @@ type HatCreatedEvent implements HatsEvent @entity {
   hatImageUri: String!
 }
 
-type HatMintedEvent implements HatsEvent @entity {
+type HatMintedEvent implements HatsEvent @entity(immutable: true) {
   id: ID!
   tree: Tree!
   hat: Hat!
@@ -78,7 +78,7 @@ type HatMintedEvent implements HatsEvent @entity {
   operator: String!
 }
 
-type HatBurnedEvent implements HatsEvent @entity {
+type HatBurnedEvent implements HatsEvent @entity(immutable: true) {
   id: ID!
   tree: Tree!
   hat: Hat!
@@ -89,7 +89,7 @@ type HatBurnedEvent implements HatsEvent @entity {
   operator: String!
 }
 
-type HatStatusChangedEvent implements HatsEvent @entity {
+type HatStatusChangedEvent implements HatsEvent @entity(immutable: true) {
   id: ID!
   tree: Tree!
   hat: Hat!
@@ -99,7 +99,7 @@ type HatStatusChangedEvent implements HatsEvent @entity {
   hatNewStatus: Boolean!
 }
 
-type HatDetailsChangedEvent implements HatsEvent @entity {
+type HatDetailsChangedEvent implements HatsEvent @entity(immutable: true) {
   id: ID!
   tree: Tree!
   hat: Hat!
@@ -109,7 +109,7 @@ type HatDetailsChangedEvent implements HatsEvent @entity {
   hatNewDetails: String!
 }
 
-type HatEligibilityChangedEvent implements HatsEvent @entity {
+type HatEligibilityChangedEvent implements HatsEvent @entity(immutable: true) {
   id: ID!
   tree: Tree!
   hat: Hat!
@@ -119,7 +119,7 @@ type HatEligibilityChangedEvent implements HatsEvent @entity {
   hatNewEligibility: String!
 }
 
-type HatToggleChangedEvent implements HatsEvent @entity {
+type HatToggleChangedEvent implements HatsEvent @entity(immutable: true) {
   id: ID!
   tree: Tree!
   hat: Hat!
@@ -129,7 +129,7 @@ type HatToggleChangedEvent implements HatsEvent @entity {
   hatNewToggle: String!
 }
 
-type HatMutabilityChangedEvent implements HatsEvent @entity {
+type HatMutabilityChangedEvent implements HatsEvent @entity(immutable: true) {
   id: ID!
   tree: Tree!
   hat: Hat!
@@ -138,7 +138,7 @@ type HatMutabilityChangedEvent implements HatsEvent @entity {
   transactionID: Bytes!
 }
 
-type HatMaxSupplyChangedEvent implements HatsEvent @entity {
+type HatMaxSupplyChangedEvent implements HatsEvent @entity(immutable: true) {
   id: ID!
   tree: Tree!
   hat: Hat!
@@ -148,7 +148,7 @@ type HatMaxSupplyChangedEvent implements HatsEvent @entity {
   hatNewMaxSupply: BigInt!
 }
 
-type HatImageURIChangedEvent implements HatsEvent @entity {
+type HatImageURIChangedEvent implements HatsEvent @entity(immutable: true) {
   id: ID!
   tree: Tree!
   hat: Hat!
@@ -158,7 +158,7 @@ type HatImageURIChangedEvent implements HatsEvent @entity {
   hatNewImageURI: String!
 }
 
-type TopHatLinkRequestedEvent implements HatsEvent @entity {
+type TopHatLinkRequestedEvent implements HatsEvent @entity(immutable: true) {
   "tree field is the tree that is being linked, hat field is the tree top hat"
   id: ID!
   tree: Tree!
@@ -169,7 +169,7 @@ type TopHatLinkRequestedEvent implements HatsEvent @entity {
   newAdmin: Hat!
 }
 
-type TopHatLinkedEvent implements HatsEvent @entity {
+type TopHatLinkedEvent implements HatsEvent @entity(immutable: true) {
   "tree field is the tree that is being linked, hat field is the tree top hat"
   id: ID!
   tree: Tree!
@@ -180,7 +180,7 @@ type TopHatLinkedEvent implements HatsEvent @entity {
   newAdmin: Hat!
 }
 
-type WearerStandingChangedEvent implements HatsEvent @entity {
+type WearerStandingChangedEvent implements HatsEvent @entity(immutable: true) {
   id: ID!
   tree: Tree!
   hat: Hat!
@@ -191,7 +191,7 @@ type WearerStandingChangedEvent implements HatsEvent @entity {
   wearerStanding: Boolean!
 }
 
-type ClaimsHatter @entity {
+type ClaimsHatter @entity(immutable: false) {
   id: ID!
   claimableHats: [Hat!]!
   claimableForHats: [Hat!]!
